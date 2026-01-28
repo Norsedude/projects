@@ -1,0 +1,545 @@
+<!doctype html>
+<!-- File: index.html
+    Simple in-browser 4-stem splitter (approximate stems via filter bands) with 4 volume sliders.
+    Usage: open this file in a modern browser, load an audio file, Play, adjust sliders,
+    or export each stem as a WAV file.
+-->
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>4-Stem Splitter</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; }
+    .controls { margin-top: 12px; display: grid; gap: 10px; }
+    .stem { display:flex; align-items:center; gap:12px; }
+    .stem label { min-width:90px; }
+    input[type="range"] { width: 320px; }
+    button { padding: 8px 12px; }
+    .row { display:flex; gap:8px; align-items:center; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <h2>4-Stem Splitter (Band-based)</h2>
+  <p>Loads an audio file and splits it into 4 frequency-band stems (low / low-mid / high-mid / high).
+    Use sliders to adjust volume per stem in real-time. Export stems to WAV if desired.</p>
+
+  <input id="fileInput" type="file" accept="audio/*">
+  <div class="row">
+    <button id="playBtn" disabled>Play</button>
+    <button id="stopBtn" disabled>Stop</button>
+    <button id="exportAllBtn" disabled>Export All Stems (WAV)</button>
+  </div>
+
+  <div class="controls" id="stems">
+    <div class="stem">
+     <label>Low (bass)</label>
+     <input id="gain0" type="range" min="0" max="2" step="0.01" value="1">
+     <span id="val0">1.00</span>
+     <button id="download0" disabled>Download</button>
+    </div>
+    <div class="stem">
+     <label>Low-Mid</label>
+     <input id="gain1" type="range" min="0" max="2" step="0.01" value="1">
+     <span id="val1">1.00</span>
+     <button id="download1" disabled>Download</button>
+    </div>
+    <div class="stem">
+     <label>High-Mid</label>
+     <input id="gain2" type="range" min="0" max="2" step="0.01" value="1">
+     <span id="val2">1.00</span>
+     <button id="download2" disabled>Download</button>
+    </div>
+    <div class="stem">
+     <label>High (treble)</label>
+     <input id="gain3" type="range" min="0" max="2" step="0.01" value="1">
+     <span id="val3">1.00</span>
+    <button id="download3" disabled>Download</button>
+    <div style="display:flex; align-items:center; gap:12px; margin-left:6px;">
+      <label style="min-width:90px;">Vocal Isolation</label>
+      <input id="vocalIso" type="range" min="0" max="2" step="0.01" value="1">
+      <span id="valVocal">1.00</span>
+      <button id="downloadVocal" disabled>Download Vocal</button>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    // GitHub Copilot
+    let audioCtx = null;
+    let buffer = null;
+    let src = null;
+    // per-stem live gain nodes (indexed 0..3 => vocals,bass,instruments,melody)
+    const stemGains = [];
+    // processing nodes used for live playback (created in createStemNodes)
+    const processNodes = [];
+    // labels used for downloads and UI
+    const STEM_LABELS = ['vocals','bass','instruments','melody'];
+    // Optional: set to a server / webservice URL that performs ML-based separation (Spleeter/UMX/etc).
+    // If null, the code falls back to a simple analysis-based heuristic (midside + simple filters).
+    // You can implement an actual separation backend and set the URL here.
+    const separationServiceUrl = null;
+
+    const fileInput = document.getElementById('fileInput');
+    const playBtn = document.getElementById('playBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const exportAllBtn = document.getElementById('exportAllBtn');
+
+    fileInput.addEventListener('change', async (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const ab = await f.arrayBuffer();
+      buffer = await audioCtx.decodeAudioData(ab);
+      enableControls(true);
+    });
+
+    function enableControls(enabled) {
+      playBtn.disabled = !enabled;
+      stopBtn.disabled = !enabled;
+      exportAllBtn.disabled = !enabled;
+      for (let i = 0; i < 4; ++i) {
+        document.getElementById('download' + i).disabled = !enabled;
+      }
+      document.getElementById('downloadVocal').disabled = !enabled;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!buffer) return;
+      startPlayback();
+    });
+    stopBtn.addEventListener('click', () => {
+      stopPlayback();
+    });
+
+    // Create persistent processing + gain nodes so sliders control live gains.
+    function createStemNodes() {
+      // cleanup old
+      for (let g of stemGains) if (g) try { g.disconnect(); } catch(e){}
+      processNodes.length = 0; stemGains.length = 0;
+      // create per-stem gain nodes (these always route to destination)
+      for (let i = 0; i < 4; ++i) {
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = parseFloat(document.getElementById('gain' + i).value);
+        gainNode.connect(audioCtx.destination);
+        stemGains.push(gainNode);
+      }
+      // Build simple heuristic processors for live playback:
+      // Vocals: broad bandpass to emphasize voice frequencies (centered material is typically vocals).
+      const vocalBP = audioCtx.createBiquadFilter();
+      vocalBP.type = 'bandpass';
+      vocalBP.frequency.value = 1200;
+      vocalBP.Q.value = 0.7;
+      processNodes.push({ node: vocalBP });
+
+      // Bass: lowpass
+      const lowLP = audioCtx.createBiquadFilter();
+      lowLP.type = 'lowpass';
+      lowLP.frequency.value = 250;
+      lowLP.Q.value = 0.7;
+      processNodes.push({ node: lowLP });
+
+      // Low-Mid: bandpass around ~500 Hz
+      const lowMidBP = audioCtx.createBiquadFilter();
+      lowMidBP.type = 'bandpass';
+      lowMidBP.frequency.value = 500;
+      lowMidBP.Q.value = 1.0;
+      processNodes.push({ node: lowMidBP });
+
+      // High-Mid: bandpass around ~4000 Hz
+      const highMidBP = audioCtx.createBiquadFilter();
+      highMidBP.type = 'bandpass';
+      highMidBP.frequency.value = 4000;
+      highMidBP.Q.value = 1.2;
+      processNodes.push({ node: highMidBP });
+
+      // Update UI displays for sliders
+      for (let i = 0; i < 4; ++i) {
+        const slider = document.getElementById('gain' + i);
+        const display = document.getElementById('val' + i);
+        display.textContent = parseFloat(slider.value).toFixed(2);
+        slider.addEventListener('input', (e) => {
+          if (stemGains[i]) stemGains[i].gain.value = parseFloat(e.target.value);
+          display.textContent = parseFloat(e.target.value).toFixed(2);
+        });
+      }
+      const vocalSlider = document.getElementById('vocalIso');
+      document.getElementById('valVocal').textContent = parseFloat(vocalSlider.value).toFixed(2);
+      vocalSlider.addEventListener('input', (e) => {
+        document.getElementById('valVocal').textContent = parseFloat(e.target.value).toFixed(2);
+      });
+    }
+
+    function startPlayback() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      createStemNodes();
+      // create fresh source
+      src = audioCtx.createBufferSource();
+      src.buffer = buffer;
+      // Route source into each processing chain created in createStemNodes().
+      // For heuristic nodes we apply the small filters; for residuals we connect directly.
+      for (let i = 0; i < 4; ++i) {
+        const proc = processNodes[i];
+        const g = stemGains[i];
+        if (proc && proc.node) {
+          src.connect(proc.node);
+          proc.node.connect(g);
+        } else {
+          // residual / passthrough branch
+          src.connect(g);
+        }
+      }
+      src.start();
+      playBtn.disabled = true;
+      stopBtn.disabled = false;
+      src.onended = () => {
+        playBtn.disabled = false;
+        stopBtn.disabled = true;
+      };
+    }
+
+    function stopPlayback() {
+      if (src) {
+        try { src.stop(); } catch (e) {}
+        src = null;
+      }
+      playBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    exportAllBtn.addEventListener('click', async () => {
+      if (!buffer) return;
+      exportAllBtn.disabled = true;
+      for (let i = 0; i < 4; ++i) {
+        const blob = await renderStemOffline(i);
+        triggerDownload(blob, `stem-${STEM_LABELS[i]}.wav`);
+      }
+      exportAllBtn.disabled = false;
+    });
+
+    for (let i = 0; i < 4; ++i) {
+      document.getElementById('download' + i).addEventListener('click', async () => {
+        if (!buffer) return;
+        const blob = await renderStemOffline(i);
+        triggerDownload(blob, `stem-${STEM_LABELS[i]}.wav`);
+      });
+    }
+
+    async function renderStemOffline(index) {
+      // If a separation service URL is set, this is where you'd upload the audio file and
+      // download the ML-extracted stem (vocals/bass/etc.). For portability this demo uses
+      // a heuristic offline rendering when no service URL is provided.
+      const sampleRate = audioCtx ? audioCtx.sampleRate : 44100;
+      const length = buffer.length;
+      const offline = new OfflineAudioContext(buffer.numberOfChannels, length, sampleRate);
+      const srcNode = offline.createBufferSource();
+      srcNode.buffer = buffer;
+      // Heuristic separation: vocals -> broad bandpass, bass -> lowpass, others -> bandpass for mids.
+      const gainOut = offline.createGain();
+      const sliderVal = parseFloat(document.getElementById('gain' + index).value);
+      gainOut.gain.value = sliderVal;
+      if (separationServiceUrl) {
+        // Placeholder for a real separation service integration.
+        // For safety this branch is left unimplemented here — set separationServiceUrl
+        // and implement upload/download logic on your server or direct to a model endpoint.
+      }
+      if (index === 0) {
+        // vocals (heuristic): bandpass to emphasize centered vocal frequencies
+        const bp = offline.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.value = 1200;
+        bp.Q.value = 0.7;
+        srcNode.connect(bp);
+        bp.connect(gainOut);
+      } else if (index === 1) {
+        // bass (heuristic)
+        const lp = offline.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = 250;
+        lp.Q.value = 0.7;
+        srcNode.connect(lp);
+        lp.connect(gainOut);
+      } else if (index === 2) {
+        // low-mid (heuristic): bandpass around ~500 Hz
+        const bp2 = offline.createBiquadFilter();
+        bp2.type = 'bandpass';
+        bp2.frequency.value = 500;
+        bp2.Q.value = 1.0;
+        srcNode.connect(bp2);
+        bp2.connect(gainOut);
+      } else if (index === 3) {
+        // high-mid (heuristic): bandpass around ~4000 Hz
+        const bp3 = offline.createBiquadFilter();
+        bp3.type = 'bandpass';
+        bp3.frequency.value = 4000;
+        bp3.Q.value = 1.2;
+        srcNode.connect(bp3);
+        bp3.connect(gainOut);
+      } else {
+        // fallback to full mix
+        srcNode.connect(gainOut);
+      }
+      gainOut.connect(offline.destination);
+      srcNode.start(0);
+      const rendered = await offline.startRendering();
+      return bufferToWavBlob(rendered);
+    }
+    // Intercept downloads and perform a simple "bleed reduction" by rendering all stems,
+    // subtracting leakage from other stems and normalizing. Uses existing renderStemOffline,
+    // bufferToWavBlob and triggerDownload functions. Capturing listeners stop the original handlers.
+    (async function() {
+        // small helper: decode a WAV Blob to an AudioBuffer
+        async function decodeBlobToAudioBuffer(blob) {
+            const ab = await blob.arrayBuffer();
+            // ensure we have an AudioContext to decode (use existing audioCtx or create one)
+            const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            return await ctx.decodeAudioData(ab);
+        }
+
+        // Render all stems (using existing renderStemOffline) and return decoded AudioBuffers
+        async function renderAllStemBuffers() {
+            const blobs = await Promise.all([0,1,2,3].map(i => renderStemOffline(i)));
+            const bufs = await Promise.all(blobs.map(b => decodeBlobToAudioBuffer(b)));
+            return bufs;
+        }
+
+        // Subtract leakage: cleaned = target - leakageFactor * sum(others)
+        // leakageFactors can be tuned per-stem to be more aggressive for bass, etc.
+        function cleanStemBuffers(stemBuffers, targetIndex) {
+            const target = stemBuffers[targetIndex];
+            const numChannels = target.numberOfChannels;
+            const length = target.length;
+            const sampleRate = target.sampleRate;
+            // per-stem leakage factors (higher => more subtraction)
+            const leakageMap = [0.6, 0.8, 0.7, 0.7]; // vocals, bass, low-mid, high-mid
+            const leakageFactor = leakageMap[targetIndex] || 0.7;
+
+            // create cleaned AudioBuffer (using existing audioCtx if available)
+            const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            const outBuf = ctx.createBuffer(numChannels, length, sampleRate);
+
+            // compute sum of other stems per channel per-sample and subtract
+            for (let ch = 0; ch < numChannels; ch++) {
+                const tData = target.getChannelData(ch);
+                const outData = outBuf.getChannelData(ch);
+                // prepare sum of others
+                const sumOthers = new Float32Array(length);
+                for (let i = 0; i < stemBuffers.length; i++) {
+                    if (i === targetIndex) continue;
+                    if (ch < stemBuffers[i].numberOfChannels) {
+                        const sData = stemBuffers[i].getChannelData(ch);
+                        for (let n = 0; n < length; n++) sumOthers[n] += sData[n];
+                    }
+                }
+                // subtract scaled sum of others and copy to out
+                for (let n = 0; n < length; n++) {
+                    outData[n] = tData[n] - leakageFactor * sumOthers[n];
+                }
+            }
+
+            // optional normalization to avoid clipping
+            let maxAbs = 0;
+            for (let ch = 0; ch < outBuf.numberOfChannels; ch++) {
+                const d = outBuf.getChannelData(ch);
+                for (let i = 0; i < d.length; i++) maxAbs = Math.max(maxAbs, Math.abs(d[i]));
+            }
+            if (maxAbs > 1.0) {
+                const scale = 1.0 / maxAbs;
+                for (let ch = 0; ch < outBuf.numberOfChannels; ch++) {
+                    const d = outBuf.getChannelData(ch);
+                    for (let i = 0; i < d.length; i++) d[i] *= scale;
+                }
+            }
+
+            return outBuf;
+        }
+
+        // Utility to create cleaned WAV blob for a given targetIndex
+        async function createCleanStemWavBlob(targetIndex) {
+            // render all stems first
+            const stemBufs = await renderAllStemBuffers();
+            const cleaned = cleanStemBuffers(stemBufs, targetIndex);
+            // encode to wav via existing helper
+            return bufferToWavBlob(cleaned);
+        }
+
+        // Intercept and replace single-stem download clicks (capture phase so we can stop originals)
+        for (let i = 0; i < 4; ++i) {
+            const btn = document.getElementById('download' + i);
+            if (!btn) continue;
+            btn.addEventListener('click', async (e) => {
+                // prevent original listeners from firing
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                btn.disabled = true;
+                try {
+                    const blob = await createCleanStemWavBlob(i);
+                    triggerDownload(blob, `stem-${STEM_LABELS[i]}-cleaned.wav`);
+                } catch (err) {
+                    console.error('Error creating cleaned stem', err);
+                    alert('Failed to create cleaned stem: ' + (err && err.message ? err.message : err));
+                } finally {
+                    btn.disabled = false;
+                }
+            }, true); // capture
+        }
+
+        // Vocal download button: produce a more aggressively cleaned "vocal" stem
+        const vocalBtn = document.getElementById('downloadVocal');
+        if (vocalBtn) {
+            vocalBtn.addEventListener('click', async (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                vocalBtn.disabled = true;
+                try {
+                    // render all stems then combine: use vocal stem (index 0) and subtract others with stronger factor
+                    const stemBufs = await renderAllStemBuffers();
+                    // make a slightly different leakage map for vocal isolation
+                    const originalLeakageMap = [0.6,0.8,0.7,0.7];
+                    // temporarily boost subtraction of non-vocal stems
+                    const boosted = stemBufs;
+                    // reuse cleanStemBuffers but override leakage by temporarily swapping function (simple approach):
+                    // We'll implement a direct custom subtract for vocals here:
+                    const target = stemBufs[0];
+                    const numChannels = target.numberOfChannels;
+                    const length = target.length;
+                    const sampleRate = target.sampleRate;
+                    const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+                    const outBuf = ctx.createBuffer(numChannels, length, sampleRate);
+
+                    // stronger removal factor for non-vocals
+                    const vocalLeakage = 0.9;
+                    for (let ch = 0; ch < numChannels; ch++) {
+                        const tData = target.getChannelData(ch);
+                        const outData = outBuf.getChannelData(ch);
+                        const sumOthers = new Float32Array(length);
+                        for (let i = 1; i < boosted.length; i++) {
+                            if (ch < boosted[i].numberOfChannels) {
+                                const sData = boosted[i].getChannelData(ch);
+                                for (let n = 0; n < length; n++) sumOthers[n] += sData[n];
+                            }
+                        }
+                        for (let n = 0; n < length; n++) {
+                            outData[n] = tData[n] - vocalLeakage * sumOthers[n];
+                        }
+                    }
+
+                    // normalize
+                    let maxAbs = 0;
+                    for (let ch = 0; ch < outBuf.numberOfChannels; ch++) {
+                        const d = outBuf.getChannelData(ch);
+                        for (let i = 0; i < d.length; i++) maxAbs = Math.max(maxAbs, Math.abs(d[i]));
+                    }
+                    if (maxAbs > 1.0) {
+                        const scale = 1.0 / maxAbs;
+                        for (let ch = 0; ch < outBuf.numberOfChannels; ch++) {
+                            const d = outBuf.getChannelData(ch);
+                            for (let i = 0; i < d.length; i++) d[i] *= scale;
+                        }
+                    }
+
+                    const blob = bufferToWavBlob(outBuf);
+                    triggerDownload(blob, `stem-vocals-isolated.wav`);
+                } catch (err) {
+                    console.error('Error creating isolated vocal stem', err);
+                    alert('Failed to create isolated vocal stem: ' + (err && err.message ? err.message : err));
+                } finally {
+                    vocalBtn.disabled = false;
+                }
+            }, true);
+        }
+
+        // Intercept Export All to produce cleaned stems instead of raw filtered stems
+        exportAllBtn.addEventListener('click', async (e) => {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            exportAllBtn.disabled = true;
+            try {
+                // render all stems once to avoid repeated rendering
+                const stemBlobs = await Promise.all([0,1,2,3].map(i => renderStemOffline(i)));
+                const stemBufs = await Promise.all(stemBlobs.map(b => decodeBlobToAudioBuffer(b)));
+                for (let i = 0; i < 4; i++) {
+                    const cleaned = cleanStemBuffers(stemBufs, i);
+                    const blob = bufferToWavBlob(cleaned);
+                    triggerDownload(blob, `stem-${STEM_LABELS[i]}-cleaned.wav`);
+                }
+            } catch (err) {
+                console.error('Error exporting cleaned stems', err);
+                alert('Failed to export cleaned stems: ' + (err && err.message ? err.message : err));
+            } finally {
+                exportAllBtn.disabled = false;
+            }
+        }, true);
+    })();
+    // WAV encoding (PCM16)
+    function bufferToWavBlob(buffer) {
+      const numOfChan = buffer.numberOfChannels;
+      const length = buffer.length * numOfChan * 2 + 44;
+      const bufferArray = new ArrayBuffer(length);
+      const view = new DataView(bufferArray);
+
+      /* RIFF identifier */
+      writeString(view, 0, 'RIFF');
+      /* file length */
+      view.setUint32(4, 36 + buffer.length * numOfChan * 2, true);
+      /* RIFF type */
+      writeString(view, 8, 'WAVE');
+      /* format chunk identifier */
+      writeString(view, 12, 'fmt ');
+      /* format chunk length */
+      view.setUint32(16, 16, true);
+      /* sample format (raw) */
+      view.setUint16(20, 1, true);
+      /* channel count */
+      view.setUint16(22, numOfChan, true);
+      /* sample rate */
+      view.setUint32(24, buffer.sampleRate, true);
+      /* byte rate (sampleRate * blockAlign) */
+      view.setUint32(28, buffer.sampleRate * numOfChan * 2, true);
+      /* block align (channel count * bytes per sample) */
+      view.setUint16(32, numOfChan * 2, true);
+      /* bits per sample */
+      view.setUint16(34, 16, true);
+      /* data chunk identifier */
+      writeString(view, 36, 'data');
+      /* data chunk length */
+      view.setUint32(40, buffer.length * numOfChan * 2, true);
+
+      // write interleaved PCM16
+      let offset = 44;
+      const channels = [];
+      for (let i = 0; i < numOfChan; i++) channels.push(buffer.getChannelData(i));
+      for (let i = 0; i < buffer.length; i++) {
+        for (let ch = 0; ch < numOfChan; ch++) {
+          let sample = Math.max(-1, Math.min(1, channels[ch][i]));
+          sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+          view.setInt16(offset, sample, true);
+          offset += 2;
+        }
+      }
+
+      return new Blob([view], { type: 'audio/wav' });
+    }
+
+    function writeString(view, offset, string) {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    }
+
+    function triggerDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style = 'display:none';
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    }
+  </script>
+</body>
+</html>
