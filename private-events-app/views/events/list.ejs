@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My events - Private Events</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <h1>My events</h1>
+  <p><a href="/events/new" class="btn">Create event</a></p>
+  <% if (events.length === 0) { %>
+    <p>No events yet. Create one and share the invite link.</p>
+  <% } else { %>
+    <ul style="list-style:none; padding:0">
+      <% events.forEach(function(e) { %>
+        <li class="card" style="margin-bottom:1rem">
+          <a href="/events/<%= e.id %>" style="color:inherit; text-decoration:none">
+            <strong><%= e.title %></strong><br>
+            <%= e.event_date %> at <%= e.event_time %> Â· <%= e.rsvp_count %> RSVPs
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</main>
+</body>
+</html>

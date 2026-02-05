@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= event.title %> - Private Events</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <p><a href="/events">Back to events</a> Â· <a href="/events/<%= event.id %>/edit" class="btn">Edit</a></p>
+  <div class="card">
+    <h1><%= event.title %></h1>
+    <p><%= event.event_date %> at <%= event.event_time %></p>
+    <% if (event.location) { %><p><%= event.location %></p><% } %>
+    <% if (event.description) { %><p><%= event.description %></p><% } %>
+    <h2>Invite link</h2>
+    <p>Send this link to guests. They will need to log in and RSVP.</p>
+    <input type="text" readonly value="<%= typeof fullUrl !== 'undefined' ? fullUrl : '/invite/' + event.invite_slug %>" style="width:100%; font-family:monospace" id="inviteUrl">
+    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('inviteUrl').value)">Copy link</button>
+    <h2>RSVPs (<%= rsvps.length %>)</h2>
+    <% if (rsvps.length === 0) { %><p>No RSVPs yet.</p><% } else { %>
+    <ul style="list-style:none; padding:0">
+      <% rsvps.forEach(function(r) { %>
+        <li><%= r.name %> (<%= r.email %>) â€” <%= r.status %></li>
+      <% }); %>
+    </ul>
+    <% } %>
+    <p><a href="/check-in/scan">Check-in (scan QR)</a></p>
+  </div>
+</main>
+</body>
+</html>

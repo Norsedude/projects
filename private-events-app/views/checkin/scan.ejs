@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in - Scan QR</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <div class="card">
+    <h1>Check-in</h1>
+    <p>Scan a guest QR code, or enter the verification URL in the box below.</p>
+    <div class="form-group">
+      <label>Verification URL (from QR scan)</label>
+      <input type="text" id="urlInput" placeholder="https://.../check-in/verify/...">
+    </div>
+    <button type="button" id="verifyBtn">Verify and check in</button>
+    <div id="result" style="margin-top:1rem"></div>
+  </div>
+</main>
+<script>
+document.getElementById('verifyBtn').onclick = function() {
+  var url = document.getElementById('urlInput').value.trim();
+  var resultEl = document.getElementById('result');
+  if (!url) { resultEl.innerHTML = '<p class="err-msg">Enter the URL.</p>'; return; }
+  var token = url.split('/verify/')[1];
+  if (!token) { resultEl.innerHTML = '<p class="err-msg">URL must contain /check-in/verify/...</p>'; return; }
+  fetch('/check-in/verify/' + token, { headers: { 'Accept': 'application/json' } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) resultEl.innerHTML = '<p class="success-msg">' + data.message + ' â€” ' + data.name + '</p>';
+      else resultEl.innerHTML = '<p class="err-msg">' + data.message + '</p>';
+    })
+    .catch(function() { resultEl.innerHTML = '<p class="err-msg">Request failed.</p>'; }); ); };
+</script>
+</body>
+</html>

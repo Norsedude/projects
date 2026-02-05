@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in result</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <div class="card">
+    <% if (success) { %>
+      <h1 class="success-msg">Checked in</h1>
+      <p><%= name %> has been checked in for <%= event %>.</p>
+    <% } else { %>
+      <h1 class="err-msg">Check-in failed</h1>
+      <p><%= message %></p>
+    <% } %>
+    <p><a href="/check-in/scan">Scan another</a></p>
+  </div>
+</main>
+</body>
+</html>

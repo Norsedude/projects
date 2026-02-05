@@ -1,0 +1,19 @@
+{
+  "name": "private-events-app",
+  "version": "1.0.0",
+  "description": "Schedule private events with login, RSVP, and one-time QR check-in",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.6.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.0",
+    "qrcode": "^1.5.4",
+    "uuid": "^10.0.0"
+  }
+}

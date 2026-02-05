@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You are on the list - <%= event.title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <div class="card">
+    <h1 class="success-msg">You are on the list</h1>
+    <p>You have successfully RSVP'd for <strong><%= event.title %></strong>.</p>
+    <p><%= event.event_date %> at <%= event.event_time %><% if (event.location) { %> Â· <%= event.location %><% } %></p>
+    <h2>Your check-in QR code</h2>
+    <p>Show this QR code at the door on the day of the event. It is one-time use only.</p>
+    <div class="qr-wrap">
+      <img src="/qr/<%= rsvp.qr_token %>" alt="Check-in QR code" width="256" height="256">
+    </div>
+    <p style="font-size:0.9rem; color:#71717a">Save this page or take a screenshot so you can show the QR at the event.</p>
+  </div>
+</main>
+</body>
+</html>

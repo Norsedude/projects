@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSVP - <%= event.title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+<main class="main-content">
+  <div class="card">
+    <h1><%= event.title %></h1>
+    <p><%= event.event_date %> at <%= event.event_time %></p>
+    <% if (event.location) { %><p><%= event.location %></p><% } %>
+    <% if (event.description) { %><p><%= event.description %></p><% } %>
+    <p>You are logged in as <%= user.name %>. Confirm your RSVP below.</p>
+    <form method="post" action="/invite/<%= event.invite_slug %>">
+      <button type="submit">I will attend</button>
+    </form>
+  </div>
+</main>
+</body>
+</html>

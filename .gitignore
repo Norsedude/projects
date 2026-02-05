@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+private-events-app/node_modules
 /.pnp
 .pnp.js
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private Events</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">Private Events</a>
+    <nav>
+      <% if (typeof user !== 'undefined' && user) { %>
+        <span class="user-name"><%= user.name %></span>
+        <a href="/events">My events</a>
+        <form action="/auth/logout" method="post" style="display:inline">
+          <button type="submit" class="btn-ghost">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/auth/login">Log in</a>
+        <a href="/auth/signup">Sign up</a>
+      <% } %>
+    </nav>
+  </header>
+  <main class="main-content"><%- typeof content !== 'undefined' ? content : '' %></main>
+</body>
+</html>
