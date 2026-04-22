@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Dojo — Community Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f4;
+    --ink: #1a1814;
+    --muted: #8a8479;
+    --border: #e4e0d8;
+    --networking: #2563eb;
+    --networking-bg: #eff6ff;
+    --social: #7c3aed;
+    --social-bg: #f5f3ff;
+    --showcase: #d97706;
+    --showcase-bg: #fffbeb;
+    --food: #059669;
+    --food-bg: #ecfdf5;
+    --workshop: #dc2626;
+    --workshop-bg: #fef2f2;
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+  }
+  .calendar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .calendar-title span {
+    color: #2563eb;
+  }
+  .calendar-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  .calendar-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .cal-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--ink);
+    color: #fff;
+  }
+  .day-name {
+    text-align: center;
+    padding: 14px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .day-name:first-child { color: rgba(255,255,255,0.35); }
+  .day-name:last-child { color: rgba(255,255,255,0.35); }
+
+  .cal-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .cal-cell {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    min-height: 110px;
+    padding: 10px 8px 8px;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .cal-cell:nth-child(7n) { border-right: none; }
+  .cal-cell:hover { background: #fdfcfa; }
+  .cal-cell.other-month .date-num { color: #ccc; }
+  .cal-cell.other-month { background: #faf9f7; }
+  .cal-cell.today { background: #f0f7ff; }
+  .cal-cell.today .date-num {
+    background: var(--networking);
+    color: #fff;
+    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cal-cell.weekend { background: #fdfcf8; }
+
+  .date-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+
+  .event-pill {
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 5px;
+    margin-bottom: 3px;
+    line-height: 1.3;
+    display: flex;
+    align-items: flex-start;
+    gap: 3px;
+    cursor: default;
+  }
+  .event-pill .pill-icon { flex-shrink: 0; font-size: 10px; }
+  .event-pill .pill-text { }
+  .event-pill .pill-time { font-weight: 400; opacity: 0.75; font-size: 8.5px; display: block; }
+
+  .ev-networking { background: var(--networking-bg); color: var(--networking); }
+  .ev-social { background: var(--social-bg); color: var(--social); }
+  .ev-showcase { background: var(--showcase-bg); color: var(--showcase); }
+  .ev-food { background: var(--food-bg); color: var(--food); }
+  .ev-workshop { background: var(--workshop-bg); color: var(--workshop); }
+
+  .food-truck-badge {
+    position: absolute;
+    bottom: 5px; right: 5px;
+    font-size: 14px;
+    opacity: 0.6;
+  }
+
+  .cal-footer {
+    background: #f5f3ef;
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-stat {
+    text-align: center;
+  }
+  .footer-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .footer-stat .lbl {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .footer-cta {
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .calendar-grid { animation: fadeIn 0.5s ease; }
+
+  .prototype-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="prototype-tag">📋 Prototype 2</div>
+  <div class="eyebrow">Hacker Dojo · Mountain View</div>
+  <div class="calendar-title">May <span>2026</span></div>
+  <div class="calendar-subtitle">Community Events Calendar — Building connections, one event at a time</div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#2563eb;"></div>Networking</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>Social / Fun</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d97706;"></div>Showcase</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#059669;"></div>Food / Casual</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dc2626;"></div>Workshop</div>
+</div>
+
+<div class="calendar-grid">
+  <div class="cal-header">
+    <div class="day-name">Sun</div>
+    <div class="day-name">Mon</div>
+    <div class="day-name">Tue</div>
+    <div class="day-name">Wed</div>
+    <div class="day-name">Thu</div>
+    <div class="day-name">Fri</div>
+    <div class="day-name">Sat</div>
+  </div>
+  <div class="cal-body">
+
+    <!-- Row 1 -->
+    <div class="cal-cell other-month weekend"><div class="date-num">27</div></div>
+    <div class="cal-cell other-month"><div class="date-num">28</div></div>
+    <div class="cal-cell other-month"><div class="date-num">29</div></div>
+    <div class="cal-cell other-month"><div class="date-num">30</div></div>
+    <div class="cal-cell other-month"><div class="date-num">1</div></div>
+    <div class="cal-cell other-month weekend"><div class="date-num">2</div></div>
+    <div class="cal-cell other-month weekend"><div class="date-num">3</div></div>
+
+    <!-- Row 2: May 4–10 -->
+    <div class="cal-cell weekend"><div class="date-num">4</div></div>
+    <div class="cal-cell"><div class="date-num">5</div></div>
+    <div class="cal-cell"><div class="date-num">6</div>
+      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
+      <div class="food-truck-badge">🍩</div>
+    </div>
+    <div class="cal-cell"><div class="date-num">7</div></div>
+    <div class="cal-cell today"><div class="date-num">8</div>
+      <div class="event-pill ev-networking"><span class="pill-icon">🔗</span><span class="pill-text">Networking Thursday<span class="pill-time">6–8pm · Main Hall</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">9</div>
+      <div class="event-pill ev-social"><span class="pill-icon">🎮</span><span class="pill-text">Game Night<span class="pill-time">6–9pm · Groups of 4</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">10</div></div>
+
+    <!-- Row 3: May 11–17 -->
+    <div class="cal-cell weekend"><div class="date-num">11</div></div>
+    <div class="cal-cell"><div class="date-num">12</div></div>
+    <div class="cal-cell"><div class="date-num">13</div>
+      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
+      <div class="food-truck-badge">🚚</div>
+    </div>
+    <div class="cal-cell"><div class="date-num">14</div>
+      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">15</div></div>
+    <div class="cal-cell weekend"><div class="date-num">16</div>
+      <div class="event-pill ev-social"><span class="pill-icon">🎯</span><span class="pill-text">Scavenger Hunt<span class="pill-time">4–6pm · Whole Space</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">17</div>
+      <div class="event-pill ev-showcase"><span class="pill-icon">🚀</span><span class="pill-text">Demo Day<span class="pill-time">1–4pm · Booths</span></span></div>
+    </div>
+
+    <!-- Row 4: May 18–24 -->
+    <div class="cal-cell weekend"><div class="date-num">18</div></div>
+    <div class="cal-cell"><div class="date-num">19</div></div>
+    <div class="cal-cell"><div class="date-num">20</div>
+      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">21</div>
+      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">22</div>
+      <div class="event-pill ev-workshop"><span class="pill-icon">🎤</span><span class="pill-text">Founder Talk<span class="pill-time">6–7:30pm · Room B</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">23</div>
+      <div class="event-pill ev-social"><span class="pill-icon">🎮</span><span class="pill-text">Video Game Fri<span class="pill-time">5–9pm · Gaming Zone</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">24</div></div>
+
+    <!-- Row 5: May 25–31 -->
+    <div class="cal-cell weekend"><div class="date-num">25</div></div>
+    <div class="cal-cell"><div class="date-num">26</div>
+      <div class="event-pill ev-workshop"><span class="pill-icon">🏆</span><span class="pill-text">Peer Awards Q2<span class="pill-time">5–6pm · Lounge</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">27</div>
+      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">28</div>
+      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
+    </div>
+    <div class="cal-cell"><div class="date-num">29</div>
+      <div class="event-pill ev-networking"><span class="pill-icon">🔗</span><span class="pill-text">Networking Thursday<span class="pill-time">6–8pm · Main Hall</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">30</div>
+      <div class="event-pill ev-showcase"><span class="pill-icon">🛠️</span><span class="pill-text">Build Night<span class="pill-time">6–9pm · Open Collab</span></span></div>
+    </div>
+    <div class="cal-cell weekend"><div class="date-num">31</div></div>
+
+  </div>
+  <div class="cal-footer">
+    <div class="footer-stat"><div class="num">14</div><div class="lbl">Events in May</div></div>
+    <div class="footer-stat"><div class="num">5</div><div class="lbl">Event Types</div></div>
+    <div class="footer-stat"><div class="num">4×</div><div class="lbl">Weekly Touchpoints</div></div>
+    <div class="footer-stat"><div class="num">2</div><div class="lbl">Monthly Food Trucks</div></div>
+    <div class="footer-cta">View Full Schedule →</div>
+  </div>
+</div>
+
+</body>
+</html>
