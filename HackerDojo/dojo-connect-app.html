@@ -1,821 +1,3073 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DojoConnect — Hacker Dojo Community App</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DojoConnect — Hacker Dojo</title>
+<!-- Whitney Medium closest available substitute: Nunito for UI, plus Source Sans Pro for body -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0f14;
-    --surface: #161a24;
-    --surface2: #1e2333;
-    --border: #2a2f42;
-    --accent: #00e5a0;
-    --accent2: #7c6ff7;
-    --accent3: #ff6b6b;
-    --accent4: #ffa94d;
-    --text: #e8eaf2;
-    --muted: #6b7094;
-    --radius: 16px;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-  h1, h2, h3 {
-    font-family: 'Syne', sans-serif;
-  }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-  .page-title {
-    text-align: center;
-    margin-bottom: 48px;
-  }
-  .page-title h1 {
-    font-size: 14px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-  .page-title h2 {
-    font-size: 36px;
-    font-weight: 800;
-    color: var(--text);
-  }
-  .page-title p {
-    margin-top: 10px;
-    color: var(--muted);
-    font-size: 15px;
-  }
+/* === HACKER DOJO BRAND SYSTEM === */
+/* Official colors: Red PANTONE 1945C = #C8102E, Black, White */
+/* Font: Whitney Medium (substituted with Nunito for web) */
 
-  .screens-row {
-    display: flex;
-    gap: 28px;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 1200px;
-    width: 100%;
-  }
+[data-theme="light"]{
+  --bg:#fafafa;--bg2:#f2f0ee;--bg3:#e8e4e0;
+  --surface:#ffffff;--surface2:#f5f3f0;
+  --border:#e2ddd8;--border2:#ccc7c0;
+  --red:#C8102E;--red2:#a50c24;
+  --red-dim:rgba(200,16,46,0.07);--red-mid:rgba(200,16,46,0.15);
+  --text:#111111;--text2:#5a5550;--text3:#999490;
+  --nav-bg:rgba(250,250,250,0.96);
+  --hero-bg:#fff5f6;--modal-bg:#ffffff;
+  --cal-header:#C8102E;--cal-header-text:#ffffff;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.12);
+}
+[data-theme="dark"]{
+  --bg:#1e2128;--bg2:#252a34;--bg3:#2c3240;
+  --surface:#252a34;--surface2:#2c3240;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.16);
+  --red:#E8192C;--red2:#ff3347;
+  --red-dim:rgba(232,25,44,0.14);--red-mid:rgba(232,25,44,0.26);
+  --text:#eef0f6;--text2:#9ba3be;--text3:#5a637a;
+  --nav-bg:rgba(28,32,40,0.97);
+  --hero-bg:#252a34;--modal-bg:#252a34;
+  --cal-header:#C8102E;--cal-header-text:#ffffff;
+  --shadow:0 2px 16px rgba(0,0,0,0.25);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.4);
+}
 
-  .phone-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-  .screen-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 4px 14px;
-    border-radius: 20px;
-  }
+/* HD Brand fonts: Nunito = Whitney Medium substitute for headings */
+html,body{height:100%;background:var(--bg);font-family:'Source Sans 3',sans-serif;color:var(--text);overflow:hidden;transition:background .3s,color .3s}
+#app{max-width:430px;height:100dvh;margin:0 auto;position:relative;background:var(--bg);overflow:hidden}
 
-  .phone {
-    width: 260px;
-    background: var(--surface);
-    border-radius: 36px;
-    border: 1.5px solid var(--border);
-    overflow: hidden;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
-    position: relative;
-  }
-  .phone::before {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 24px;
-    background: var(--bg);
-    border-radius: 0 0 16px 16px;
-    margin: 0 auto;
-  }
+/* SCREENS */
+.screen{position:absolute;inset:0;bottom:68px;overflow-y:auto;overflow-x:hidden;display:none;flex-direction:column;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.screen.active{display:flex;animation:sIn .25s cubic-bezier(.22,1,.36,1)}
+/* Home screen uses flex column so sticky header works; content div handles its own scroll */
+#s-home{overflow:hidden}
+#home-content{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+#home-content::-webkit-scrollbar{display:none}
+@keyframes sIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
-  .screen {
-    padding: 12px 14px 20px;
-    min-height: 520px;
-  }
+/* NAV */
+#nav{position:absolute;bottom:0;left:0;right:0;height:68px;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:2px solid var(--red);display:flex;align-items:center;justify-content:space-around;z-index:100;padding:0 4px}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;cursor:pointer;border:none;background:none;color:var(--text3);transition:all .2s;position:relative;border-radius:12px}
+.nb.active{color:var(--red)}
+.nb.active::before{content:'';position:absolute;inset:2px 4px;background:var(--red-dim);border-radius:10px}
+.nb svg{width:20px;height:20px;transition:transform .18s;position:relative;z-index:1}
+.nb.active svg{transform:scale(1.1)}
+.nb span{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;position:relative;z-index:1}
+.nb .dot{position:absolute;top:4px;right:10px;width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--nav-bg);z-index:2}
 
-  /* Status bar */
-  .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4px 10px;
-    font-size: 10px;
-    color: var(--muted);
-  }
+/* SHARED */
+.screen-hdr{padding:52px 20px 12px;position:sticky;top:0;background:linear-gradient(to bottom,var(--bg) 84%,transparent);z-index:10;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid transparent}
+.screen-title{font-family:'Nunito',sans-serif;font-size:27px;font-weight:900;letter-spacing:-.02em;color:var(--text)}
+.screen-sub{font-size:12px;color:var(--text2);margin-top:2px}
+/* small brand tag under screen titles */
+.hd-brand-tag{display:inline-flex;align-items:center;gap:4px;font-family:'Nunito',sans-serif;font-size:8px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-top:2px}
+.hd-brand-tag svg{width:10px;height:10px}
+.sec-lbl{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);padding:0 20px;margin-bottom:8px}
+.spb{height:28px;flex-shrink:0}
+.theme-btn-placeholder{}
 
-  /* HOME SCREEN */
-  .app-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .app-logo {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .logo-mark {
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 800;
-    color: #000;
-  }
-  .app-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent2), var(--accent3));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 600;
-  }
+/* BUTTONS */
+.btn-red{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;border:none;cursor:pointer;background:var(--red);color:#fff;transition:all .15s;letter-spacing:.02em}
+.btn-red:active{transform:scale(.96);background:var(--red2)}
+.btn-ghost{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text2);transition:all .15s}
+.btn-ghost:active{transform:scale(.96)}
 
-  .greeting {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .greeting span { color: var(--accent); }
-  .sub-greeting {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
+/* EVENT TYPE COLORS */
+.type-networking{--tc:var(--red);--tb:var(--red-dim)}
+.type-social{--tc:#d97706;--tb:rgba(245,158,11,.1)}
+.type-showcase{--tc:#2563eb;--tb:rgba(59,130,246,.1)}
+.type-food{--tc:#16a34a;--tb:rgba(34,197,94,.1)}
+.type-workshop{--tc:#9333ea;--tb:rgba(168,85,247,.1)}
 
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
+/* ================ VISUAL CALENDAR ================ */
+.vis-cal-wrap{margin:0 16px 10px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
 
-  .quick-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 18px;
-  }
-  .qa-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 6px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .qa-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .qa-icon { font-size: 18px; margin-bottom: 4px; }
-  .qa-label { font-size: 9px; color: var(--muted); font-weight: 500; }
+/* Big month title header */
+.vis-cal-hero{background:var(--red);padding:20px 20px 16px;position:relative;overflow:hidden}
+.vis-cal-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.08)}
+.vis-cal-hero::after{content:'';position:absolute;bottom:-20px;left:20px;width:80px;height:80px;border-radius:50%;background:rgba(0,0,0,0.06)}
+.vis-cal-nav-row{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.vis-cal-arr{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.12);border:none;color:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.vis-cal-arr:active{transform:scale(.9);background:rgba(255,255,255,.2)}
+.vis-cal-month-label{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.vis-cal-big-month{font-family:'Nunito',sans-serif;font-size:52px;font-weight:900;color:#fff;line-height:.95;letter-spacing:-.03em;margin-top:6px;position:relative;z-index:1}
+.vis-cal-year{font-family:'Nunito',sans-serif;font-size:16px;font-weight:400;color:rgba(255,255,255,.55);margin-left:4px}
 
-  .event-card {
-    background: linear-gradient(135deg, #1a2240, #1e1a36);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-    margin-bottom: 8px;
-    position: relative;
-    overflow: hidden;
-  }
-  .event-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 100%;
-    background: var(--accent);
-  }
-  .event-card.purple::before { background: var(--accent2); }
-  .event-card.orange::before { background: var(--accent4); }
-  .event-card.red::before { background: var(--accent3); }
+/* Day-of-week row */
+.vis-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--bg2);border-top:1px solid var(--border)}
+.vis-dow span{text-align:center;padding:8px 2px;font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
 
-  .event-tag {
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(0, 229, 160, 0.1);
-    border-radius: 4px;
-    padding: 2px 6px;
-    display: inline-block;
-    margin-bottom: 5px;
-  }
-  .event-card.purple .event-tag { color: var(--accent2); background: rgba(124,111,247,0.12); }
-  .event-card.orange .event-tag { color: var(--accent4); background: rgba(255,169,77,0.12); }
-  .event-card.red .event-tag { color: var(--accent3); background: rgba(255,107,107,0.12); }
+/* Grid */
+.vis-grid{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surface)}
+.vis-cell{min-height:80px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px 4px 4px;cursor:pointer;transition:background .12s;position:relative}
+.vis-cell:nth-child(7n){border-right:none}
+.vis-cell:last-child,.vis-cell:nth-last-child(-n+7):nth-child(7n+1)~.vis-cell{border-bottom:none}
+.vis-cell:hover{background:var(--bg2)}
+.vis-cell.other-m{background:var(--bg2)}
+.vis-cell.other-m .vdn{color:var(--text3)}
+.vis-cell.is-today .vdn{background:var(--red);color:#fff;border-radius:6px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.vis-cell.has-rsvp::after{content:'';position:absolute;bottom:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--red)}
+.vdn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
 
-  .event-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .event-meta {
-    font-size: 10px;
-    color: var(--muted);
-    display: flex;
-    gap: 8px;
-  }
-  .event-meta span { display: flex; align-items: center; gap: 3px; }
+/* Event pills on calendar */
+.cal-pill{font-size:8px;font-weight:600;padding:2px 5px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;display:block;max-width:100%}
+.cp-networking{background:var(--red-dim);color:var(--red)}
+.cp-social{background:rgba(245,158,11,.12);color:#b45309}
+.cp-showcase{background:rgba(59,130,246,.12);color:#1d4ed8}
+.cp-food{background:rgba(34,197,94,.12);color:#15803d}
+.cp-workshop{background:rgba(168,85,247,.12);color:#7e22ce}
+.cp-custom{background:rgba(100,116,139,.12);color:#475569}
 
-  .join-btn {
-    margin-top: 8px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    padding: 5px 12px;
-    font-family: 'Syne', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-  }
+/* More indicator */
+.vis-cell.selected{background:var(--red-dim) !important;outline:2px solid var(--red);outline-offset:-2px}
+.vis-cell.selected .vdn{color:var(--red)}
+.cal-more{font-size:7.5px;color:var(--text3);font-weight:600;padding:0 2px}
 
-  /* GROUPS SCREEN */
-  .interest-group {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .interest-group:hover { border-color: var(--accent2); transform: translateX(2px); }
-  .group-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .group-info { flex: 1; }
-  .group-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
-  .group-count { font-size: 10px; color: var(--muted); }
-  .group-arrow { font-size: 14px; color: var(--muted); }
+/* ================ EVENT CARD (list) ================ */
+.ev-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 10px;position:relative;overflow:hidden;cursor:pointer;transition:all .15s}
+.ev-card:active{transform:scale(.985)}
+.ev-card:hover{border-color:var(--border2)}
+.ev-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.ev-card.type-networking::before{background:var(--red)}
+.ev-card.type-social::before{background:#f59e0b}
+.ev-card.type-showcase::before{background:#3b82f6}
+.ev-card.type-food::before{background:#22c55e}
+.ev-card.type-workshop::before{background:#a855f7}
+.ev-badge{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;display:inline-block;margin-bottom:5px;background:var(--tb,var(--red-dim));color:var(--tc,var(--red))}
+.ev-name{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;margin-bottom:3px;color:var(--text)}
+.ev-meta{display:flex;gap:8px;font-size:11px;color:var(--text2);flex-wrap:wrap;align-items:center}
+.ev-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ev-going{font-size:11px;color:var(--text3);margin-top:4px}
+.rsvp-mini{font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;padding:5px 12px;border-radius:7px;border:1.5px solid var(--red);color:var(--red);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.rsvp-mini.on{background:var(--red);color:#fff}
+.rsvp-mini:active{transform:scale(.93)}
 
-  /* SERENDIPITY SCREEN */
-  .match-card {
-    background: linear-gradient(135deg, #1a2240 0%, #1e1a36 100%);
-    border: 1px solid rgba(124,111,247,0.3);
-    border-radius: 18px;
-    padding: 16px;
-    margin-bottom: 12px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .match-card::after {
-    content: '';
-    position: absolute;
-    top: -30px; right: -30px;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(124,111,247,0.15), transparent);
-    border-radius: 50%;
-  }
-  .match-avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    margin: 0 auto 8px;
-    border: 2px solid rgba(124,111,247,0.4);
-  }
-  .match-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
-  .match-role { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
-  .match-tags {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
-  .tag {
-    font-size: 9px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 20px;
-    background: rgba(124,111,247,0.15);
-    border: 1px solid rgba(124,111,247,0.3);
-    color: var(--accent2);
-  }
-  .tag.green { background: rgba(0,229,160,0.1); border-color: rgba(0,229,160,0.3); color: var(--accent); }
-  .match-timer {
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  .match-timer strong { color: var(--accent4); font-family: 'Syne', sans-serif; }
-  .match-actions { display: flex; gap: 6px; }
-  .btn-connect {
-    flex: 1;
-    background: linear-gradient(135deg, var(--accent2), #9c8fff);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 8px;
-    font-family: 'Syne', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-skip {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-size: 10px;
-    cursor: pointer;
-  }
+/* ================ HOME ================ */
+.home-hero{
+  padding:52px 20px 12px;
+  background:var(--bg);
+  position:sticky;
+  top:0;
+  z-index:20;
+  flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.home-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);z-index:2}
+.home-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;position:relative;z-index:1}
 
-  .common-badge {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px 10px;
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  .common-badge strong { color: var(--text); font-family: 'Syne', sans-serif; }
+/* Hacker Dojo wordmark — compact inline */
+.hd-wordmark{display:flex;align-items:center;gap:7px}
+.hd-torii{width:22px;height:22px;color:var(--red);flex-shrink:0}
+.hd-text{display:flex;align-items:baseline;gap:3px;line-height:1}
+.hd-hacker{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;letter-spacing:.01em;color:var(--text)}
+.hd-dojo{font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--red)}
+.hd-sep{font-size:11px;color:var(--border2);margin:0 2px}
+.hd-sub{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:var(--text3)}
 
-  /* Nav */
-  .bottom-nav {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0 4px;
-    border-top: 1px solid var(--border);
-    margin-top: auto;
-  }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    cursor: pointer;
-  }
-  .nav-icon { font-size: 16px; }
-  .nav-label { font-size: 8px; color: var(--muted); }
-  .nav-item.active .nav-label { color: var(--accent); }
-  .nav-item.active .nav-icon { filter: drop-shadow(0 0 4px var(--accent)); }
+.h-right{display:flex;gap:7px;align-items:center}
+.av-sm{width:32px;height:32px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;cursor:pointer;flex-shrink:0}
 
-  /* Feed */
-  .feed-post {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-    margin-bottom: 8px;
-  }
-  .post-header {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 8px;
-  }
-  .post-avatar {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-  }
-  .post-meta { flex: 1; }
-  .post-author { font-size: 11px; font-weight: 600; }
-  .post-time { font-size: 9px; color: var(--muted); }
-  .post-type-badge {
-    font-size: 8px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .post-body { font-size: 11px; line-height: 1.5; color: #c0c4d6; margin-bottom: 8px; }
-  .post-actions { display: flex; gap: 12px; }
-  .post-action { font-size: 10px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 3px; }
-  .post-action.liked { color: var(--accent3); }
+/* Compact greeting */
+.greeting{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;letter-spacing:-.01em;color:var(--text);display:flex;align-items:center;gap:6px}
+.greeting em{color:var(--red);font-style:normal}
+.greet-sub{font-size:11px;color:var(--text2);margin-top:1px}
 
-  .announcement-banner {
-    background: linear-gradient(135deg, rgba(0,229,160,0.1), rgba(124,111,247,0.1));
-    border: 1px solid rgba(0,229,160,0.25);
-    border-radius: 12px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .ann-icon { font-size: 20px; }
-  .ann-text { font-size: 11px; line-height: 1.4; }
-  .ann-text strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+/* Home tabs — sticky just under hero */
+.h-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:19;flex-shrink:0}
+.htab{flex:1;padding:10px 8px;text-align:center;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.htab.active{color:var(--red);border-bottom-color:var(--red)}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .phone { animation: fadeUp 0.4s ease both; }
-  .phone:nth-child(2) { animation-delay: 0.1s; }
-  .phone:nth-child(3) { animation-delay: 0.2s; }
-  .phone:nth-child(4) { animation-delay: 0.3s; }
+/* My Calendar mini view on home */
+.mini-cal-strip{padding:14px 16px 0}
+.mcs-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.mcs-see-all{font-size:11px;font-weight:500;color:var(--red);cursor:pointer;font-family:'Source Sans 3',sans-serif}
+.week-strip{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.week-strip::-webkit-scrollbar{display:none}
+.day-pill{flex-shrink:0;width:46px;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;background:var(--surface);border:1px solid var(--border);transition:all .15s}
+.day-pill:active{transform:scale(.93)}
+.day-pill.has-ev{border-color:var(--red-mid);background:var(--red-dim)}
+.day-pill.today-pill{background:var(--red);border-color:var(--red)}
+.day-pill.today-pill .dp-name,.day-pill.today-pill .dp-num{color:#fff}
+.dp-name{font-family:'Nunito',sans-serif;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.dp-num{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--text);line-height:1}
+.dp-dots{display:flex;justify-content:center;gap:2px;margin-top:4px;min-height:5px}
+.dp-dot{width:4px;height:4px;border-radius:50%}
 
-  .screen-label-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    text-align: center;
-    margin-bottom: 4px;
-    color: var(--text);
-  }
-  .screen-label-sub {
-    font-size: 11px;
-    color: var(--muted);
-    text-align: center;
-    margin-bottom: 12px;
-  }
+/* Quick actions */
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 16px;margin:14px 0}
+.qc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.qc:active{transform:scale(.94)}
+.qc:hover{border-color:var(--border2)}
+.qc-icon{font-size:20px;margin-bottom:5px}
+.qc-lbl{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)}
 
-  .prototype-label {
-    font-size: 10px;
-    color: var(--accent);
-    background: rgba(0,229,160,0.08);
-    border: 1px solid rgba(0,229,160,0.2);
-    border-radius: 20px;
-    padding: 3px 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 6px;
-    text-align: center;
-  }
+/* No events empty */
+.empty-state{padding:32px 20px;text-align:center}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px}
+.empty-sub{font-size:13px;color:var(--text2)}
+
+/* ================ GROUPS ================ */
+.group-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 9px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.group-card:active{transform:scale(.985)}
+.group-card:hover{border-color:var(--border2)}
+.g-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.g-info{flex:1;min-width:0}
+.g-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.g-meta{font-size:11px;color:var(--text2);display:flex;gap:7px}
+.g-online{display:inline-flex;align-items:center;gap:3px}
+.g-online::before{content:'';width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block}
+.joined-tag{font-family:'Nunito',sans-serif;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--red-dim);color:var(--red);letter-spacing:.08em;text-transform:uppercase}
+.join-tag{font-family:'Nunito',sans-serif;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);cursor:pointer;transition:all .15s;letter-spacing:.04em}
+.join-tag:hover{background:var(--red-dim);color:var(--red);border-color:var(--red-mid)}
+
+/* ================ MATCH ================ */
+.match-card{margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center;position:relative;overflow:hidden}
+.match-card::before{content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:150px;height:150px;background:radial-gradient(circle,var(--red-dim),transparent);pointer-events:none}
+.m-av{width:66px;height:66px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff;margin:0 auto 9px;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--red-mid);position:relative;z-index:1}
+.m-name{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text)}
+.m-role{font-size:12px;color:var(--text2);margin-bottom:12px}
+.tags-row{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.mtag{font-size:10px;padding:3px 9px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+.mtag.hot{background:var(--red-dim);border-color:var(--red-mid);color:var(--red)}
+.m-win{font-size:12px;color:var(--text2);margin-bottom:12px}
+.m-win strong{color:var(--red);font-family:'Nunito',sans-serif}
+.m-btns{display:flex;gap:8px}
+.btn-connect{flex:1;padding:11px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-connect:active{transform:scale(.96);background:var(--red2)}
+.btn-skip{padding:11px 15px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:10px;font-size:13px;cursor:pointer;transition:all .15s}
+.compat-card{margin:0 16px 10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 15px}
+.compat-lbl{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
+.compat-track{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.compat-fill{height:100%;background:var(--red);border-radius:3px;transition:width .7s cubic-bezier(.22,1,.36,1)}
+.compat-row{display:flex;justify-content:space-between}
+.compat-pct{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:var(--red)}
+.compat-note{font-size:11px;color:var(--text3)}
+.why-card{margin:0 16px 10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.55}
+.why-card strong{display:block;font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:4px}
+.streak-card{margin:0 16px 10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px}
+.streak-num{font-family:'Nunito',sans-serif;font-size:36px;font-weight:900;color:var(--red);line-height:1}
+.streak-lbl{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.streak-sub{font-size:11px;color:var(--text2)}
+.past-conns{display:flex;gap:8px;padding:0 16px;flex-wrap:wrap}
+.pc-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 11px;display:flex;align-items:center;gap:7px}
+.pc-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:9px;font-weight:900;color:#fff;flex-shrink:0}
+.pc-name{font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--text)}
+.pc-when{font-size:9px;color:var(--text3)}
+
+/* ================ FEED ================ */
+.compose-bar{margin:0 16px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:50px;padding:10px 15px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:border-color .15s}
+.compose-bar:hover{border-color:var(--red)}
+.c-av{width:27px;height:27px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;flex-shrink:0}
+.c-ph{font-size:13px;color:var(--text3)}
+.ann-banner{margin:0 16px 12px;background:var(--red-dim);border:1px solid var(--red-mid);border-radius:13px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.ann-ico{font-size:18px;flex-shrink:0}
+.ann-txt{font-size:13px;color:var(--text);line-height:1.5}
+.ann-txt strong{color:var(--red);font-family:'Nunito',sans-serif}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 9px;cursor:pointer;transition:all .15s}
+.post-card:hover{border-color:var(--border2)}
+.post-hdr{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.post-av{width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+.post-meta{flex:1}
+.post-author{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
+.post-time{font-size:11px;color:var(--text3)}
+.post-type{font-family:'Nunito',sans-serif;font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase}
+.post-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.post-acts{display:flex;gap:13px}
+.post-act{font-size:12px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:3px;background:none;border:none;padding:0;transition:color .15s}
+.post-act:hover{color:var(--text2)}
+.post-act.liked{color:var(--red)}
+
+/* ================ MODAL SHEET ================ */
+#overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);z-index:200;display:none;align-items:flex-end}
+#overlay.open{display:flex;animation:obg .2s}
+@keyframes obg{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;background:var(--modal-bg);border-radius:22px 22px 0 0;border-top:1px solid var(--border2);padding:16px 20px 40px;animation:sup .28s cubic-bezier(.22,1,.36,1);max-height:90dvh;overflow-y:auto;scrollbar-width:none}
+.sheet::-webkit-scrollbar{display:none}
+@keyframes sup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px}
+.sheet-title{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--text);margin-bottom:3px}
+.sheet-sub{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.dchip{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px}
+.sheet-sec{font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.step-list{list-style:none;margin-bottom:16px}
+.step-list li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5;color:var(--text2)}
+.step-list li:last-child{border-bottom:none}
+.step-n{width:21px;height:21px;border-radius:50%;flex-shrink:0;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;margin-top:1px}
+
+/* BIG RSVP button in sheet */
+.sheet-rsvp{width:100%;padding:16px;background:var(--red);color:#fff;border:none;border-radius:13px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px;letter-spacing:.01em}
+.sheet-rsvp:active{transform:scale(.98);background:var(--red2)}
+.sheet-rsvp.rsvpd{background:var(--surface2);color:var(--red);border:2px solid var(--red)}
+.add-to-cal-btn{width:100%;padding:12px;background:transparent;color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-to-cal-btn:hover{border-color:var(--red);color:var(--red)}
+.add-to-cal-btn:active{transform:scale(.97)}
+
+/* FORMS */
+.form-group{margin-bottom:13px}
+.form-label{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .15s;resize:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--red)}
+.form-select option{background:var(--modal-bg)}
+.form-textarea{min-height:80px;line-height:1.5}
+.type-btns{display:flex;gap:6px;flex-wrap:wrap}
+.type-btn{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;padding:6px 11px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;letter-spacing:.04em;text-transform:capitalize}
+.type-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sheet-submit{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px}
+.sheet-submit:active{transform:scale(.97);background:var(--red2)}
+
+/* post detail comments */
+.post-detail-body{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.post-detail-acts{display:flex;gap:12px;padding-top:11px;border-top:1px solid var(--border);margin-bottom:14px}
+.comment-list{margin-bottom:12px}
+.comment{display:flex;gap:8px;margin-bottom:9px}
+.comment-av{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:9px;font-weight:900;color:#fff;flex-shrink:0}
+.comment-bbl{background:var(--surface2);border-radius:4px 11px 11px 11px;padding:7px 10px;flex:1}
+.comment-name{font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+.comment-body{font-size:12px;color:var(--text2);line-height:1.5}
+.comment-input-row{display:flex;gap:7px;align-items:center}
+.comment-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:18px;padding:8px 13px;font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s}
+.comment-input:focus{border-color:var(--red)}
+.send-btn{width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;flex-shrink:0}
+.send-btn:active{transform:scale(.9);background:var(--red2)}
+
+/* FAB */
+.cal-fab{position:sticky;bottom:12px;left:0;right:0;display:flex;justify-content:flex-end;padding:0 18px;z-index:20;pointer-events:none;margin-top:-8px}
+.fab{pointer-events:all;background:var(--red);color:#fff;border:none;border-radius:50px;padding:11px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px var(--red-mid);transition:all .15s;display:flex;align-items:center;gap:5px}
+.fab:active{transform:scale(.95);background:var(--red2)}
+
+/* PROFILE SHEET */
+.profile-hero{background:linear-gradient(145deg,#C8102E 0%,#a50c24 100%);border-radius:14px 14px 0 0;padding:28px 20px 20px;margin:-18px -20px 20px;text-align:center;position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.1);border-radius:50%}
+.profile-hero::after{content:'';position:absolute;bottom:-30px;left:-20px;width:90px;height:90px;background:rgba(255,255,255,.06);border-radius:50%}
+.profile-big-av{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:#fff;margin:0 auto 10px;border:3px solid rgba(255,255,255,.4);position:relative;z-index:1;cursor:pointer;transition:all .15s}
+.profile-big-av:hover{background:rgba(255,255,255,.35)}
+.profile-pname{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:3px;position:relative;z-index:1}
+.profile-ptitle{font-size:13px;color:rgba(255,255,255,.8);position:relative;z-index:1}
+.profile-stats{display:flex;justify-content:center;gap:24px;margin-top:14px;position:relative;z-index:1}
+.pstat{text-align:center}
+.pstat-num{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#fff;line-height:1}
+.pstat-lbl{font-size:9px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;font-family:'Nunito',sans-serif;font-weight:700}
+.profile-section{margin-bottom:18px}
+.profile-section-title{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.profile-field{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--text);width:100%;outline:none;transition:border-color .15s;resize:none;line-height:1.5}
+.profile-field:focus{border-color:var(--red)}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.skill-tag{font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-mid);display:flex;align-items:center;gap:5px;cursor:pointer}
+.skill-tag .rm{font-size:10px;opacity:.7;transition:opacity .15s}
+.skill-tag .rm:hover{opacity:1}
+.skill-input-row{display:flex;gap:7px}
+.skill-add-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s}
+.skill-add-input:focus{border-color:var(--red)}
+.skill-add-btn{background:var(--red);color:#fff;border:none;border-radius:8px;padding:8px 13px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
+.skill-add-btn:active{transform:scale(.94)}
+.profile-save{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px}
+.profile-save:active{transform:scale(.97);background:var(--red2)}
+.edit-overlay-btn{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;z-index:2;transition:all .15s}
+.edit-overlay-btn:hover{background:rgba(255,255,255,.35)}
+
+/* ===== ACCOUNT / AUTH SCREENS ===== */
+#auth-screen{position:absolute;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;overflow-y:auto;scrollbar-width:none}
+#auth-screen.hidden{display:none}
+.auth-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px}
+.auth-torii{width:52px;height:52px;color:var(--red);margin-bottom:10px}
+.auth-brand{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:2px}
+.auth-title{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--text);line-height:1}
+.auth-sub{font-size:13px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.5}
+.auth-card{width:100%;max-width:360px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow-lg)}
+.auth-card-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px}
+.auth-card-sub{font-size:12px;color:var(--text2);margin-bottom:20px}
+.auth-field-group{margin-bottom:14px}
+.auth-label{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.auth-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
+.auth-input:focus{border-color:var(--red)}
+.auth-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px;letter-spacing:.01em}
+.auth-btn:active{transform:scale(.97);background:var(--red2)}
+.auth-btn.ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border);margin-top:8px}
+.auth-btn.ghost:hover{border-color:var(--red);color:var(--red)}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-divider span{font-size:11px;color:var(--text3);white-space:nowrap}
+.auth-error{background:var(--red-dim);border:1px solid var(--red-mid);color:var(--red);border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:12px;display:none}
+.auth-error.show{display:block}
+
+/* Account switcher in profile */
+.acct-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.acct-item:hover{border-color:var(--red-mid)}
+.acct-item.active-acct{border-color:var(--red);background:var(--red-dim)}
+.acct-av{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.acct-info{flex:1;min-width:0}
+.acct-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.acct-email{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acct-check{color:var(--red);font-size:16px;flex-shrink:0}
+
+/* ===== QOL ADDITIONS ===== */
+
+/* Spinner for loading states */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+.spinner.dark{border-color:var(--red-dim);border-top-color:var(--red)}
+
+/* Theme toggle — icon only, pill shaped */
+.theme-btn{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:18px;transition:all .18s;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0}
+.theme-btn:active{transform:scale(.88)}
+.theme-btn .tb-icon{font-size:17px;line-height:1}
+.theme-btn .tb-label{display:none}
+
+/* Past-day calendar cells dimmed */
+.vis-cell.past-day{opacity:.45}
+.vis-cell.past-day:hover{opacity:.6;background:var(--bg2)}
+
+/* Search bar */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:9px 13px;margin:0 16px 12px;transition:border-color .15s}
+.search-bar:focus-within{border-color:var(--red)}
+.search-bar svg{width:15px;height:15px;color:var(--text3);flex-shrink:0}
+.search-input{flex:1;background:none;border:none;outline:none;font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--text)}
+.search-input::placeholder{color:var(--text3)}
+
+/* Availability badge */
+.avail-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .15s;border:1.5px solid}
+.avail-open{background:rgba(34,197,94,.1);color:#15803d;border-color:rgba(34,197,94,.25)}
+.avail-busy{background:rgba(245,158,11,.1);color:#b45309;border-color:rgba(245,158,11,.25)}
+.avail-browse{background:var(--surface2);color:var(--text3);border-color:var(--border)}
+
+/* Skill category chips */
+.skill-cat-label{font-size:9px;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:8px 0 4px;display:block}
+.skill-tag.technical{background:rgba(59,130,246,.09);color:#1d4ed8;border-color:rgba(59,130,246,.2)}
+.skill-tag.tool{background:rgba(168,85,247,.09);color:#7e22ce;border-color:rgba(168,85,247,.2)}
+.skill-tag.soft{background:rgba(34,197,94,.09);color:#15803d;border-color:rgba(34,197,94,.2)}
+
+/* Event RSVP confirmed checkmark on card */
+.ev-rsvp-confirmed{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#15803d;font-family:'Nunito',sans-serif;font-weight:700;background:rgba(34,197,94,.1);border-radius:5px;padding:2px 7px;margin-top:4px}
+
+/* Event action buttons (edit/delete) */
+.ev-actions-row{display:flex;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.ev-action-btn{flex:1;padding:9px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;border:1.5px solid var(--border);background:transparent;color:var(--text2)}
+.ev-action-btn:active{transform:scale(.96)}
+.ev-action-btn.danger{color:var(--red);border-color:var(--red-mid)}
+.ev-action-btn.danger:hover{background:var(--red-dim)}
+
+/* Toast — longer display for long messages, progress bar */
+#toast{position:absolute;bottom:calc(68px + 14px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);border-radius:24px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;white-space:nowrap;z-index:400;opacity:0;pointer-events:none;transition:all .22s cubic-bezier(.22,1,.36,1);max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Empty state with illustration */
+.empty-state{padding:36px 20px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.7}
+.empty-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:5px}
+.empty-sub{font-size:13px;color:var(--text2);line-height:1.5;max-width:220px}
+.empty-cta{margin-top:14px;padding:10px 20px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.empty-cta:active{transform:scale(.96)}
+
+/* Mini month grid on home My Calendar tab */
+.mini-month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:8px}
+.mini-day{height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .12s;position:relative}
+.mini-day:hover{background:var(--surface2)}
+.mini-day.today-day{background:var(--red);color:#fff;font-weight:800}
+.mini-day.has-event::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--red)}
+.mini-day.today-day::after{background:#fff}
+.mini-day.has-rsvp::after{background:var(--red)}
+.mini-day.past-mini{opacity:.4}
+.mini-day.other-mini{opacity:.25;pointer-events:none}
+.mini-dow{height:20px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+
+/* Conversation search */
+.msg-search-wrap{padding:8px 16px 0}
+
+/* Seen match tracking */
+.match-seen-bar{display:flex;gap:6px;align-items:center;min-height:10px}
+.seen-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:all .2s;cursor:pointer}
+.seen-dot.current{background:var(--red);transform:scale(1.3)}
+.seen-dot.seen{background:var(--text3)}
+
+/* Back button in chat */
+.chat-back{cursor:pointer;color:var(--text2);font-size:22px;line-height:1;padding:4px 8px 4px 0;transition:color .15s}
+.chat-back:hover{color:var(--red)}
+
+/* Keyboard dismiss on form submit */
+.kb-dismiss{outline:none}
+
+
 </style>
 </head>
 <body>
+<!-- ===== AUTH SCREEN ===== -->
+<div id="auth-screen" class="hidden">
+  <div class="auth-logo">
+    <svg class="auth-torii" viewBox="0 0 48 48" fill="none">
+      <rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/>
+      <rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/>
+      <rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+      <rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+    </svg>
+    <div class="auth-brand">Hacker Dojo</div>
+    <div class="auth-title">DojoConnect</div>
+    <div class="auth-sub" id="auth-tagline">Sign in to your account or create one to get started.</div>
+  </div>
 
-<div class="page-title">
-  <h1>Prototype 1</h1>
-  <h2>DojoConnect — Community App</h2>
-  <p>Mobile app mockup · 4 screens · Hacker Dojo</p>
+  <div class="auth-card" id="auth-card">
+    <!-- Content swapped by JS -->
+  </div>
 </div>
 
-<div class="screens-row">
+<div id="app">
 
-  <!-- SCREEN 1: HOME -->
-  <div class="phone-wrapper">
-    <div class="prototype-label">Screen 1</div>
-    <div class="screen-label-title">Home</div>
-    <div class="screen-label-sub">Dashboard & upcoming events</div>
-    <div class="phone">
-      <div class="screen">
-        <div class="status-bar"><span>9:41</span><span>●●● ▲ 🔋</span></div>
-        <div class="app-header">
-          <div class="app-logo">
-            <div class="logo-mark">DJ</div>
-            <span class="app-name">DojoConnect</span>
-          </div>
-          <div class="avatar">MO</div>
+<!-- ===== HOME ===== -->
+<div class="screen active" id="s-home">
+  <!-- Sticky header: wordmark + greeting + tabs all fixed at top -->
+  <div class="home-hero">
+    <div class="home-top">
+      <div class="hd-wordmark">
+        <svg class="hd-torii" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/>
+          <rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/>
+          <rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+          <rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+        </svg>
+        <div class="hd-text">
+          <span class="hd-hacker">Hacker</span>
+          <span class="hd-dojo">Dojo</span>
+          <span class="hd-sep">·</span>
+          <span class="hd-sub">Connect</span>
         </div>
-        <div class="greeting">Hey, Mateo <span>👋</span></div>
-        <div class="sub-greeting">3 events this week · 2 new matches</div>
-
-        <div class="quick-actions">
-          <div class="qa-btn">
-            <div class="qa-icon">📅</div>
-            <div class="qa-label">Events</div>
-          </div>
-          <div class="qa-btn">
-            <div class="qa-icon">👥</div>
-            <div class="qa-label">Groups</div>
-          </div>
-          <div class="qa-btn">
-            <div class="qa-icon">✨</div>
-            <div class="qa-label">Match</div>
-          </div>
-        </div>
-
-        <div class="section-title">This Week</div>
-        <div class="event-card">
-          <div class="event-tag">Networking</div>
-          <div class="event-name">Networking Thursday</div>
-          <div class="event-meta">
-            <span>📅 Thu, 6–8pm</span>
-            <span>👤 24 going</span>
-          </div>
-          <button class="join-btn">Join →</button>
-        </div>
-        <div class="event-card purple">
-          <div class="event-tag">Social</div>
-          <div class="event-name">Game Night Friday</div>
-          <div class="event-meta">
-            <span>📅 Fri, 6–9pm</span>
-            <span>👤 18 going</span>
-          </div>
-          <button class="join-btn" style="background:var(--accent2);color:#fff;">Join →</button>
-        </div>
-        <div class="event-card orange">
-          <div class="event-tag">Showcase</div>
-          <div class="event-name">Demo Day / Build Night</div>
-          <div class="event-meta">
-            <span>📅 Sat, 2–5pm</span>
-            <span>👤 31 going</span>
-          </div>
-          <button class="join-btn" style="background:var(--accent4);color:#000;">Join →</button>
-        </div>
-
-        <div class="bottom-nav">
-          <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
-          <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Events</div></div>
-          <div class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Groups</div></div>
-          <div class="nav-item"><div class="nav-icon">✨</div><div class="nav-label">Match</div></div>
-          <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">Feed</div></div>
-        </div>
+      </div>
+      <div class="h-right">
+        <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+        <div class="av-sm" id="home-av" onclick="openProfile()" style="cursor:pointer"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div class="greeting" id="home-greeting">Hey, <em id="home-greeting-name"></em> 👋</div>
+        <div class="greet-sub" id="home-sub">Loading your week...</div>
       </div>
     </div>
   </div>
 
-  <!-- SCREEN 2: GROUPS -->
-  <div class="phone-wrapper">
-    <div class="prototype-label">Screen 2</div>
-    <div class="screen-label-title">Groups</div>
-    <div class="screen-label-sub">Interest-based communities</div>
-    <div class="phone">
-      <div class="screen">
-        <div class="status-bar"><span>9:41</span><span>●●● ▲ 🔋</span></div>
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;">My Groups</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Connect by interest & specialty</div>
-
-        <div class="section-title">🔥 Most Active</div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(0,229,160,0.15);">💻</div>
-          <div class="group-info">
-            <div class="group-name">Software Dev</div>
-            <div class="group-count">142 members · 8 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(124,111,247,0.15);">🤖</div>
-          <div class="group-info">
-            <div class="group-name">AI / Machine Learning</div>
-            <div class="group-count">98 members · 12 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(255,169,77,0.15);">🚀</div>
-          <div class="group-info">
-            <div class="group-name">Founders & Startups</div>
-            <div class="group-count">76 members · 5 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-
-        <div class="section-title" style="margin-top:12px;">🎯 Explore More</div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(255,107,107,0.15);">🎮</div>
-          <div class="group-info">
-            <div class="group-name">Game Dev</div>
-            <div class="group-count">54 members · 3 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(0,229,160,0.1);">🔧</div>
-          <div class="group-info">
-            <div class="group-name">Hardware / Robotics</div>
-            <div class="group-count">61 members · 6 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(124,111,247,0.1);">🎨</div>
-          <div class="group-info">
-            <div class="group-name">Design & UX</div>
-            <div class="group-count">47 members · 2 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-        <div class="interest-group">
-          <div class="group-icon" style="background:rgba(255,169,77,0.1);">☁️</div>
-          <div class="group-info">
-            <div class="group-name">Cloud & DevOps</div>
-            <div class="group-count">39 members · 4 online</div>
-          </div>
-          <div class="group-arrow">›</div>
-        </div>
-
-        <div class="bottom-nav">
-          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
-          <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Events</div></div>
-          <div class="nav-item active"><div class="nav-icon">👥</div><div class="nav-label">Groups</div></div>
-          <div class="nav-item"><div class="nav-icon">✨</div><div class="nav-label">Match</div></div>
-          <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">Feed</div></div>
-        </div>
-      </div>
-    </div>
+  <div class="h-tabs">
+    <div class="htab active" onclick="homeTab('upcoming',this)">Upcoming</div>
+    <div class="htab" onclick="homeTab('myevents',this)">My Calendar</div>
+    <div class="htab" onclick="homeTab('discover',this)">Discover</div>
   </div>
 
-  <!-- SCREEN 3: SERENDIPITY MATCH -->
-  <div class="phone-wrapper">
-    <div class="prototype-label">Screen 3</div>
-    <div class="screen-label-title">Serendipity Match</div>
-    <div class="screen-label-sub">AI-powered 15-min connections</div>
-    <div class="phone">
-      <div class="screen">
-        <div class="status-bar"><span>9:41</span><span>●●● ▲ 🔋</span></div>
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:2px;">✨ Your Match</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Curated for you · Updates daily</div>
-
-        <div class="match-card">
-          <div class="match-avatar">HP</div>
-          <div class="match-name">Hina P.</div>
-          <div class="match-role">AI Engineer · 3 yrs at Dojo</div>
-          <div class="match-tags">
-            <span class="tag">Machine Learning</span>
-            <span class="tag green">Robotics</span>
-            <span class="tag">Open Source</span>
-            <span class="tag green">Startups</span>
-          </div>
-          <div class="match-timer">Shared window: <strong>Today 2–4pm</strong></div>
-          <div class="match-actions">
-            <button class="btn-connect">✨ Start 15-min Chat</button>
-            <button class="btn-skip">Skip</button>
-          </div>
-        </div>
-
-        <div class="common-badge">
-          💡 <strong>Why you matched:</strong> Both working on AI projects, both interested in startup ecosystem
-        </div>
-
-        <div class="section-title" style="margin-top:8px;">Past Connections</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:7px 10px;display:flex;align-items:center;gap:6px;">
-            <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">SR</div>
-            <div style="font-size:10px;">Allison P.<br><span style="color:var(--muted);font-size:9px;">Last week</span></div>
-          </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:7px 10px;display:flex;align-items:center;gap:6px;">
-            <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">MP</div>
-            <div style="font-size:10px;">Heather S.<br><span style="color:var(--muted);font-size:9px;">2 weeks ago</span></div>
-          </div>
-        </div>
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;margin-top:10px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Your connection streak</div>
-          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent4);">🔥 5</div>
-          <div style="font-size:9px;color:var(--muted);">5 weeks in a row</div>
-        </div>
-
-        <div class="bottom-nav">
-          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
-          <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Events</div></div>
-          <div class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Groups</div></div>
-          <div class="nav-item active"><div class="nav-icon">✨</div><div class="nav-label">Match</div></div>
-          <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">Feed</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCREEN 4: COMMUNITY FEED -->
-  <div class="phone-wrapper">
-    <div class="prototype-label">Screen 4</div>
-    <div class="screen-label-title">Community Feed</div>
-    <div class="screen-label-sub">Announcements & member posts</div>
-    <div class="phone">
-      <div class="screen">
-        <div class="status-bar"><span>9:41</span><span>●●● ▲ 🔋</span></div>
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:2px;">Community</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Hacker Dojo · 342 members</div>
-
-        <div class="announcement-banner">
-          <div class="ann-icon">📢</div>
-          <div class="ann-text"><strong>Networking Thursday is tomorrow</strong> at 6pm — 24 members RSVP'd. Food & drinks provided!</div>
-        </div>
-
-        <div class="feed-post">
-          <div class="post-header">
-            <div class="post-avatar" style="background:linear-gradient(135deg,var(--accent),#00c4aa);">HD</div>
-            <div class="post-meta">
-              <div class="post-author">Hacker Dojo Staff</div>
-              <div class="post-time">2 hours ago</div>
-            </div>
-            <div class="post-type-badge" style="background:rgba(0,229,160,0.1);color:var(--accent);">Announce</div>
-          </div>
-          <div class="post-body">🌮 Food Truck Tuesday is back this week! Tacos & burritos from Truck Tuesdays parked outside noon–2pm. Members eat free with badge.</div>
-          <div class="post-actions">
-            <div class="post-action liked">❤️ 31</div>
-            <div class="post-action">💬 7</div>
-            <div class="post-action">↗️ Share</div>
-          </div>
-        </div>
-
-        <div class="feed-post">
-          <div class="post-header">
-            <div class="post-avatar" style="background:linear-gradient(135deg,var(--accent2),#a78bfa);">AA</div>
-            <div class="post-meta">
-              <div class="post-author">Alex A.</div>
-              <div class="post-time">4 hours ago</div>
-            </div>
-            <div class="post-type-badge" style="background:rgba(124,111,247,0.12);color:var(--accent2);">Collab</div>
-          </div>
-          <div class="post-body">Anyone working on AI / computer vision projects? Looking to pair up for Demo Day next Saturday. DM me!</div>
-          <div class="post-actions">
-            <div class="post-action">❤️ 12</div>
-            <div class="post-action">💬 5</div>
-            <div class="post-action">↗️ Share</div>
-          </div>
-        </div>
-
-        <div class="feed-post">
-          <div class="post-header">
-            <div class="post-avatar" style="background:linear-gradient(135deg,var(--accent4),#ffcc80);">LT</div>
-            <div class="post-meta">
-              <div class="post-author">Lilibeth T.</div>
-              <div class="post-time">Yesterday</div>
-            </div>
-            <div class="post-type-badge" style="background:rgba(255,169,77,0.12);color:var(--accent4);">Win 🏆</div>
-          </div>
-          <div class="post-body">Shoutout to everyone who came to Game Night — our team won the trivia round! Best night here yet. See you all Thursday 🙌</div>
-          <div class="post-actions">
-            <div class="post-action liked">❤️ 47</div>
-            <div class="post-action">💬 14</div>
-            <div class="post-action">↗️ Share</div>
-          </div>
-        </div>
-
-        <div class="bottom-nav">
-          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
-          <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Events</div></div>
-          <div class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Groups</div></div>
-          <div class="nav-item"><div class="nav-icon">✨</div><div class="nav-label">Match</div></div>
-          <div class="nav-item active"><div class="nav-icon">💬</div><div class="nav-label">Feed</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <!-- Scrollable content only -->
+  <div id="home-content" style="padding-top:12px"></div>
+  <div class="spb"></div>
 </div>
 
+<!-- ===== CALENDAR ===== -->
+<div class="screen" id="s-calendar">
+  <div style="padding:48px 20px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border)">
+    <div>
+      <div class="screen-title">Calendar</div>
+      <div class="hd-brand-tag">
+        <svg viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/><rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/></svg>
+        Hacker Dojo
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+  </div>
+
+  <!-- Visual calendar -->
+  <div class="vis-cal-wrap">
+    <div class="vis-cal-hero" id="cal-hero-bg">
+      <div class="vis-cal-nav-row">
+        <button class="vis-cal-arr" onclick="calNav(-1)">‹</button>
+        <div class="vis-cal-month-label" id="cal-month-label">May 2026</div>
+        <button class="vis-cal-arr" onclick="calNav(1)">›</button>
+      </div>
+      <div class="vis-cal-big-month">
+        <span id="cal-big-month">May</span><span class="vis-cal-year" id="cal-big-year">2026</span>
+      </div>
+    </div>
+    <div class="vis-dow">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <div class="vis-grid" id="vis-grid"></div>
+  </div>
+
+  <!-- Selected day panel -->
+  <div id="cal-day-panel" style="display:none;padding:0 16px 0;margin-top:4px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div id="cal-day-label" style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--text)"></div>
+      <div onclick="closeDayPanel()" style="font-size:12px;color:var(--text3);cursor:pointer;padding:4px 8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">✕</div>
+    </div>
+    <div id="cal-day-events"></div>
+  </div>
+
+  <!-- Legend -->
+  <div id="cal-legend" style="padding:12px 16px 0;display:flex;gap:10px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:2px;background:var(--red)"></div>Networking</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:2px;background:#f59e0b"></div>Social</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:2px;background:#3b82f6"></div>Showcase</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:2px;background:#22c55e"></div>Food</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:2px;background:#a855f7"></div>Workshop</div>
+  </div>
+
+  <div class="cal-fab">
+    <button class="fab" onclick="openSheet('add-event')">＋ Add Event</button>
+  </div>
+  <div class="spb"></div>
+</div>
+
+<!-- ===== GROUPS ===== -->
+<div class="screen" id="s-groups">
+  <div class="screen-hdr">
+    <div>
+      <div class="screen-title">Groups</div>
+      <div class="hd-brand-tag"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/><rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/></svg>Hacker Dojo</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+  </div>
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="search-input" id="groups-search" placeholder="Search groups..." oninput="filterGroupsBySearch(this.value)" />
+  </div>
+  <div style="padding:0 16px 12px;display:flex;gap:8px">
+    <button class="btn-red" style="flex:1;font-size:12px;padding:9px" onclick="openSheet('create-group')">＋ Create Group</button>
+    <button class="btn-ghost" style="flex:1;font-size:12px;padding:9px" onclick="toast('Showing all groups')">Explore All</button>
+  </div>
+  <div class="sec-lbl">🔥 My Groups</div>
+  <div id="my-groups"></div>
+  <div class="sec-lbl" style="margin-top:6px">🌐 Explore More</div>
+  <div id="explore-groups"></div>
+  <div class="spb"></div>
+</div>
+
+<!-- ===== MATCH ===== -->
+<div class="screen" id="s-match">
+  <div class="screen-hdr" style="flex-direction:column;align-items:stretch;gap:10px;padding-bottom:14px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between">
+      <div>
+        <div class="screen-title">Match</div>
+        <div class="hd-brand-tag"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/><rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/></svg>Hacker Dojo · AI Connections</div>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+    </div>
+    <div class="match-seen-bar" id="match-seen-bar" style="margin:0;padding:0"></div>
+  </div>
+  <div class="match-card">
+    <div class="m-av" id="m-av">HP</div>
+    <div class="m-name" id="m-name">Hina Patel</div>
+    <div class="m-role" id="m-role">UX Designer · 2 yrs at Dojo</div>
+    <div class="tags-row" id="m-tags"></div>
+    <div class="m-win">Best window: <strong id="m-time">Today 3–5pm</strong></div>
+    <div class="m-btns">
+      <button class="btn-connect" id="btn-connect" onclick="acceptMatch()">✦ Start 15-min Chat</button>
+      <button class="btn-skip" onclick="skipMatch()">Skip</button>
+    </div>
+  </div>
+  <div class="compat-card">
+    <div class="compat-lbl">Compatibility Score</div>
+    <div class="compat-track"><div class="compat-fill" id="compat-fill" style="width:0%"></div></div>
+    <div class="compat-row">
+      <div class="compat-pct" id="compat-pct">87%</div>
+      <div class="compat-note" id="compat-note">Strong match on interests</div>
+    </div>
+  </div>
+  <div class="why-card"><strong>Why You Matched</strong><span id="m-reason">Both working on product design and interested in early-stage startups.</span></div>
+  <div class="streak-card">
+    <div class="streak-num">🔥 5</div>
+    <div><div class="streak-lbl">Connection Streak</div><div class="streak-sub">5 weeks in a row — keep it up!</div></div>
+  </div>
+  <div class="sec-lbl" style="margin-top:4px">Past Connections</div>
+  <div class="past-conns" id="past-conn"></div>
+  <div class="spb"></div>
+</div>
+
+<!-- ===== FEED ===== -->
+<div class="screen" id="s-feed">
+  <div class="screen-hdr">
+    <div>
+      <div class="screen-title">Community</div>
+      <div class="hd-brand-tag"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/><rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/></svg>Hacker Dojo · 342 members</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+  </div>
+  <div class="compose-bar" onclick="openSheet('compose')">
+    <div class="c-av">MO</div>
+    <div class="c-ph">Share something with the community...</div>
+  </div>
+  <div class="ann-banner">
+    <div class="ann-ico">📢</div>
+    <div class="ann-txt"><strong>Networking Thursday tomorrow at 6pm</strong> — 24 members RSVP'd. Food and drinks provided!</div>
+  </div>
+  <div id="feed-posts"></div>
+  <div class="spb"></div>
+</div>
+
+<!-- ===== MESSAGES ===== -->
+<div class="screen" id="s-messages">
+  <div class="screen-hdr">
+    <div>
+      <div class="screen-title">Messages</div>
+      <div class="hd-brand-tag"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/><rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/></svg>Hacker Dojo</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+  </div>
+  <div class="search-bar" style="margin-top:4px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="search-input" id="msg-search" placeholder="Search messages..." oninput="filterMessages(this.value)" />
+  </div>
+  <div id="msg-thread-list"></div>
+  <div class="spb"></div>
+</div>
+
+<!-- ===== CHAT ===== -->
+<div class="screen" id="s-chat">
+  <div style="padding:48px 20px 10px;display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--bg);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border)">
+    <div class="chat-back" onclick="goTo('messages')">‹</div>
+    <div id="chat-av" style="width:36px;height:36px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:#fff;flex-shrink:0"></div>
+    <div style="flex:1;min-width:0">
+      <div id="chat-name" style="font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--text)"></div>
+      <div id="chat-role" style="font-size:11px;color:var(--text3)"></div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()"><span class="tb-icon">☀️</span></button>
+  </div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:none"></div>
+  <div style="padding:10px 16px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-shrink:0;background:var(--bg)">
+    <input id="chat-input" class="comment-input" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChatMsg()" style="border-radius:22px" />
+    <button class="send-btn" onclick="sendChatMsg()">➤</button>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <button class="nb active" id="nb-home" onclick="goTo('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="nb" id="nb-calendar" onclick="goTo('calendar')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>Calendar</span>
+  </button>
+  <button class="nb" id="nb-groups" onclick="goTo('groups')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span>Groups</span>
+  </button>
+  <button class="nb" id="nb-match" onclick="goTo('match')">
+    <div class="dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Match</span>
+  </button>
+  <button class="nb" id="nb-messages" onclick="goTo('messages')">
+    <div class="dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Messages</span>
+  </button>
+  <button class="nb" id="nb-feed" onclick="goTo('feed')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>Feed</span>
+  </button>
+</nav>
+
+<!-- ===== MODAL ===== -->
+<div id="overlay" onclick="closeSheet(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div id="sheet-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+</div>
+
+<script>
+// ========== DATA ==========
+const MEMBERS = {
+  MO:{name:'Mateo Ortega',initials:'MO',color:'#c41c1c'},
+  HP:{name:'Hina Patel',initials:'HP',color:'#7c3aed'},
+  AA:{name:'Alex Alvarez',initials:'AA',color:'#0369a1'},
+  AP:{name:'Allison Pon',initials:'AP',color:'#0891b2'},
+  HS:{name:'Heather Swinehart',initials:'HS',color:'#15803d'},
+  LT:{name:'Lilibeth Trinidad',initials:'LT',color:'#b45309'},
+  SS:{name:'Sousen Saddik',initials:'SS',color:'#be185d'},
+};
+
+const TYPE_COLORS = {
+  networking:{pill:'cp-networking',badge:'background:var(--red-dim);color:var(--red)',bar:'var(--red)'},
+  social:{pill:'cp-social',badge:'background:rgba(245,158,11,.1);color:#b45309',bar:'#f59e0b'},
+  showcase:{pill:'cp-showcase',badge:'background:rgba(59,130,246,.1);color:#1d4ed8',bar:'#3b82f6'},
+  food:{pill:'cp-food',badge:'background:rgba(34,197,94,.1);color:#15803d',bar:'#22c55e'},
+  workshop:{pill:'cp-workshop',badge:'background:rgba(168,85,247,.1);color:#7e22ce',bar:'#a855f7'},
+  custom:{pill:'cp-custom',badge:'background:rgba(100,116,139,.1);color:#475569',bar:'#64748b'},
+};
+
+let events = [
+  {id:1,name:'Networking Thursday',type:'networking',date:'2026-05-07',time:'6:00–8:00 PM',location:'Main Hall',going:24,desc:'Meet founders, engineers, and builders over drinks. Structured speed intros plus open networking.',steps:[{n:'1',t:'Arrive & grab a name tag',d:'Your tag shows your name and top skill so conversations start naturally'},{n:'2',t:'Speed intro rotations',d:'5-min rounds in small groups — meet 8 people in 30 min'},{n:'3',t:'Open networking floor',d:'Follow up with anyone you connected with, exchange contacts'},{n:'4',t:'Lightning announcements',d:'Members share what they are working on or looking for'}]},
+  {id:2,name:'Game Night Friday',type:'social',date:'2026-05-09',time:'6:00–9:00 PM',location:'Main Room',going:18,desc:'Teams of 4 strangers compete in trivia, mini challenges, and the spaghetti-marshmallow build.',steps:[{n:'1',t:'Groups of 4 randomized at the door',d:'You are placed with 3 people you do not know — intentionally'},{n:'2',t:'3 rounds of games',d:'Tech trivia, mini challenges, spaghetti marshmallow tower'},{n:'3',t:'Points and prizes',d:'Top team wins. Peer shoutouts each round'},{n:'4',t:'Mix and mingle',d:'Last 30 min open floor — add each other on DojoConnect'}]},
+  {id:3,name:'Demo Day / Build Night',type:'showcase',date:'2026-05-16',time:'1:00–4:00 PM',location:'Open Floor + Booths',going:31,desc:'Set up a booth and show what you are building. Any project, any stage.',steps:[{n:'1',t:'Set up your booth',d:'Any project — demo, prototype, sketch, or idea is fine'},{n:'2',t:'Walk-around hour',d:'Tour booths, ask questions, leave written feedback cards'},{n:'3',t:'Lightning pitches (optional)',d:'3-min pitch to the full room plus live Q&A'},{n:'4',t:'Community vote + prizes',d:'Winner gets a free month of membership'}]},
+  {id:4,name:'Founder Talk',type:'workshop',date:'2026-05-20',time:'6:00–7:30 PM',location:'Room B',going:15,desc:'A founder or expert shares their story and opens for Q&A. Topics include UI/UX, legal, and startup building.',steps:[{n:'1',t:'Intro',d:'15-min overview of who they are and what they built'},{n:'2',t:'Main talk',d:'45-min conversational deep dive on their topic'},{n:'3',t:'Open Q&A',d:'Members ask anything — career, technical, personal'},{n:'4',t:'Informal wrap-up',d:'Speaker stays 15 min for one-on-one conversations'}]},
+  {id:5,name:'Food Truck Tuesday',type:'food',date:'2026-05-12',time:'12:00–2:00 PM',location:'Outside Entrance',going:null,desc:'Rotating food truck outside. Members eat free with badge.',steps:[{n:'1',t:'Truck announced morning-of',d:'Check the feed for today\'s truck and menu'},{n:'2',t:'Show your member badge',d:'Members get their meal comped — guests pay regular price'},{n:'3',t:'Eat outside together',d:'Picnic tables set up as an intentional communal space'}]},
+  {id:6,name:'Scavenger Hunt',type:'social',date:'2026-05-23',time:'4:00–6:00 PM',location:'Whole Space',going:22,desc:'Find 5 hidden ducks to win prizes. Gets people exploring, talking, and competing in a fun way.',steps:[{n:'1',t:'Get your clue sheet',d:'Each clue leads to a hidden duck somewhere in the building'},{n:'2',t:'Explore the whole space',d:'Ducks hidden in areas members rarely visit'},{n:'3',t:'First 5 winners get prizes',d:'Prizes: free snacks, Dojo swag, guest passes'},{n:'4',t:'Debrief',d:'Everyone gathers at the end to share where they found them'}]},
+  {id:7,name:'Networking Thursday',type:'networking',date:'2026-05-28',time:'6:00–8:00 PM',location:'Main Hall',going:19,desc:'Monthly flagship networking. Meet founders and engineers over drinks.',steps:[{n:'1',t:'Arrive & grab a name tag',d:'Your tag shows your name and top skill'},{n:'2',t:'Speed intros',d:'5-min rounds — meet 8 people in 30 min'},{n:'3',t:'Open floor',d:'Free networking and contact exchange'},{n:'4',t:'Announcements',d:'Members share what they need or offer'}]},
+  {id:8,name:'Video Game Fridays',type:'social',date:'2026-05-02',time:'5:00–9:00 PM',location:'Gaming Zone',going:20,desc:'Open gaming night. Drop in and play, no signup needed.',steps:[{n:'1',t:'Drop in anytime after 5pm',d:'No RSVP required'},{n:'2',t:'Join a rotating lobby',d:'Games rotate hourly so you always play with new people'},{n:'3',t:'Snacks provided',d:'Light snacks and drinks in the gaming zone'}]},
+  {id:9,name:'Donut Wednesday',type:'food',date:'2026-05-06',time:'9:00–10:00 AM',location:'Lounge',going:null,desc:'Free donuts every Wednesday morning. A low-key reason to come in early.',steps:[{n:'1',t:'Come in before 10am',d:'Donuts are first come first served'},{n:'2',t:'Grab coffee too',d:'Coffee and tea available in the lounge'},{n:'3',t:'Chat and start your day',d:'Unstructured — just hang out and connect'}]},
+  {id:10,name:'Peer Awards Q2',type:'workshop',date:'2026-05-26',time:'5:00–6:00 PM',location:'Lounge',going:12,desc:'Quarterly peer recognition ceremony. Members give awards to fellow members.',steps:[{n:'1',t:'Nominations open 2 weeks before',d:'Nominate anyone in the community'},{n:'2',t:'Voting week',d:'All members vote on nominees'},{n:'3',t:'Awards ceremony',d:'Two awards given per quarter with prizes'}]},
+  {id:11,name:'Food Truck Tuesday',type:'food',date:'2026-05-19',time:'12:00–2:00 PM',location:'Outside Entrance',going:null,desc:'Second Food Truck Tuesday of the month. Rotating vendor.',steps:[{n:'1',t:'Check the feed',d:'Truck announced morning-of'},{n:'2',t:'Show your badge',d:'Free for members'},{n:'3',t:'Eat and connect',d:'Picnic tables outside'}]},
+  {id:12,name:'Donut Wednesday',type:'food',date:'2026-05-13',time:'9:00–10:00 AM',location:'Lounge',going:null,desc:'Weekly donut morning. Free for all members.',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'},{n:'2',t:'Coffee available',d:'Coffee and tea in the lounge'},{n:'3',t:'Chat and connect',d:'Unstructured hang out'}]},
+  {id:13,name:'Donut Wednesday',type:'food',date:'2026-05-20',time:'9:00–10:00 AM',location:'Lounge',going:null,desc:'Weekly donut morning.',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'},{n:'2',t:'Coffee available',d:'Coffee and tea available'},{n:'3',t:'Chat',d:'Unstructured hang out'}]},
+  {id:14,name:'Donut Wednesday',type:'food',date:'2026-05-27',time:'9:00–10:00 AM',location:'Lounge',going:null,desc:'Weekly donut morning.',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'},{n:'2',t:'Coffee available',d:'Coffee and tea available'},{n:'3',t:'Chat',d:'Unstructured hang out'}]},
+];
+
+let rsvpd = new Set([1,2]); // pre-RSVP'd for demo
+let calYear = 2026, calMonth = 4; // May
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+let groups = [
+  {id:1,name:'Software Dev',icon:'💻',bg:'rgba(16,185,129,0.12)',members:142,online:8,joined:true,desc:'Full stack, backend, frontend — all things code.'},
+  {id:2,name:'AI / Machine Learning',icon:'🤖',bg:'rgba(139,92,246,0.12)',members:98,online:12,joined:false,desc:'ML, LLMs, data science, and AI research.'},
+  {id:3,name:'Founders & Startups',icon:'🚀',bg:'rgba(245,158,11,0.12)',members:76,online:5,joined:true,desc:'Early-stage builders, operators, and aspiring founders.'},
+  {id:4,name:'Game Dev',icon:'🎮',bg:'rgba(239,68,68,0.12)',members:54,online:3,joined:false,desc:'Indie games, game design, Unity, Unreal, and beyond.'},
+  {id:5,name:'Hardware & Robotics',icon:'🔧',bg:'rgba(16,185,129,0.08)',members:61,online:6,joined:false,desc:'Electronics, 3D printing, robotics, and embedded systems.'},
+  {id:6,name:'Design & UX',icon:'🎨',bg:'rgba(139,92,246,0.08)',members:47,online:2,joined:false,desc:'Product design, UX research, Figma, and visual design.'},
+  {id:7,name:'Cloud & DevOps',icon:'☁️',bg:'rgba(245,158,11,0.08)',members:39,online:4,joined:false,desc:'AWS, GCP, Azure, CI/CD pipelines, and infrastructure.'},
+];
+
+const matches = [
+  {av:'HP',name:'Hina Patel',role:'UX Designer · 2 yrs at Dojo',tags:['UX Design','Startups','Figma','Research'],hot:[0,3],time:'Today 3–5pm',compat:87,note:'Strong match on interests',reason:'Both working on product design and interested in early-stage startups at Dojo.'},
+  {av:'AA',name:'Alex Alvarez',role:'Full Stack Engineer · 1 yr at Dojo',tags:['React','Node.js','Startups','Open Source'],hot:[2],time:'Tomorrow 10am–12pm',compat:79,note:'Great technical alignment',reason:'Both building web apps and contributing to open source side projects.'},
+  {av:'SS',name:'Sousen Saddik',role:'ML Engineer · 6 months at Dojo',tags:['Machine Learning','Python','Computer Vision','Robotics'],hot:[0,3],time:'Today 5–7pm',compat:91,note:'Exceptional interest overlap',reason:'Both deep in AI/ML work and looking for technical collaborators for Demo Day.'},
+  {av:'LT',name:'Lilibeth Trinidad',role:'Hardware Engineer · 3 yrs at Dojo',tags:['Robotics','3D Printing','Embedded Systems','Arduino'],hot:[2],time:'Tomorrow 2–4pm',compat:72,note:'Complementary skill sets',reason:'Your software background pairs well with her hardware expertise — great for collab.'},
+];
+let matchIdx = 0;
+
+let posts = [
+  {id:1,member:'HS',type:'Announce',body:'🌮 Food Truck Tuesday is back this week! Tacos and burritos parked outside noon–2pm. Members eat free with badge.',time:'2 hours ago',likes:31,liked:false,comments:[{member:'AA',body:'Amazing! See everyone there 🌮',time:'1h ago'},{member:'HP',body:'Bringing my whole team!',time:'45m ago'}]},
+  {id:2,member:'LT',type:'Collab',body:'Anyone working on AI or computer vision projects? Looking to pair up for Demo Day next Saturday. DM me!',time:'4 hours ago',likes:12,liked:false,comments:[{member:'SS',body:'I\'m in! ML and CV are my thing. Let\'s connect.',time:'3h ago'}]},
+  {id:3,member:'AA',type:'Win 🏆',body:'Shoutout to everyone who came to Game Night — our team won the trivia round! Best night here yet. See you all Thursday 🙌',time:'Yesterday',likes:47,liked:true,comments:[{member:'AP',body:'You guys were unstoppable 😂',time:'Yesterday'},{member:'MO',body:'Rematch next time!',time:'Yesterday'},{member:'HS',body:'Congrats team!!',time:'Yesterday'}]},
+  {id:4,member:'AP',type:'Question',body:'Has anyone used the 3D printers here for prototyping? Trying to figure out if it\'s worth upgrading my membership.',time:'2 days ago',likes:8,liked:false,comments:[{member:'LT',body:'100% worth it. I use them weekly for robotics parts. DM me for tips!',time:'2d ago'},{member:'AA',body:'Same as Lilibeth — great quality prints.',time:'2d ago'}]},
+  {id:5,member:'SS',type:'Update',body:'Just finished my first month at Dojo and already have 2 potential collaborators for my ML project. This place is what you make it 🙌',time:'3 days ago',likes:63,liked:false,comments:[{member:'HP',body:'That\'s the spirit! Love to see it.',time:'3d ago'},{member:'MO',body:'Welcome to the fam Sousen!',time:'3d ago'}]},
+];
+let nextPostId = 6;
+
+// ========== NAV ==========
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
+  document.getElementById('s-'+s).classList.add('active');
+  document.getElementById('nb-'+s).classList.add('active');
+  if(s==='calendar')renderCal();
+  if(s==='groups')renderGroups();
+  if(s==='match')renderMatch();
+  if(s==='feed')renderFeed();
+  if(s==='home')renderHome();
+  if(s==='messages')renderMessages();
+  if(s==='chat')renderChatMessages();
+}
+
+// ========== THEME ==========
+let dark = true;
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.querySelectorAll('.theme-btn .tb-icon').forEach(t=>t.textContent=dark?'☀️':'☽');
+}
+
+// ========== HOME ==========
+let homeTabState = 'upcoming';
+function homeTab(tab,el){
+  homeTabState=tab;
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderHomeContent();
+}
+
+function renderHome(){
+  const myEv = events.filter(e=>rsvpd.has(e.id));
+  const up = getUpcoming();
+  document.getElementById('home-sub').textContent = `${up.length} events this month · ${myEv.length} RSVP'd`;
+
+  // Always stamp name + avatar directly — never rely on hardcoded HTML values
+  const nameSpan = document.getElementById('home-greeting-name');
+  if(nameSpan) nameSpan.textContent = profile.name.split(' ')[0];
+  const av = document.getElementById('home-av');
+  if(av) av.textContent = profile.initials;
+
+  renderHomeContent();
+}
+
+function parseDate(iso){ const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d); }
+
+function getUpcoming(){
+  const now = parseDate('2026-05-07');
+  return events.filter(e=>parseDate(e.date)>=now).sort((a,b)=>parseDate(a.date)-parseDate(b.date)).slice(0,6);
+}
+
+function renderHomeContent(){
+  const c = document.getElementById('home-content');
+  if(homeTabState==='upcoming'){
+    const evs = getUpcoming();
+    let html = `<div class="quick-grid">
+      <div class="qc" onclick="goTo('calendar')"><div class="qc-icon">📅</div><div class="qc-lbl">Calendar</div></div>
+      <div class="qc" onclick="goTo('match')"><div class="qc-icon">✦</div><div class="qc-lbl">Match</div></div>
+      <div class="qc" onclick="goTo('feed')"><div class="qc-icon">💬</div><div class="qc-lbl">Feed</div></div>
+    </div>`;
+    html += `<div class="sec-lbl">This Week</div>`;
+    evs.forEach(e=>{ html += buildEvCard(e); });
+    c.innerHTML = html;
+  } else if(homeTabState==='myevents'){
+    renderMyCalendarTab(c);
+  } else {
+    c.innerHTML = `
+      <div style="padding:0 16px 12px">
+        <div style="font-family:Fraunces,serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">🤝 2 new matches waiting</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Daily AI-powered connections based on your interests</div>
+        <button class="btn-red" style="width:100%;font-size:13px" onclick="goTo('match')">View My Matches</button>
+      </div>
+      <div style="padding:0 16px 12px">
+        <div style="font-family:Fraunces,serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">👥 Explore Groups</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Connect with members who share your interests</div>
+        <button class="btn-ghost" style="width:100%;font-size:13px" onclick="goTo('groups')">Browse Groups</button>
+      </div>`;
+  }
+}
+
+function renderMyCalendarTab(container){
+  const myEvs = events.filter(e=>rsvpd.has(e.id)).sort((a,b)=>parseDate(a.date)-parseDate(b.date));
+  const listHtml = myEvs.length
+    ? myEvs.map(e=>buildEvCard(e)).join('')
+    : `<div class="empty-state">
+        <div class="empty-icon">🎟️</div>
+        <div class="empty-title">No RSVPs yet</div>
+        <div class="empty-sub">Browse upcoming events and tap RSVP to save them here</div>
+        <button class="empty-cta" onclick="goTo('calendar')">Browse Calendar</button>
+      </div>`;
+
+  container.innerHTML = `
+    <div class="mini-cal-strip">
+      <div class="mcs-title">
+        <span style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:800">May 2026</span>
+        <span class="mcs-see-all" onclick="calYear=2026;calMonth=4;goTo('calendar')">Full Calendar →</span>
+      </div>
+      ${buildMiniMonthGrid()}
+    </div>
+    <div style="height:14px"></div>
+    <div class="sec-lbl">My RSVP'd Events</div>
+    ${listHtml}`;
+}
+
+function dayPillClick(iso){
+  const dayEvs = events.filter(e=>e.date===iso);
+  if(!dayEvs.length){
+    toast('No events on this day');
+    return;
+  }
+  if(dayEvs.length===1){ openEvent(dayEvs[0].id); return; }
+  const d = new Date(iso);
+  const sc = document.getElementById('sheet-content');
+  sc.innerHTML = `<div class="sheet-title">${d.toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div><div class="sheet-sub">${dayEvs.length} events this day</div>
+    ${dayEvs.map(e=>{
+      const tc = TYPE_COLORS[e.type]||TYPE_COLORS.custom;
+      return `<div class="ev-card type-${e.type}" onclick="openEvent(${e.id})" style="margin:0 0 9px"><div class="ev-badge" style="${tc.badge}">${e.type}</div><div class="ev-name">${e.name}</div><div class="ev-meta"><span>🕐 ${e.time}</span><span>📍 ${e.location}</span></div></div>`;
+    }).join('')}`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function buildEvCard(e){
+  const isR = rsvpd.has(e.id);
+  const [y,mo,day] = e.date.split('-').map(Number);
+  const d = new Date(y, mo-1, day);
+  const ds = d.toLocaleDateString('en-US',{month:'short',day:'numeric',weekday:'short'});
+  const tc = TYPE_COLORS[e.type]||TYPE_COLORS.custom;
+  return `<div class="ev-card type-${e.type}" onclick="openEvent(${e.id})">
+    <div class="ev-badge" style="${tc.badge}">${e.type.charAt(0).toUpperCase()+e.type.slice(1)}</div>
+    <div class="ev-row">
+      <div style="min-width:0;flex:1">
+        <div class="ev-name">${e.name}</div>
+        <div class="ev-meta"><span>📅 ${ds}</span><span>🕐 ${e.time}</span></div>
+        <div class="ev-meta" style="margin-top:2px"><span>📍 ${e.location}</span></div>
+      </div>
+      <button class="rsvp-mini ${isR?'on':''}" onclick="event.stopPropagation();toggleRsvp(${e.id},this)">${isR?'✓ Going':'RSVP'}</button>
+    </div>
+    ${e.going?`<div class="ev-going" style="margin-top:5px">${e.going+(isR?1:0)} going</div>`:''}
+    ${isR?`<div class="ev-rsvp-confirmed">✓ You're going</div>`:''}
+  </div>`;
+}
+
+function toggleRsvp(id,btn){
+  if(rsvpd.has(id)){
+    rsvpd.delete(id);
+    btn.textContent='RSVP';
+    btn.classList.remove('on');
+    toast('Removed from your calendar');
+  } else {
+    rsvpd.add(id);
+    btn.textContent='✓ Going';
+    btn.classList.add('on');
+    toast('✅ Added to your calendar!');
+  }
+  renderHome();
+}
+
+// ========== CALENDAR ==========
+function renderCal(){
+  const title = MONTHS[calMonth]+' '+calYear;
+  document.getElementById('cal-big-month').textContent = MONTHS[calMonth];
+  document.getElementById('cal-big-year').textContent = calYear;
+  document.getElementById('cal-month-label').textContent = title;
+
+  // Color the hero bar by first event type of month (or red default)
+  const monthEvs = events.filter(e=>{
+    const [y,m] = e.date.split('-').map(Number);
+    return y===calYear && m-1===calMonth;
+  });
+
+  const first = new Date(calYear,calMonth,1).getDay();
+  const days = new Date(calYear,calMonth+1,0).getDate();
+  const prevDays = new Date(calYear,calMonth,0).getDate();
+  const todayISO = '2026-05-07';
+
+  const evByDay = {};
+  monthEvs.forEach(e=>{
+    const d = parseInt(e.date.split('-')[2], 10);
+    if(!evByDay[d]) evByDay[d]=[];
+    evByDay[d].push(e);
+  });
+
+  let html = '';
+  // prev
+  for(let i=first-1;i>=0;i--){
+    html+=`<div class="vis-cell other-m"><div class="vdn">${prevDays-i}</div></div>`;
+  }
+  // current
+  for(let d=1;d<=days;d++){
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = iso===todayISO;
+    const dayEvs = evByDay[d]||[];
+    const hasMyRsvp = dayEvs.some(e=>rsvpd.has(e.id));
+    const isPast = !isToday && `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}` < TODAY_ISO;
+    html+=`<div class="vis-cell${isToday?' is-today':''}${hasMyRsvp?' has-rsvp':''}${isPast?' past-day':''}" onclick="calDayClick('${iso}',this)">
+      <div class="vdn">${d}</div>
+      ${dayEvs.slice(0,2).map(e=>`<div class="cal-pill ${TYPE_COLORS[e.type]?.pill||'cp-custom'}">${e.name.split(' ').slice(0,2).join(' ')}</div>`).join('')}
+      ${dayEvs.length>2?`<div class="cal-more">+${dayEvs.length-2} more</div>`:''}
+    </div>`;
+  }
+  // next
+  const total = first+days;
+  const rem = total%7===0?0:7-(total%7);
+  for(let d=1;d<=rem;d++){
+    html+=`<div class="vis-cell other-m"><div class="vdn">${d}</div></div>`;
+  }
+  document.getElementById('vis-grid').innerHTML=html;
+
+  // event list below calendar
+  // Reset day panel when month changes
+  closeDayPanel();
+}
+
+function closeDayPanel(){
+  document.getElementById('cal-day-panel').style.display='none';
+  // Deselect any highlighted cell
+  document.querySelectorAll('.vis-cell.selected').forEach(c=>c.classList.remove('selected'));
+}
+
+function calNav(dir){
+  calMonth+=dir;
+  if(calMonth<0){calMonth=11;calYear--;}
+  if(calMonth>11){calMonth=0;calYear++;}
+  renderCal();
+}
+
+function calDayClick(iso, cellEl){
+  const dayEvs = events.filter(e=>e.date===iso);
+  // Parse date parts directly to avoid UTC offset issues
+  const [y,mo,day] = iso.split('-').map(Number);
+  const d = new Date(y, mo-1, day);
+  const label = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+  // Highlight selected cell
+  document.querySelectorAll('.vis-cell.selected').forEach(c=>c.classList.remove('selected'));
+  if(cellEl) cellEl.classList.add('selected');
+
+  const panel = document.getElementById('cal-day-panel');
+  const dayLabel = document.getElementById('cal-day-label');
+  const dayEventsEl = document.getElementById('cal-day-events');
+
+  dayLabel.textContent = label;
+
+  if(!dayEvs.length){
+    dayEventsEl.innerHTML = `<div style="padding:10px 0 14px;text-align:center">
+      <div style="font-size:22px;margin-bottom:6px">📭</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px">No events on this day</div>
+      <button class="btn-red" style="font-size:12px;padding:8px 16px" onclick="openSheet('add-event',{date:'${iso}'})">＋ Add Event</button>
+    </div>`;
+  } else {
+    dayEventsEl.innerHTML = dayEvs.map(e => {
+      const tc = TYPE_COLORS[e.type]||TYPE_COLORS.custom;
+      const isR = rsvpd.has(e.id);
+      return `<div class="ev-card type-${e.type}" onclick="openEvent(${e.id})" style="margin:0 0 9px">
+        <div class="ev-badge" style="${tc.badge}">${e.type.charAt(0).toUpperCase()+e.type.slice(1)}</div>
+        <div class="ev-row">
+          <div style="min-width:0;flex:1">
+            <div class="ev-name">${e.name}</div>
+            <div class="ev-meta"><span>🕐 ${e.time}</span><span>📍 ${e.location}</span></div>
+          </div>
+          <button class="rsvp-mini ${isR?'on':''}" onclick="event.stopPropagation();toggleRsvp(${e.id},this)">${isR?'✓ Going':'RSVP'}</button>
+        </div>
+        ${e.going?`<div class="ev-going">${e.going+(isR?1:0)} going</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  panel.style.display = 'block';
+  // Smooth scroll to panel
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+
+// ========== EVENT DETAIL SHEET ==========
+function openEvent(id){
+  const e = events.find(x=>x.id===id);
+  if(!e)return;
+  const isR = rsvpd.has(id);
+  const [ey,emo,eday] = e.date.split('-').map(Number);
+  const d = new Date(ey, emo-1, eday);
+  const dateLabel = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const tc = TYPE_COLORS[e.type]||TYPE_COLORS.custom;
+  const sc = document.getElementById('sheet-content');
+  sc.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <div class="ev-badge" style="${tc.badge};font-size:10px;padding:3px 10px">${e.type.charAt(0).toUpperCase()+e.type.slice(1)}</div>
+    </div>
+    <div class="sheet-title">${e.name}</div>
+    <div class="sheet-sub">${e.desc}</div>
+    <div class="chip-row">
+      <div class="dchip">📅 ${dateLabel}</div>
+      <div class="dchip">🕐 ${e.time}</div>
+      <div class="dchip">📍 ${e.location}</div>
+      ${e.going?`<div class="dchip">👤 ${e.going+(isR?1:0)} going</div>`:''}
+    </div>
+    <div class="sheet-sec">How It Works</div>
+    <ul class="step-list">
+      ${e.steps.map(s=>`<li><div class="step-n">${s.n}</div><div><strong style="font-family:Fraunces,serif;font-weight:700;display:block;margin-bottom:2px;color:var(--text)">${s.t}</strong>${s.d}</div></li>`).join('')}
+    </ul>
+    <button class="sheet-rsvp ${isR?'rsvpd':''}" id="sr-btn" onclick="sheetRsvp(${id})">
+      ${isR?'✓ You\'re Going! — Tap to Remove':`RSVP${e.going?' — Join '+e.going+' Members':''}`}
+    </button>
+    <button class="add-to-cal-btn" onclick="addToExternalCal('${e.name}','${e.date}','${e.time}','${e.location}')">
+      📅 Add to External Calendar
+    </button>
+    ${e.id > 100 ? `
+    <div class="ev-actions-row">
+      <button class="ev-action-btn" onclick="openEventEdit(${id})">✏️ Edit Event</button>
+      <button class="ev-action-btn danger" onclick="deleteEvent(${id})">🗑 Delete</button>
+    </div>` : ''}`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function sheetRsvp(id){
+  const btn=document.getElementById('sr-btn');
+  if(rsvpd.has(id)){
+    rsvpd.delete(id);
+    btn.classList.remove('rsvpd');
+    btn.textContent='RSVP';
+    toast('Removed from your calendar');
+  } else {
+    rsvpd.add(id);
+    btn.classList.add('rsvpd');
+    btn.textContent="✓ You're Going! — Tap to Remove";
+    toast('✅ Added to your calendar!');
+  }
+  renderHome();
+  if(document.getElementById('s-calendar').classList.contains('active')) renderCal();
+}
+
+function addToExternalCal(name,date,time,loc){
+  // Build a google calendar link
+  const d = date.replace(/-/g,'');
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(name)}&dates=${d}/${d}&details=${encodeURIComponent('Hacker Dojo event — '+time)}&location=${encodeURIComponent(loc)}`;
+  toast('📅 Opening Google Calendar...');
+  setTimeout(()=>window.open(url,'_blank'),600);
+}
+
+// ========== SHEETS ==========
+function openSheet(type, opts={}){
+  const sc = document.getElementById('sheet-content');
+  if(type==='add-event'){
+    sc.innerHTML=`
+      <div class="sheet-title">Add Event</div>
+      <div class="sheet-sub">Create a new event for the Dojo community</div>
+      <div class="form-group">
+        <label class="form-label">Event Name</label>
+        <input class="form-input" id="ne-name" placeholder="e.g. Coffee & Code Morning" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <div class="type-btns" id="ne-type-btns">
+          ${['networking','social','showcase','food','workshop'].map((t,i)=>`<button class="type-btn${i===0?' active':''}" onclick="selectType(this,'${t}')">${t}</button>`).join('')}
+        </div>
+        <input type="hidden" id="ne-type" value="networking">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-input" id="ne-date" type="date" value="${opts.date||'2026-05-15'}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input class="form-input" id="ne-time" placeholder="6:00–8:00 PM" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input class="form-input" id="ne-location" placeholder="e.g. Main Hall" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="ne-desc" placeholder="What's this event about?"></textarea>
+      </div>
+      <button class="sheet-submit" onclick="submitEvent()">Create Event</button>`;
+  } else if(type==='create-group'){
+    sc.innerHTML=`
+      <div class="sheet-title">Create Group</div>
+      <div class="sheet-sub">Start a new community around a shared interest</div>
+      <div class="form-group">
+        <label class="form-label">Group Name</label>
+        <input class="form-input" id="ng-name" placeholder="e.g. Biotech Builders" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Icon (emoji)</label>
+        <input class="form-input" id="ng-icon" placeholder="🧬" maxlength="2" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="ng-desc" placeholder="What is this group about?"></textarea>
+      </div>
+      <button class="sheet-submit" onclick="submitGroup()">Create Group</button>`;
+  } else if(type==='compose'){
+    sc.innerHTML=`
+      <div class="sheet-title">New Post</div>
+      <div class="sheet-sub">Share something with the Dojo community</div>
+      <div class="form-group">
+        <label class="form-label">Post Type</label>
+        <div class="type-btns" id="pt-btns">
+          ${['Update','Question','Collab','Win','Announce'].map((t,i)=>`<button class="type-btn${i===0?' active':''}" onclick="selectPostType(this,'${t}')">${t}</button>`).join('')}
+        </div>
+        <input type="hidden" id="pt-type" value="Update">
+      </div>
+      <div class="form-group">
+        <label class="form-label">What's on your mind?</label>
+        <textarea class="form-textarea" id="pt-body" placeholder="Share an update, ask a question, or look for collaborators..." style="min-height:120px"></textarea>
+      </div>
+      <button class="sheet-submit" onclick="submitPost()">Post to Community</button>`;
+  }
+  document.getElementById('overlay').classList.add('open');
+}
+
+function selectType(btn,val){
+  document.querySelectorAll('#ne-type-btns .type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ne-type').value=val;
+}
+function selectPostType(btn,val){
+  document.querySelectorAll('#pt-btns .type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pt-type').value=val;
+}
+
+function submitEvent(){
+  blurInputs();
+  const name=document.getElementById('ne-name').value.trim();
+  const type=document.getElementById('ne-type').value;
+  const date=document.getElementById('ne-date').value;
+  const time=document.getElementById('ne-time').value.trim()||'TBD';
+  const loc=document.getElementById('ne-location').value.trim()||'TBD';
+  const desc=document.getElementById('ne-desc').value.trim()||'A new Dojo event.';
+  if(!name||!date){toast('⚠️ Name and date required');return;}
+  events.push({id:Date.now(),name,type,date,time,location:loc,going:0,desc,steps:[{n:'1',t:'Show up!',d:'Come and join the event.'}]});
+  closeSheet();
+  toast(`✅ "${name}" added to calendar!`);
+  renderCal();
+  renderHome();
+}
+
+function submitGroup(){
+  blurInputs();
+  const name=document.getElementById('ng-name').value.trim();
+  const icon=document.getElementById('ng-icon').value.trim()||'👥';
+  const desc=document.getElementById('ng-desc').value.trim()||'A new community group.';
+  if(!name){toast('⚠️ Group name required');return;}
+  const colors=['rgba(196,28,28,0.12)','rgba(59,130,246,0.12)','rgba(245,158,11,0.12)','rgba(168,85,247,0.12)'];
+  groups.unshift({id:Date.now(),name,icon,bg:colors[Math.floor(Math.random()*colors.length)],members:1,online:1,joined:true,desc});
+  closeSheet();
+  toast(`✅ Group "${name}" created!`);
+  renderGroups();
+}
+
+function submitPost(){
+  blurInputs();
+  const body=document.getElementById('pt-body').value.trim();
+  const type=document.getElementById('pt-type').value;
+  if(!body){toast('⚠️ Write something first');return;}
+  posts.unshift({id:nextPostId++,member:'MO',type,body,time:'Just now',likes:0,liked:false,comments:[]});
+  closeSheet();
+  toast('✅ Posted to community!');
+  renderFeed();
+}
+
+function closeSheet(e){
+  if(e&&e.target!==document.getElementById('overlay'))return;
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ========== GROUPS ==========
+function renderGroups(){
+  const joined=groups.filter(g=>g.joined);
+  const explore=groups.filter(g=>!g.joined);
+  document.getElementById('my-groups').innerHTML=joined.length
+    ?joined.map(g=>buildGroupCard(g)).join('')
+    :'<div style="padding:14px 16px;font-size:13px;color:var(--text3)">No groups yet — explore below!</div>';
+  document.getElementById('explore-groups').innerHTML=explore.map(g=>buildGroupCard(g)).join('');
+}
+
+function buildGroupCard(g){
+  return `<div class="group-card" onclick="openGroupSheet(${g.id})">
+    <div class="g-icon" style="background:${g.bg}">${g.icon}</div>
+    <div class="g-info">
+      <div class="g-name">${g.name}</div>
+      <div class="g-meta"><span class="g-online">${g.online} online</span><span>${g.members} members</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+      ${g.joined?`<div class="joined-tag">Joined</div>`:`<div class="join-tag" onclick="event.stopPropagation();joinGroup(${g.id})">+ Join</div>`}
+      <div style="color:var(--text3);font-size:18px">›</div>
+    </div>
+  </div>`;
+}
+
+function openGroupSheet(id){
+  const g = groups.find(x=>x.id===id);
+  if(!g) return;
+  const sc = document.getElementById('sheet-content');
+
+  // Sample members per group for exploration
+  const groupMembers = {
+    1: [{k:'AA',role:'Full Stack Eng'},{k:'HS',role:'Staff Engineer'},{k:'SS',role:'ML Engineer'}],
+    2: [{k:'SS',role:'ML Engineer'},{k:'HP',role:'UX Designer'},{k:'LT',role:'Hardware Eng'}],
+    3: [{k:'HP',role:'UX Designer'},{k:'AA',role:'Full Stack Eng'},{k:'AP',role:'Product Manager'}],
+    4: [{k:'AA',role:'Full Stack Eng'},{k:'SS',role:'ML Engineer'}],
+    5: [{k:'LT',role:'Hardware Eng'},{k:'HS',role:'Staff Engineer'}],
+    6: [{k:'HP',role:'UX Designer'},{k:'AP',role:'Product Manager'}],
+    7: [{k:'HS',role:'Staff Engineer'},{k:'AA',role:'Full Stack Eng'}],
+  };
+
+  const groupPosts = {
+    1: [{member:'AA',text:'anyone know a good way to handle auth with supabase and nextjs? been stuck on this for a bit',time:'2h ago'},{member:'HS',text:'just pushed a fix for that race condition we found last week, repo is updated',time:'1d ago'}],
+    2: [{member:'SS',text:'found a really good paper on transformer fine-tuning, dropping it in the resources channel',time:'3h ago'},{member:'HP',text:'heads up the AI study group is meeting thursday at 5pm if anyone wants to join',time:'1d ago'}],
+    3: [{member:'HP',text:'anyone going to the YC demo day next month? trying to get a group together',time:'4h ago'},{member:'AP',text:'great turnout at the founder talk last week, thanks everyone who came out',time:'2d ago'}],
+    4: [{member:'AA',text:'game jam this weekend anyone? thinking of doing a 48 hour thing',time:'6h ago'}],
+    5: [{member:'LT',text:'3D printer A is back up, the bed was just misaligned. should be good now',time:'1h ago'},{member:'HS',text:'anyone have experience with the new raspberry pi 5? trying to figure out if its worth upgrading',time:'3d ago'}],
+    6: [{member:'HP',text:'sharing my figma community file for mobile components if anyone wants it',time:'5h ago'}],
+    7: [{member:'HS',text:'anyone tried the new AWS container service? curious if its actually better',time:'1d ago'}],
+  };
+
+  const members = groupMembers[id] || [];
+  const gPosts = groupPosts[id] || [];
+
+  sc.innerHTML = `
+    <div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">
+      <div style="width:52px;height:52px;border-radius:14px;background:${g.bg};display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${g.icon}</div>
+      <div style="flex:1">
+        <div class="sheet-title" style="font-size:20px;margin-bottom:2px">${g.name}</div>
+        <div style="font-size:12px;color:var(--text2);display:flex;gap:10px">
+          <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block"></span>${g.online} online</span>
+          <span>${g.members} members</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px">${g.desc}</div>
+
+    <button onclick="joinGroup(${g.id});document.getElementById('overlay').classList.remove('open')"
+      style="width:100%;padding:12px;border-radius:11px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;border:none;margin-bottom:18px;${g.joined ? 'background:var(--surface2);color:var(--text2);border:1.5px solid var(--border)' : 'background:var(--red);color:#fff'}">
+      ${g.joined ? 'Leave Group' : 'Join Group'}
+    </button>
+
+    ${members.length ? `
+    <div class="sheet-sec" style="margin-bottom:10px">Members</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+      ${members.map(mem => {
+        const mb = MEMBERS[mem.k] || {initials:mem.k, color:'#888', name:mem.k};
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface2);border-radius:10px;cursor:pointer" onclick="startMatchChat('${mem.k}');document.getElementById('overlay').classList.remove('open')">
+          <div style="width:34px;height:34px;border-radius:50%;background:${mb.color};display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0">${mb.initials}</div>
+          <div style="flex:1">
+            <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text)">${mb.name}</div>
+            <div style="font-size:11px;color:var(--text3)">${mem.role}</div>
+          </div>
+          <div style="font-size:11px;color:var(--red);font-family:'Nunito',sans-serif;font-weight:700">Message →</div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
+    ${gPosts.length ? `
+    <div class="sheet-sec" style="margin-bottom:10px">Recent Activity</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${gPosts.map(p => {
+        const mb = MEMBERS[p.member] || {initials:p.member, color:'#888', name:p.member};
+        return `<div style="background:var(--surface2);border-radius:11px;padding:11px 13px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+            <div style="width:26px;height:26px;border-radius:50%;background:${mb.color};display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:9px;font-weight:900;color:#fff">${mb.initials}</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--text)">${mb.name}</div>
+            <div style="font-size:10px;color:var(--text3);margin-left:auto">${p.time}</div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.5">${p.text}</div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
+    <div style="height:8px"></div>`;
+
+  document.getElementById('overlay').classList.add('open');
+}
+
+function joinGroup(id){
+  const g=groups.find(x=>x.id===id);
+  if(!g)return;
+  g.joined=!g.joined;
+  g.members+=g.joined?1:-1;
+  toast(g.joined?`✅ Joined ${g.name}!`:`Left ${g.name}`);
+  renderGroups();
+}
+
+// ========== MATCH ==========
+function renderMatch(){
+  seenMatches.add(matchIdx);
+  renderMatchDots();
+  const m=matches[matchIdx];
+  const av=document.getElementById('m-av');
+  av.textContent=m.av;
+  av.style.background=MEMBERS[m.av]?.color||'var(--red)';
+  document.getElementById('m-name').textContent=m.name;
+  document.getElementById('m-role').textContent=m.role;
+  document.getElementById('m-time').textContent=m.time;
+  document.getElementById('m-reason').textContent=m.reason;
+  document.getElementById('compat-pct').textContent=m.compat+'%';
+  document.getElementById('compat-note').textContent=m.note;
+  document.getElementById('m-tags').innerHTML=m.tags.map((t,i)=>`<span class="mtag${m.hot.includes(i)?' hot':''}">${t}</span>`).join('');
+  const btn=document.getElementById('btn-connect');
+  btn.textContent='✦ Start 15-min Chat';
+  btn.style.opacity='';
+  btn.disabled=false;
+  document.getElementById('compat-fill').style.width='0%';
+  setTimeout(()=>{document.getElementById('compat-fill').style.width=m.compat+'%';},120);
+  document.getElementById('past-conn').innerHTML=pastConns.map(p=>`
+    <div class="pc-chip" onclick="startMatchChat('${p.av}')" style="cursor:pointer">
+      <div class="pc-av" style="background:${p.color}">${p.av}</div>
+      <div><div class="pc-name">${p.name}</div><div class="pc-when">${p.when}</div></div>
+      <div style="font-size:10px;color:var(--red);font-family:'Nunito',sans-serif;font-weight:700;margin-left:4px">Chat →</div>
+    </div>`).join('');
+}
+
+function skipMatch(){
+  matchIdx=(matchIdx+1)%matches.length;
+  renderMatch();
+  toast('⏭ New match loaded');
+}
+
+function acceptMatch(){
+  const m = matches[matchIdx];
+  const btn = document.getElementById('btn-connect');
+
+  // Prevent double-tap
+  if(btn.disabled) return;
+  btn.textContent = '✓ Connecting...';
+  btn.style.opacity = '.65';
+  btn.disabled = true;
+
+  // Only add to pastConns if not already there
+  const alreadyConnected = pastConns.some(p => p.av === m.av);
+  if(!alreadyConnected){
+    pastConns.unshift({av:m.av, name:m.name, when:'Just now', color:MEMBERS[m.av]?.color||'#C8102E'});
+    if(pastConns.length > 4) pastConns = pastConns.slice(0, 4);
+  }
+
+  toast(`✦ Connected with ${m.name}! Opening chat...`);
+
+  // Open chat then advance to next match
+  setTimeout(()=>{
+    startMatchChat(m.av);
+    // Move to next match so re-opening Match shows a fresh person
+    matchIdx = (matchIdx + 1) % matches.length;
+  }, 700);
+}
+
+// ========== FEED ==========
+const POST_TC = {
+  Update:{bg:'rgba(59,130,246,.1)',c:'#2563eb'},
+  Question:{bg:'rgba(245,158,11,.1)',c:'#b45309'},
+  Collab:{bg:'rgba(139,92,246,.1)',c:'#7c3aed'},
+  'Win 🏆':{bg:'rgba(34,197,94,.1)',c:'#15803d'},
+  Announce:{bg:'rgba(196,28,28,.1)',c:'var(--red)'},
+};
+
+function renderFeed(){
+  document.getElementById('feed-posts').innerHTML=posts.map(p=>buildPostCard(p)).join('');
+}
+
+function buildPostCard(p){
+  const m=MEMBERS[p.member]||{initials:p.member,color:'#888',name:p.member};
+  const tc=POST_TC[p.type]||{bg:'var(--red-dim)',c:'var(--red)'};
+  return `<div class="post-card" onclick="openPost(${p.id})">
+    <div class="post-hdr">
+      <div class="post-av" style="background:${m.color}">${m.initials}</div>
+      <div class="post-meta">
+        <div class="post-author">${m.name}</div>
+        <div class="post-time">${p.time}</div>
+      </div>
+      <div class="post-type" style="background:${tc.bg};color:${tc.c}">${p.type}</div>
+    </div>
+    <div class="post-body">${p.body}</div>
+    <div class="post-acts">
+      <button class="post-act ${p.liked?'liked':''}" onclick="event.stopPropagation();likePost(${p.id},this)">❤️ ${p.likes}</button>
+      <button class="post-act" onclick="event.stopPropagation();openPost(${p.id})">💬 ${p.comments.length}</button>
+      <button class="post-act" onclick="event.stopPropagation();toast('↗️ Copied link!')">↗️ Share</button>
+    </div>
+  </div>`;
+}
+
+function likePost(id,btn){
+  const p=posts.find(x=>x.id===id);
+  if(!p)return;
+  p.liked=!p.liked;
+  p.likes+=p.liked?1:-1;
+  btn.textContent=`❤️ ${p.likes}`;
+  btn.classList.toggle('liked',p.liked);
+}
+
+function openPost(id){
+  const p=posts.find(x=>x.id===id);
+  if(!p)return;
+  const m=MEMBERS[p.member]||{initials:p.member,color:'#888',name:p.member};
+  const tc=POST_TC[p.type]||{bg:'var(--red-dim)',c:'var(--red)'};
+  document.getElementById('sheet-content').innerHTML=`
+    <div class="post-hdr" style="margin-bottom:11px">
+      <div class="post-av" style="background:${m.color}">${m.initials}</div>
+      <div class="post-meta">
+        <div class="post-author">${m.name}</div>
+        <div class="post-time">${p.time}</div>
+      </div>
+      <div class="post-type" style="background:${tc.bg};color:${tc.c}">${p.type}</div>
+    </div>
+    <div class="post-detail-body">${p.body}</div>
+    <div class="post-detail-acts">
+      <button class="post-act ${p.liked?'liked':''}" onclick="likePost(${id},this);renderFeed()" style="font-size:13px">❤️ ${p.likes}</button>
+      <button class="post-act" style="font-size:13px">💬 ${p.comments.length} comments</button>
+    </div>
+    <div class="comment-list" id="cl-${id}">
+      ${p.comments.map(c=>{const cm=MEMBERS[c.member]||{initials:c.member,color:'#888',name:c.member};return`<div class="comment"><div class="comment-av" style="background:${cm.color}">${cm.initials}</div><div class="comment-bbl"><div class="comment-name">${cm.name} <span style="font-weight:400;font-size:9px;color:var(--text3)">${c.time}</span></div><div class="comment-body">${c.body}</div></div></div>`;}).join('')}
+    </div>
+    <div class="comment-input-row">
+      <div class="comment-av" style="background:var(--red);flex-shrink:0">MO</div>
+      <input class="comment-input" id="ci-${id}" placeholder="Write a comment..." onkeydown="if(event.key==='Enter')submitComment(${id})" />
+      <button class="send-btn" onclick="submitComment(${id})">➤</button>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function submitComment(id){
+  const input=document.getElementById(`ci-${id}`);
+  const val=input.value.trim();
+  if(!val)return;
+  const p=posts.find(x=>x.id===id);
+  if(!p)return;
+  p.comments.push({member:'MO',body:val,time:'Just now'});
+  input.value='';
+  const list=document.getElementById(`cl-${id}`);
+  if(list){
+    const div=document.createElement('div');
+    div.className='comment';
+    div.innerHTML=`<div class="comment-av" style="background:var(--red)">MO</div><div class="comment-bbl"><div class="comment-name">Mateo Ortega <span style="font-weight:400;font-size:9px;color:var(--text3)">Just now</span></div><div class="comment-body">${val}</div></div>`;
+    list.appendChild(div);
+    div.scrollIntoView({behavior:'smooth'});
+  }
+  renderFeed();
+  toast('💬 Comment posted!');
+}
+
+// ========== MESSAGES ==========
+// Conversations are generated dynamically per account based on their profile
+// DEFAULT_CONVERSATIONS is only used for Mateo's pre-seeded account
+const DEFAULT_CONVERSATIONS = {
+  HP: {
+    member: 'HP',
+    messages: [
+      {from:'HP', text:'hey mateo! saw we got matched, pretty cool haha. i heard you do hardware stuff?', time:'2d ago'},
+      {from:'MO', text:'yeah! computer engineering at SJSU. you do UX right? ive been wanting to learn more about that side of things', time:'2d ago'},
+      {from:'HP', text:'yes! its actually super relevant to what youre doing. like even hardware products need good UX lol', time:'2d ago'},
+      {from:'MO', text:'100% honestly never thought about it that way. would love to pick your brain sometime', time:'2d ago'},
+      {from:'HP', text:'for sure, im usually at dojo thursdays. come find me after the networking thing 😊', time:'1d ago'},
+    ],
+    unread: 1
+  },
+  AA: {
+    member: 'AA',
+    messages: [
+      {from:'AA', text:'yo mateo what stack are you using for your project rn', time:'3d ago'},
+      {from:'MO', text:'react and supabase mostly. still figuring out the backend tbh. you?', time:'3d ago'},
+      {from:'AA', text:'same stack lol we should link up. im working on something kinda similar', time:'3d ago'},
+      {from:'MO', text:'fr? what are you building', time:'3d ago'},
+      {from:'AA', text:'basically a collab tool for engineering students. nothing crazy yet but its getting there. free after game night friday?', time:'2d ago'},
+    ],
+    unread: 0
+  },
+  SS: {
+    member: 'SS',
+    messages: [
+      {from:'SS', text:'hey! saw your comment on the demo day post, are you presenting next month?', time:'5h ago'},
+    ],
+    unread: 1
+  },
+};
+
+const DEFAULT_PAST_CONNS = [
+  {av:'AP', name:'Allison Pon', when:'Last week', color:'#0891b2'},
+  {av:'HS', name:'Heather Swinehart', when:'2 weeks ago', color:'#15803d'},
+];
+
+// Generate fresh conversations for a new account based on their name and background
+function generateConversationsForAccount(acct){
+  const firstName = (acct.name||'').split(' ')[0] || 'there';
+  const title = (acct.title||'').toLowerCase();
+  const skills = (acct.skills||[]).map(s=>s.toLowerCase());
+
+  // Build contextual openers based on what we know about the person
+  const isTech = skills.some(s=>['engineering','software','code','python','javascript','programming','machine learning','ai','data'].some(k=>s.includes(k)));
+  const isDesign = skills.some(s=>['design','ux','ui','figma','product'].some(k=>s.includes(k)));
+  const isHardware = skills.some(s=>['hardware','robotics','circuit','electronics','3d','embedded'].some(k=>s.includes(k)));
+  const isLeader = title.includes('manager') || title.includes('director') || title.includes('lead') || title.includes('prime') || title.includes('president') || title.includes('ceo') || title.includes('founder');
+  const isFinance = title.includes('finance') || title.includes('bank') || title.includes('economic') || skills.some(s=>['finance','economics','banking','investment'].some(k=>s.includes(k)));
+
+  // Pick contextually relevant openers for each match
+  const hpOpener = isDesign
+    ? `hey ${firstName}! we got matched — i do UX design here, saw you have a design background too. would love to connect!`
+    : isLeader || isFinance
+    ? `hey ${firstName}! saw we matched. i do product/UX design. always love connecting with senior folks here. what brings you to dojo?`
+    : `hey ${firstName}! we got matched — i do UX design here. what are you working on these days?`;
+
+  const aaOpener = isTech
+    ? `hey ${firstName}! we matched up. saw your background — what tech stack are you working with these days?`
+    : isLeader || isFinance
+    ? `hey ${firstName}! saw we matched. i'm alex, full stack engineer here. always curious what non-engineers think about the tech side of things lol`
+    : `hey ${firstName}! we matched — i'm alex. full stack engineer, been at dojo about a year. what do you do?`;
+
+  const ssOpener = isLeader || isFinance
+    ? `hey ${firstName}! sousen here, i do ML engineering. saw your profile — would love to hear your perspective on AI from the policy/leadership side`
+    : isTech
+    ? `hey ${firstName}! saw we matched. i do ML and AI stuff here at dojo. what kind of projects are you building?`
+    : `hey ${firstName}! we got matched — i'm sousen, i work on machine learning projects. what brings you to hacker dojo?`;
+
+  // User's generic reply based on their background
+  const userReply = isLeader || isFinance
+    ? `hey! great to connect. i'm ${firstName}, ${acct.title||'working on some projects here'}. always interesting to meet builders at dojo`
+    : isTech
+    ? `hey! yeah i saw we matched too. i'm into ${skills.slice(0,2).join(' and ')||'tech stuff'} mostly. you?`
+    : `hey! great to connect. i'm ${firstName} — ${acct.title || 'here at dojo'}. excited to meet people here`;
+
+  return {
+    HP: {
+      member: 'HP',
+      messages: [
+        {from:'HP', text: hpOpener, time:'2d ago'},
+        {from:'MO', text: userReply, time:'2d ago'},
+        {from:'HP', text:"nice! we should grab coffee before one of the thursday networking events", time:'1d ago'},
+      ],
+      unread: 1
+    },
+    AA: {
+      member: 'AA',
+      messages: [
+        {from:'AA', text: aaOpener, time:'3d ago'},
+        {from:'MO', text: userReply, time:'3d ago'},
+        {from:'AA', text:"that's cool, we should link up sometime this week. you going to game night friday?", time:'2d ago'},
+      ],
+      unread: 0
+    },
+    SS: {
+      member: 'SS',
+      messages: [
+        {from:'SS', text: ssOpener, time:'5h ago'},
+      ],
+      unread: 1
+    },
+  };
+}
+
+let conversations = JSON.parse(JSON.stringify(DEFAULT_CONVERSATIONS));
+let pastConns = [...DEFAULT_PAST_CONNS];
+let activeChatMember = null;
+
+function renderMessages(){
+  const list = document.getElementById('msg-thread-list');
+  const threads = Object.values(conversations);
+  if(!threads.length){
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">No messages yet</div><div class="empty-sub">Accept a match to start a conversation</div></div>`;
+    return;
+  }
+  list.innerHTML = threads.map(t => {
+    const m = MEMBERS[t.member] || {initials:t.member, color:'#888', name:t.member};
+    const last = t.messages[t.messages.length - 1];
+    const preview = last ? (last.from==='MO' ? 'You: ' : '') + last.text : '';
+    return `<div onclick="openChat('${t.member}')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+      <div style="position:relative;flex-shrink:0">
+        <div style="width:46px;height:46px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:#fff">${m.initials}</div>
+        ${t.unread > 0 ? `<div style="position:absolute;top:-1px;right:-1px;width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:8px;font-weight:900;color:#fff">${t.unread}</div>` : ''}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px">
+          <div style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:${t.unread?'900':'700'};color:var(--text)">${m.name}</div>
+          <div style="font-size:10px;color:var(--text3);flex-shrink:0;margin-left:8px">${last?.time||''}</div>
+        </div>
+        <div style="font-size:12px;color:${t.unread?'var(--text)':'var(--text3)'};font-weight:${t.unread?'500':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Update nav dot on messages tab
+  const hasUnread = threads.some(t=>t.unread>0);
+  const msgDot = document.querySelector('#nb-messages .dot');
+  if(msgDot) msgDot.style.display = hasUnread ? 'block' : 'none';
+}
+
+function openChat(memberKey){
+  activeChatMember = memberKey;
+  const conv = conversations[memberKey];
+  if(!conv) return;
+  const m = MEMBERS[memberKey] || {initials:memberKey, color:'#888', name:memberKey};
+
+  // Mark as read
+  conv.unread = 0;
+  renderMessages();
+
+  // Set header
+  document.getElementById('chat-av').textContent = m.initials;
+  document.getElementById('chat-av').style.background = m.color;
+  document.getElementById('chat-name').textContent = m.name;
+  document.getElementById('chat-role').textContent = getMemberRole(memberKey);
+
+  renderChatMessages();
+
+  // Switch to chat screen
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
+  document.getElementById('s-chat').classList.add('active');
+  document.getElementById('nb-messages').classList.add('active');
+}
+
+function getMemberRole(key){
+  const roles = {
+    HP:'UX Designer · 2 yrs at Dojo',
+    AA:'Full Stack Engineer · 1 yr at Dojo',
+    AP:'Product Manager · 3 yrs at Dojo',
+    HS:'Staff Engineer · 4 yrs at Dojo',
+    LT:'Hardware Engineer · 3 yrs at Dojo',
+    SS:'ML Engineer · 6 months at Dojo',
+  };
+  return roles[key] || 'Hacker Dojo Member';
+}
+
+function renderChatMessages(){
+  const conv = conversations[activeChatMember];
+  if(!conv) return;
+  const m = MEMBERS[activeChatMember] || {initials:activeChatMember, color:'#888'};
+  const el = document.getElementById('chat-messages');
+  el.innerHTML = conv.messages.map((msg, i) => {
+    const isMe = msg.from === 'MO';
+    const showAvatar = !isMe && (i===0 || conv.messages[i-1].from !== msg.from);
+    return `<div style="display:flex;flex-direction:${isMe?'row-reverse':'row'};align-items:flex-end;gap:8px">
+      ${!isMe ? `<div style="width:28px;height:28px;border-radius:50%;background:${showAvatar?m.color:'transparent'};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff">${showAvatar?m.initials:''}</div>` : ''}
+      <div style="max-width:70%">
+        <div style="background:${isMe?'var(--red)':'var(--surface2)'};color:${isMe?'#fff':'var(--text)'};padding:10px 14px;border-radius:${isMe?'18px 18px 4px 18px':'18px 18px 18px 4px'};font-size:13px;line-height:1.5">${msg.text}</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:3px;text-align:${isMe?'right':'left'}">${msg.time}</div>
+      </div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>{ el.scrollTop = el.scrollHeight; }, 50);
+}
+
+function sendChatMsg(){
+  const input = document.getElementById('chat-input');
+  const val = input.value.trim();
+  if(!val || !activeChatMember) return;
+  const conv = conversations[activeChatMember];
+  if(!conv) return;
+  conv.messages.push({from:'MO', text:val, time:'Just now'});
+  input.value = '';
+  renderChatMessages();
+  renderMessages();
+
+  // Simulate reply after short delay
+  const replies = {
+    HP:[
+      "haha yeah for sure, when are you usually at dojo?",
+      "ok that actually makes a lot of sense",
+      "lets grab coffee before the networking thing thursday",
+      "omg same, its been a lot lately lol",
+      "yes!! okay lets actually plan something this week",
+    ],
+    AA:[
+      "dude yes finally someone gets it lol",
+      "okay send me the repo link when you can",
+      "fr fr, i'll be there friday. we can talk more then",
+      "thats actually sick, how long have you been working on it",
+      "yeah supabase is so good for that kind of stuff",
+    ],
+    SS:[
+      "wait yes we should def collab on that",
+      "thats actually super relevant to what im doing too",
+      "okay im down, when works for you",
+      "lol yes the ML group here is kind of underrated",
+      "honestly demo day was so worth it, you should do it",
+    ],
+    LT:[
+      "the 3D printers here are actually so good btw, have you used them yet",
+      "yes hardware plus software is such a good combo",
+      "lmk when youre free, im usually here afternoons",
+      "okay that makes sense, i can show you how i set mine up",
+    ],
+    AP:[
+      "okay ill put it in the calendar!",
+      "sounds good, see you then",
+      "yes!! looking forward to it",
+      "for sure, just let me know",
+    ],
+    HS:[
+      "agreed dojo has been so helpful honestly",
+      "lets set something up this week",
+      "ill send you my notes from last time too",
+      "yes omg same, been super busy but its good busy",
+    ],
+  };
+  const memberReplies = replies[activeChatMember] || ["sounds good!", "for sure, lets link up", "ok yeah lets do it"];
+  const reply = memberReplies[conv.messages.length % memberReplies.length];
+  setTimeout(()=>{
+    if(activeChatMember && conversations[activeChatMember]){
+      conversations[activeChatMember].messages.push({from:activeChatMember, text:reply, time:'Just now'});
+      renderChatMessages();
+      renderMessages();
+    }
+  }, 1200 + Math.random()*800);
+}
+
+// Start a chat from match screen
+function startMatchChat(memberKey){
+  const firstName = profile.name.split(' ')[0] || 'there';
+  const title = (profile.title||'').toLowerCase();
+  const skills = (profile.skills||[]).map(s=>s.toLowerCase());
+  const isTech = skills.some(s=>['engineering','software','code','python','programming','ml','ai','data','hardware','robotics'].some(k=>s.includes(k)));
+  const isLeader = title.includes('prime') || title.includes('minister') || title.includes('president') || title.includes('director') || title.includes('manager') || title.includes('ceo');
+
+  const openers = {
+    HP: isLeader
+      ? `hey ${firstName}! we got matched — i'm hina, i do UX design here. really cool to connect with someone at your level!`
+      : `hey ${firstName}! we got matched, pretty exciting. i do UX design — what are you working on?`,
+    AA: isLeader
+      ? `hey ${firstName}! alex here, full stack engineer at dojo. honestly a bit starstruck matching with you lol. what brings you here?`
+      : isTech
+      ? `yo! ${firstName} right? we matched up — what stack are you working with these days?`
+      : `hey ${firstName}! we got matched. im alex, full stack engineer here. what do you do?`,
+    SS: isLeader
+      ? `hey ${firstName}! sousen here. i do ML engineering at dojo. would love to hear your thoughts on AI from a policy perspective`
+      : `hey ${firstName}! we matched — i do ML stuff mostly. what are you building?`,
+    LT: `hey ${firstName}! we got matched. im lilibeth, i do hardware and robotics here at dojo. what brings you in?`,
+    AP: `hi ${firstName}! we matched up. im allison, i work in product management here. excited to connect!`,
+    HS: `hey ${firstName}! saw we matched — im heather, been at dojo a few years. what are you working on these days?`,
+  };
+
+  if(!conversations[memberKey]){
+    conversations[memberKey] = {
+      member: memberKey,
+      messages: [{
+        from: memberKey,
+        text: openers[memberKey] || `hey ${firstName}! we got matched up here at dojo. excited to connect`,
+        time: 'Just now'
+      }],
+      unread: 1
+    };
+  }
+  openChat(memberKey);
+}
+
+
+
+
+// ========== USER ACCOUNT CLASS ==========
+
+class UserAccount {
+  constructor(data = {}){
+    // Identity
+    this.email      = data.email      || '';
+    this.password   = data.password   || '';
+    this.name       = data.name       || 'Member';
+    this.initials   = data.initials   || makeInitials(data.name || 'M');
+    this.color      = data.color      || '#C8102E';
+
+    // Profile
+    this.title        = data.title      || 'Hacker Dojo Member';
+    this.location     = data.location   || '';
+    this.about        = data.about      || '';
+    this.skills       = data.skills     ? [...data.skills] : [];
+    this.linkedin     = data.linkedin   || '';
+    this.school       = data.school     || '';
+    this.role         = data.role       || '';
+    this.availability = data.availability || 'open';
+
+    // App state — per account, fully isolated
+    this.rsvpd        = data.rsvpd        ? [...data.rsvpd] : [];
+    this.joinedGroups = data.joinedGroups ? [...data.joinedGroups] : [];
+    this.matchIdx     = data.matchIdx     || 0;
+    this.pastConns    = data.pastConns    ? JSON.parse(JSON.stringify(data.pastConns)) : [];
+    this.conversations= data.conversations? JSON.parse(JSON.stringify(data.conversations)) : null;
+
+    this.createdAt = data.createdAt || Date.now();
+  }
+
+  toJSON(){
+    return {
+      email: this.email,
+      password: this.password,
+      name: this.name,
+      initials: this.initials,
+      color: this.color,
+      title: this.title,
+      location: this.location,
+      about: this.about,
+      skills: [...this.skills],
+      linkedin: this.linkedin,
+      school: this.school,
+      role: this.role,
+      availability: this.availability,
+      rsvpd: [...this.rsvpd],
+      joinedGroups: [...this.joinedGroups],
+      matchIdx: this.matchIdx,
+      pastConns: JSON.parse(JSON.stringify(this.pastConns)),
+      conversations: this.conversations ? JSON.parse(JSON.stringify(this.conversations)) : {},
+      createdAt: this.createdAt,
+    };
+  }
+
+  get firstName(){ return this.name.split(' ')[0]; }
+  get isMateo(){ return this.email === 'mateo@sjsu.edu'; }
+
+  hasStaleConversations(){
+    if(!this.conversations) return true;
+    const count = Object.keys(this.conversations).length;
+    if(count < 2) return true;
+    // Check if any messages mention another account's name
+    const text = JSON.stringify(this.conversations).toLowerCase();
+    if(!this.isMateo && text.includes('mateo')) return true;
+    return false;
+  }
+
+  resolveConversations(){
+    if(this.isMateo){
+      if(!this.conversations || !Object.keys(this.conversations).length){
+        this.conversations = JSON.parse(JSON.stringify(DEFAULT_CONVERSATIONS));
+      }
+    } else if(this.hasStaleConversations()){
+      this.conversations = generateConversationsForAccount(this);
+    }
+  }
+
+  resolvePastConns(){
+    if(this.isMateo && !this.pastConns.length){
+      this.pastConns = JSON.parse(JSON.stringify(DEFAULT_PAST_CONNS));
+    } else if(!this.isMateo && !this.pastConns.length){
+      this.pastConns = [{av:'AP', name:'Allison Pon', when:'3 weeks ago', color:'#0891b2'}];
+    }
+  }
+
+  resolveGroups(groupsArr){
+    // Reset all joins first
+    groupsArr.forEach(g => g.joined = false);
+    if(this.joinedGroups.length){
+      this.joinedGroups.forEach(id => {
+        const g = groupsArr.find(x => x.id === id);
+        if(g) g.joined = true;
+      });
+    } else if(this.isMateo){
+      [1, 3].forEach(id => { const g = groupsArr.find(x=>x.id===id); if(g) g.joined=true; });
+    }
+  }
+}
+
+// ========== SESSION — current active user ==========
+
+class Session {
+  constructor(){
+    this.user = null; // UserAccount instance
+  }
+
+  // Load an account object (plain or UserAccount) into active session
+  load(acctData){
+    this.user = new UserAccount(acctData);
+    this.user.resolveConversations();
+    this.user.resolvePastConns();
+
+    // Push into global state the app reads from
+    this._syncGlobals();
+
+    // Persist resolved data back (conversations may have been generated)
+    this._saveUser();
+  }
+
+  // Sync UserAccount → global variables the rest of the app uses
+  _syncGlobals(){
+    const u = this.user;
+
+    // Profile
+    profile.name        = u.name;
+    profile.initials    = u.initials;
+    profile.title       = u.title;
+    profile.location    = u.location;
+    profile.about       = u.about;
+    profile.skills      = [...u.skills];
+    profile.linkedin    = u.linkedin;
+    profile.school      = u.school;
+    profile.color       = u.color;
+    profile.availability= u.availability;
+
+    MEMBERS.MO.name     = u.name;
+    MEMBERS.MO.initials = u.initials;
+
+    // App state
+    rsvpd         = new Set(u.rsvpd);
+    pastConns     = JSON.parse(JSON.stringify(u.pastConns));
+    conversations = JSON.parse(JSON.stringify(u.conversations || {}));
+    matchIdx      = u.matchIdx;
+
+    // Groups — filter to base set then apply joined state
+    groups = groups.filter(g => g.id <= 7);
+    u.resolveGroups(groups);
+  }
+
+  // Snapshot globals back into UserAccount and persist to localStorage
+  save(){
+    if(!this.user) return;
+    const u = this.user;
+
+    u.name        = profile.name;
+    u.initials    = profile.initials;
+    u.title       = profile.title;
+    u.location    = profile.location;
+    u.about       = profile.about;
+    u.skills      = [...profile.skills];
+    u.linkedin    = profile.linkedin;
+    u.school      = profile.school;
+    u.availability= profile.availability;
+
+    u.rsvpd        = [...rsvpd];
+    u.joinedGroups = groups.filter(g=>g.joined).map(g=>g.id);
+    u.matchIdx     = matchIdx;
+    u.pastConns    = JSON.parse(JSON.stringify(pastConns));
+    u.conversations= JSON.parse(JSON.stringify(conversations));
+
+    this._saveUser();
+  }
+
+  _saveUser(){
+    if(!this.user?.email) return;
+    const all = loadAccounts();
+    all[this.user.email] = this.user.toJSON();
+    saveAccounts(all);
+  }
+
+  get isActive(){ return !!this.user; }
+  get email(){ return this.user?.email || ''; }
+}
+
+const session = new Session();
+
+// ========== PROFILE (kept as plain object for backwards compat with all existing UI code) ==========
+let profile = {
+  initials: 'MO',
+  name: 'Mateo Ortega',
+  title: 'Computer Engineering Student · San Jose State University',
+  location: 'American Canyon, CA',
+  about: "Pursuing a Bachelor's in Computer Engineering at San Jose State University. Previously earned two AS-Ts in Mathematics and Physics at Napa Valley College — part of the STEM community for over 7 years.\n\nBackground in robotics engineering, 3D modeling, soldering, digital circuit design, and programming. Currently part of the Braven Career Accelerator at SJSU. Experience as a Workstation Assembly Technician at Steiger Dynamics.",
+  skills: ['Computer Engineering','Robotics','3D Modeling','Digital Circuit Design','Python','Hardware Design','Soldering','Programming','Circuit Prototyping','Technical Development'],
+  linkedin: 'linkedin.com/in/mateoortega',
+  school: 'San Jose State University',
+  role: 'Workstation Assembly Tech · Steiger Dynamics',
+  color: '#C8102E',
+  availability: 'open',
+};
+
+function openProfile(){
+  const sc = document.getElementById('sheet-content');
+  sc.innerHTML = buildProfileSheet();
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(renderSkillTags, 50);
+}
+
+function escHtml(str){ return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderSkillTags(){
+  const c = document.getElementById('skill-tags-container');
+  if(!c) return;
+  c.innerHTML = profile.skills.map((s,i)=>`
+    <div class="skill-tag">${escHtml(s)}<span class="rm" onclick="removeSkill(${i})">✕</span></div>`).join('');
+}
+
+function addSkill(){
+  const input = document.getElementById('skill-input');
+  const val = (input?.value||'').trim();
+  if(!val) return;
+  if(profile.skills.includes(val)){ toast('Already added!'); return; }
+  profile.skills.push(val);
+  input.value = '';
+  renderSkillTags();
+  toast(`✅ "${val}" added`);
+}
+
+function removeSkill(idx){
+  profile.skills.splice(idx,1);
+  renderSkillTags();
+}
+
+function changeInitials(){
+  const newVal = window.prompt('Enter your initials (1–2 letters):', profile.initials);
+  if(!newVal) return;
+  profile.initials = newVal.trim().toUpperCase().slice(0,2);
+  const avText = document.getElementById('prof-av-text');
+  if(avText) avText.textContent = profile.initials;
+  updateHomeAvatar();
+}
+
+function liveUpdateProfileName(val){
+  if(!val.trim()) return;
+  const initials = makeInitials(val.trim());
+  const profAvText = document.getElementById('prof-av-text');
+  if(profAvText) profAvText.textContent = initials;
+}
+
+function updateHomeAvatar(){
+  // Use stable IDs — works regardless of which screen is active
+  const av = document.getElementById('home-av');
+  if(av) av.textContent = profile.initials;
+  // Update greeting name span directly by ID
+  const nameSpan = document.getElementById('home-greeting-name');
+  if(nameSpan) nameSpan.textContent = profile.name.split(' ')[0];
+  // Also update compose bar avatars
+  document.querySelectorAll('.c-av').forEach(el => el.textContent = profile.initials);
+}
+
+let toastT;
+function toast(msg, duration){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  const ms = duration || (msg.length > 40 ? 3500 : 2400);
+  toastT = setTimeout(()=>t.classList.remove('show'), ms);
+}
+
+// ========== QOL: AVAILABILITY ==========
+function setAvailability(val){
+  profile.availability = val;
+  persistProfileToAccount();
+  // Update badge styles live
+  ['open','busy','browse'].forEach(v=>{
+    const el = document.getElementById('avail-'+v);
+    if(!el) return;
+    el.className = `avail-badge ${v===val ? `avail-${v}` : ''}`;
+  });
+  const labels = {open:'Open to Connect', busy:'Busy', browse:'Just Browsing'};
+  toast(`✅ Status set to: ${labels[val]}`);
+}
+
+// ========== QOL: GROUP SEARCH ==========
+function filterGroupsBySearch(q){
+  const query = q.toLowerCase();
+  document.querySelectorAll('#my-groups .group-card, #explore-groups .group-card').forEach(card=>{
+    const name = card.querySelector('.g-name')?.textContent.toLowerCase()||'';
+    card.style.display = name.includes(query) ? '' : 'none';
+  });
+}
+
+// ========== QOL: MESSAGE SEARCH ==========
+function filterMessages(q){
+  const query = q.toLowerCase();
+  const threads = Object.values(conversations);
+  const list = document.getElementById('msg-thread-list');
+  if(!q){renderMessages();return;}
+  const filtered = threads.filter(t=>{
+    const m = MEMBERS[t.member];
+    const name = (m?.name||'').toLowerCase();
+    const lastMsg = t.messages[t.messages.length-1]?.text.toLowerCase()||'';
+    return name.includes(query)||lastMsg.includes(query);
+  });
+  if(!filtered.length){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results</div><div class="empty-sub">No conversations match "${q}"</div></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(t=>{
+    const m = MEMBERS[t.member]||{initials:t.member,color:'#888',name:t.member};
+    const last = t.messages[t.messages.length-1];
+    const preview = last?(last.from==='MO'?'You: ':'')+last.text:'';
+    return `<div onclick="openChat('${t.member}')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--border)">
+      <div style="position:relative;flex-shrink:0">
+        <div style="width:46px;height:46px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:#fff">${m.initials}</div>
+        ${t.unread>0?`<div style="position:absolute;top:-1px;right:-1px;width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff">${t.unread}</div>`:''}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">${m.name}</div>
+        <div style="font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ========== QOL: MATCH PROGRESS DOTS ==========
+let seenMatches = new Set();
+function renderMatchDots(){
+  const bar = document.getElementById('match-seen-bar');
+  if(!bar) return;
+  bar.innerHTML = matches.map((m,i)=>`
+    <div class="seen-dot ${i===matchIdx?'current':seenMatches.has(i)?'seen':''}"
+      title="${m.name}" onclick="jumpToMatch(${i})"></div>`).join('');
+}
+function jumpToMatch(idx){
+  matchIdx = idx;
+  renderMatch();
+}
+
+// ========== QOL: PAST-DAY DIMMING IN CALENDAR ==========
+// Applied in renderCal — cells with date < today get past-day class
+const TODAY_ISO = '2026-05-07';
+
+// ========== QOL: EDIT & DELETE EVENTS ==========
+function openEventEdit(id){
+  const e = events.find(x=>x.id===id);
+  if(!e) return;
+  const sc = document.getElementById('sheet-content');
+  sc.innerHTML=`
+    <div class="sheet-title">Edit Event</div>
+    <div class="sheet-sub">Update the details for this event</div>
+    <div class="form-group"><label class="form-label">Event Name</label>
+      <input class="profile-field" id="ee-name" value="${escHtml(e.name)}" /></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date</label>
+        <input class="profile-field" id="ee-date" type="date" value="${e.date}" /></div>
+      <div class="form-group"><label class="form-label">Time</label>
+        <input class="profile-field" id="ee-time" value="${escHtml(e.time)}" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Location</label>
+      <input class="profile-field" id="ee-location" value="${escHtml(e.location)}" /></div>
+    <div class="form-group"><label class="form-label">Description</label>
+      <textarea class="profile-field" id="ee-desc" style="min-height:70px">${escHtml(e.desc)}</textarea></div>
+    <button class="sheet-submit" onclick="saveEventEdit(${id})">Save Changes</button>
+    <button onclick="deleteEvent(${id})" style="width:100%;padding:12px;margin-top:8px;background:transparent;border:1.5px solid var(--red-mid);color:var(--red);border-radius:11px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Delete Event</button>`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function saveEventEdit(id){
+  const e = events.find(x=>x.id===id);
+  if(!e) return;
+  const get = id => document.getElementById(id)?.value.trim();
+  e.name = get('ee-name')||e.name;
+  e.date = get('ee-date')||e.date;
+  e.time = get('ee-time')||e.time;
+  e.location = get('ee-location')||e.location;
+  e.desc = get('ee-desc')||e.desc;
+  closeSheet();
+  renderCal();
+  renderHome();
+  toast('✅ Event updated!');
+}
+
+function deleteEvent(id){
+  if(!confirm('Delete this event?')) return;
+  events = events.filter(x=>x.id!==id);
+  rsvpd.delete(id);
+  closeSheet();
+  renderCal();
+  renderHome();
+  toast('🗑 Event deleted');
+}
+
+// ========== QOL: KEYBOARD DISMISS ==========
+function blurInputs(){
+  document.querySelectorAll('input,textarea').forEach(el=>el.blur());
+}
+
+// ========== QOL: MINI MONTH GRID on Home ==========
+function buildMiniMonthGrid(){
+  const today = parseDate(TODAY_ISO);
+  const y = today.getFullYear(), mo = today.getMonth();
+  const first = new Date(y,mo,1).getDay();
+  const days = new Date(y,mo+1,0).getDate();
+  const DAYS = ['S','M','T','W','T','F','S'];
+  const evByDay = {};
+  events.filter(e=>{
+    const [ey,em]=e.date.split('-').map(Number);
+    return ey===y && em-1===mo;
+  }).forEach(e=>{
+    const d=parseInt(e.date.split('-')[2],10);
+    if(!evByDay[d])evByDay[d]=[];
+    evByDay[d].push(e);
+  });
+
+  let html = `<div class="mini-month-grid">`;
+  // DOW headers
+  DAYS.forEach(d=>{ html+=`<div class="mini-dow">${d}</div>`; });
+  // Empty cells before first
+  for(let i=0;i<first;i++) html+=`<div class="mini-day other-mini"></div>`;
+  // Days
+  for(let d=1;d<=days;d++){
+    const iso=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = d===today.getDate();
+    const isPast = parseDate(iso)<today && !isToday;
+    const hasEv = !!evByDay[d];
+    const hasRsvp = evByDay[d]?.some(e=>rsvpd.has(e.id));
+    html+=`<div class="mini-day ${isToday?'today-day':''} ${isPast?'past-mini':''} ${hasEv&&!isToday?'has-event':''} ${hasRsvp&&!isToday?'has-rsvp':''}"
+      onclick="calDayFromMini('${iso}')">${d}</div>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+
+function calDayFromMini(iso){
+  const dayEvs = events.filter(e => e.date === iso);
+  const [y, mo, day] = iso.split('-').map(Number);
+  const d = new Date(y, mo-1, day);
+  const label = d.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+  const sc = document.getElementById('sheet-content');
+
+  if(!dayEvs.length){
+    sc.innerHTML = `
+      <div class="sheet-title">${label}</div>
+      <div class="sheet-sub">No events scheduled</div>
+      <div style="padding:20px 0;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">📭</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:14px">Nothing on this day yet</div>
+        <button class="btn-red" style="font-size:13px;padding:10px 20px" onclick="closeSheet();goTo('calendar');setTimeout(()=>openSheet('add-event',{date:'${iso}'}),120)">＋ Add Event</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('open');
+    return;
+  }
+
+  if(dayEvs.length === 1){
+    openEvent(dayEvs[0].id);
+    return;
+  }
+
+  sc.innerHTML = `
+    <div class="sheet-title">${label}</div>
+    <div class="sheet-sub">${dayEvs.length} events this day</div>
+    ${dayEvs.map(e => {
+      const tc = TYPE_COLORS[e.type] || TYPE_COLORS.custom;
+      return `<div class="ev-card type-${e.type}" onclick="openEvent(${e.id})" style="margin:0 0 9px">
+        <div class="ev-badge" style="${tc.badge}">${e.type}</div>
+        <div class="ev-name">${e.name}</div>
+        <div class="ev-meta"><span>🕐 ${e.time}</span><span>📍 ${e.location}</span></div>
+      </div>`;
+    }).join('')}`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function goToCalendarDay(iso){
+  // Navigate to calendar tab and jump to the correct month/year for the given date
+  const [y, mo] = iso.split('-').map(Number);
+  calYear = y;
+  calMonth = mo - 1;
+  goTo('calendar');
+  setTimeout(() => calDayClick(iso, null), 80);
+}
+
+// ========== QOL: RSVP CONFIRMED BADGE ON CARDS ==========
+// Applied in buildEvCard — show green ✓ badge when rsvpd
+
+// ========== QOL: SPINNER for LinkedIn import ==========
+function setLiBtnLoading(btnId, loading){
+  const btn = document.getElementById(btnId);
+  if(!btn) return;
+  if(loading){
+    btn.innerHTML = `<span class="spinner"></span>`;
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'Import';
+    btn.disabled = false;
+  }
+}
+
+
+
+// ========== ACCOUNT SYSTEM ==========
+const STORAGE_KEY = 'dojo_accounts';
+const ACTIVE_KEY = 'dojo_active';
+
+function loadAccounts(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e){ return {}; }
+}
+function saveAccounts(accts){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(accts)); } catch(e){}
+}
+function getActiveKey(){
+  try { return localStorage.getItem(ACTIVE_KEY) || null; } catch(e){ return null; }
+}
+function setActiveKey(k){
+  try { localStorage.setItem(ACTIVE_KEY, k); } catch(e){}
+}
+
+function makeInitials(name){
+  const parts = name.trim().split(/\s+/);
+  if(parts.length >= 2) return (parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+  return name.slice(0,2).toUpperCase();
+}
+
+// ---- AUTH FLOW ----
+function showAuth(view='login'){
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('app').style.display='none';
+  renderAuthView(view);
+}
+
+function hideAuth(){
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('app').style.display='';
+}
+
+function renderAuthView(view){
+  const card = document.getElementById('auth-card');
+  const accounts = loadAccounts();
+  const hasAccounts = Object.keys(accounts).length > 0;
+
+  if(view==='login'){
+    card.innerHTML = `
+      <div class="auth-card-title">Welcome back</div>
+      <div class="auth-card-sub">Sign in to your DojoConnect account</div>
+      <div class="auth-error" id="auth-err"></div>
+      <div class="auth-field-group">
+        <label class="auth-label">Email</label>
+        <input class="auth-input" id="ai-email" type="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="auth-field-group">
+        <label class="auth-label">Password</label>
+        <input class="auth-input" id="ai-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')loginUser()" />
+      </div>
+      <button class="auth-btn" onclick="loginUser()">Sign In</button>
+      <div class="auth-divider"><span>or</span></div>
+      <button class="auth-btn ghost" onclick="renderAuthView('signup')">Create Account</button>
+      ${hasAccounts ? `<button class="auth-btn ghost" onclick="renderAuthView('switch')" style="margin-top:6px">Switch Account</button>` : ''}
+    `;
+    setTimeout(()=>document.getElementById('ai-email')?.focus(),100);
+
+  } else if(view==='signup'){
+    card.innerHTML = `
+      <div class="auth-card-title">Create account</div>
+      <div class="auth-card-sub">Paste your LinkedIn URL to auto-fill your profile, or fill in manually.</div>
+      <div class="auth-error" id="auth-err"></div>
+
+      <!-- LinkedIn import row -->
+      <div class="auth-field-group">
+        <label class="auth-label">LinkedIn URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optional, auto-fills profile)</span></label>
+        <div style="display:flex;gap:7px">
+          <input class="auth-input" id="su-linkedin" placeholder="linkedin.com/in/yourname" style="flex:1" oninput="linkedinInputChanged()" />
+          <button id="li-fetch-btn" onclick="fetchLinkedInSignup()" style="background:var(--red);color:#fff;border:none;border-radius:9px;padding:0 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;opacity:.4;transition:all .15s" disabled>Import</button>
+        </div>
+        <div id="li-status" style="font-size:11px;color:var(--text3);margin-top:5px;min-height:16px"></div>
+      </div>
+
+      <div id="li-preview" style="display:none;background:var(--red-dim);border:1px solid var(--red-mid);border-radius:10px;padding:12px 14px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div id="li-prev-av" style="width:38px;height:38px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:#fff;flex-shrink:0"></div>
+          <div>
+            <div id="li-prev-name" style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text)"></div>
+            <div id="li-prev-title" style="font-size:11px;color:var(--text2)"></div>
+          </div>
+          <div style="margin-left:auto;font-size:18px">✅</div>
+        </div>
+        <div id="li-prev-about" style="font-size:11px;color:var(--text2);line-height:1.5"></div>
+      </div>
+
+      <div class="auth-field-group">
+        <label class="auth-label">Full Name</label>
+        <input class="auth-input" id="su-name" placeholder="Your full name" autocomplete="name" />
+      </div>
+      <div class="auth-field-group">
+        <label class="auth-label">Email</label>
+        <input class="auth-input" id="su-email" type="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="auth-field-group">
+        <label class="auth-label">Password</label>
+        <input class="auth-input" id="su-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password" />
+      </div>
+      <div class="auth-field-group">
+        <label class="auth-label">Title / Role <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optional)</span></label>
+        <input class="auth-input" id="su-title" placeholder="e.g. Software Engineer · SJSU" />
+      </div>
+      <button class="auth-btn" onclick="signupUser()">Create Account</button>
+      <div class="auth-divider"><span>or</span></div>
+      <button class="auth-btn ghost" onclick="renderAuthView('login')">Back to Sign In</button>
+    `;
+    setTimeout(()=>document.getElementById('su-linkedin')?.focus(),100);
+
+  } else if(view==='switch'){
+    const accts = loadAccounts();
+    const active = getActiveKey();
+    const items = Object.values(accts).map(a=>`
+      <div class="acct-item${a.email===active?' active-acct':''}" onclick="switchToAccount('${a.email}')">
+        <div class="acct-av" style="background:${a.color||'var(--red)'}">${a.initials}</div>
+        <div class="acct-info">
+          <div class="acct-name">${escHtml(a.name)}</div>
+          <div class="acct-email">${escHtml(a.email)}</div>
+        </div>
+        ${a.email===active?'<div class="acct-check">✓</div>':''}
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="auth-card-title">Switch Account</div>
+      <div class="auth-card-sub">Choose which account to use</div>
+      ${items}
+      <div class="auth-divider"><span>or</span></div>
+      <button class="auth-btn ghost" onclick="renderAuthView('signup')">Add Account</button>
+      <button class="auth-btn ghost" onclick="renderAuthView('login')" style="margin-top:6px">Back</button>
+    `;
+  }
+}
+
+function authErr(msg){
+  const el = document.getElementById('auth-err');
+  if(el){ el.textContent=msg; el.classList.add('show'); }
+}
+
+const AV_COLORS = ['#C8102E','#7c3aed','#0369a1','#0891b2','#15803d','#b45309','#be185d','#0f766e'];
+
+function signupUser(){
+  const nameVal = (document.getElementById('su-name')?.value || '').trim();
+  const email = (document.getElementById('su-email')?.value || '').trim().toLowerCase();
+  const pass = document.getElementById('su-pass')?.value || '';
+  const titleVal = (document.getElementById('su-title')?.value || '').trim();
+  const liUrl = (document.getElementById('su-linkedin')?.value || '').trim();
+  const li = _liImportData || {};
+
+  const name = nameVal || li.name || '';
+  const title = titleVal || li.title || '';
+
+  if(!name){ authErr('Please enter your name.'); return; }
+  if(!email || !email.includes('@')){ authErr('Please enter a valid email.'); return; }
+  if(!pass || pass.length < 6){ authErr('Password must be at least 6 characters.'); return; }
+  const accounts = loadAccounts();
+  if(accounts[email]){ authErr('An account with this email already exists.'); return; }
+  const color = AV_COLORS[Object.keys(accounts).length % AV_COLORS.length];
+
+  const newUser = new UserAccount({
+    name, email,
+    password: btoa(pass),
+    initials: makeInitials(name),
+    color,
+    title: title || li.title || 'Hacker Dojo Member',
+    location: li.location || '',
+    about: li.about || '',
+    skills: li.skills ? [...li.skills] : [],
+    linkedin: liUrl || li.linkedin || '',
+    school: li.school || '',
+    createdAt: Date.now(),
+  });
+  newUser.resolveConversations();
+  newUser.resolvePastConns();
+
+  accounts[email] = newUser.toJSON();
+  saveAccounts(accounts);
+  setActiveKey(email);
+  session.load(newUser.toJSON());
+  _liImportData = null;
+  hideAuth();
+  applyActiveAccount();
+  toast(`Welcome to DojoConnect, ${newUser.firstName}! 🎉`);
+}
+
+function loginUser(){
+  const email = document.getElementById('ai-email')?.value.trim().toLowerCase();
+  const pass = document.getElementById('ai-pass')?.value;
+  if(!email || !pass){ authErr('Please fill in both fields.'); return; }
+  const accounts = loadAccounts();
+  const acctData = accounts[email];
+  if(!acctData){ authErr('No account found with that email.'); return; }
+  if(btoa(pass) !== acctData.password){ authErr('Incorrect password.'); return; }
+  setActiveKey(email);
+  session.load(acctData);
+  hideAuth();
+  applyActiveAccount();
+  toast(`Welcome back, ${session.user.firstName}!`);
+}
+
+function switchToAccount(email){
+  // Save current account state before switching
+  if(session.isActive) session.save();
+  const accounts = loadAccounts();
+  const acctData = accounts[email];
+  if(!acctData) return;
+  setActiveKey(email);
+  session.load(acctData);
+  hideAuth();
+  applyActiveAccount();
+  toast(`Switched to ${session.user.firstName}`);
+}
+
+function loadProfileFromAccount(acctData){
+  session.load(acctData);
+}
+
+function persistProfileToAccount(){
+  session.save();
+}
+
+function resetAppStateForAccount(){
+  // Still used in a few places — session.load() handles this properly
+  // but keep as no-op fallback so existing call sites don't break
+  rsvpd = new Set();
+  pastConns = [];
+  matchIdx = 0;
+  conversations = {};
+  activeChatMember = null;
+  groups = groups.filter(g => g.id <= 7);
+  groups.forEach(g => g.joined = false);
+}
+
+function applyActiveAccount(){
+  renderHome();
+  renderFeed();
+  renderMessages();
+  if(document.getElementById('s-match')?.classList.contains('active')) renderMatch();
+  if(document.getElementById('s-groups')?.classList.contains('active')) renderGroups();
+  requestAnimationFrame(() => updateHomeAvatar());
+}
+
+function logoutUser(){
+  if(session.isActive) session.save();
+  closeSheet();
+  setActiveKey('');
+  session.user = null;
+  resetAppStateForAccount();
+  showAuth('login');
+  toast('Signed out');
+}
+
+function saveProfile(){
+  const get = id => (document.getElementById(id)?.value||'').trim();
+  const name = get('pf-name');
+  const title = get('pf-title');
+  const location = get('pf-location');
+  const about = get('pf-about');
+  const linkedin = get('pf-linkedin');
+  const school = get('pf-school');
+  if(name){ profile.name = name; profile.initials = makeInitials(name); MEMBERS.MO.name = name; MEMBERS.MO.initials = profile.initials; }
+  if(title) profile.title = title;
+  if(location) profile.location = location;
+  if(about) profile.about = about;
+  if(linkedin) profile.linkedin = linkedin;
+  if(school) profile.school = school;
+  persistProfileToAccount();
+  closeSheet();
+  requestAnimationFrame(() => {
+    applyActiveAccount();
+    toast('✅ Profile saved!');
+  });
+}
+
+function buildProfileSheet(){
+  const activeEmail = getActiveKey();
+  const accounts = loadAccounts();
+  const hasMultiple = Object.keys(accounts).length > 1;
+  const rsvpCount = rsvpd.size;
+  const matchCount = pastConns.length + 2;
+  const groupCount = groups.filter(g=>g.joined).length;
+
+  const accountSection = `
+  <div class="profile-section" style="margin-top:4px">
+    <div class="profile-section-title">Account</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">${escHtml(activeEmail||'Guest')}</div>
+    ${hasMultiple ? `<button class="auth-btn ghost" style="font-size:12px;padding:9px;margin-bottom:6px;border-radius:10px;width:100%" onclick="openAccountSwitcher()">Switch Account</button>` : ''}
+    <button class="auth-btn ghost" style="font-size:12px;padding:9px;border-radius:10px;color:var(--red);border-color:var(--red-mid);width:100%" onclick="logoutUser()">Sign Out</button>
+  </div>`;
+
+  return `
+  <div class="profile-hero">
+    <svg style="position:absolute;top:10px;left:14px;width:22px;height:22px;opacity:.25;z-index:0" viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="40" height="5" rx="2.5" fill="white"/><rect x="7" y="14" width="34" height="4" rx="2" fill="white"/><rect x="8" y="18" width="5" height="24" rx="2.5" fill="white"/><rect x="35" y="18" width="5" height="24" rx="2.5" fill="white"/></svg>
+    <div style="position:relative;display:inline-block;z-index:1">
+      <div class="profile-big-av" onclick="changeInitials()"><span id="prof-av-text">${profile.initials}</span></div>
+      <button class="edit-overlay-btn" onclick="changeInitials()">✏️</button>
+    </div>
+    <div class="profile-pname">${escHtml(profile.name)}</div>
+    <div class="profile-ptitle">${escHtml(profile.title)}</div>
+    <div class="profile-stats">
+      <div class="pstat"><div class="pstat-num">${rsvpCount}</div><div class="pstat-lbl">Events</div></div>
+      <div class="pstat"><div class="pstat-num">${matchCount}</div><div class="pstat-lbl">Connections</div></div>
+      <div class="pstat"><div class="pstat-num">${groupCount}</div><div class="pstat-lbl">Groups</div></div>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <div class="profile-section-title">Availability</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="avail-badge ${(profile.availability||'open')==='open'?'avail-open':''}" onclick="setAvailability('open')" id="avail-open">🟢 Open to Connect</div>
+      <div class="avail-badge ${(profile.availability||'')==='busy'?'avail-busy':''}" onclick="setAvailability('busy')" id="avail-busy">🔴 Busy</div>
+      <div class="avail-badge ${(profile.availability||'')==='browse'?'avail-browse':''}" onclick="setAvailability('browse')" id="avail-browse">📓 Just Browsing</div>
+    </div>
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">Display Name</div>
+    <input class="profile-field" id="pf-name" value="${escHtml(profile.name)}" placeholder="Your name"
+      oninput="liveUpdateProfileName(this.value)" />
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">Title / Role</div>
+    <input class="profile-field" id="pf-title" value="${escHtml(profile.title)}" placeholder="e.g. Software Engineer · SJSU" />
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">Location</div>
+    <input class="profile-field" id="pf-location" value="${escHtml(profile.location)}" placeholder="e.g. San Jose, CA" />
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">About</div>
+    <textarea class="profile-field" id="pf-about" rows="6" style="min-height:130px">${escHtml(profile.about)}</textarea>
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">Skills & Interests</div>
+    <div class="skill-tags" id="skill-tags-container"></div>
+    <div class="skill-input-row">
+      <input class="skill-add-input" id="skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter')addSkill()" />
+      <button class="skill-add-btn" onclick="addSkill()">+ Add</button>
+    </div>
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">LinkedIn</div>
+    <div style="display:flex;gap:7px;align-items:center">
+      <input class="profile-field" id="pf-linkedin" value="${escHtml(profile.linkedin)}" placeholder="linkedin.com/in/yourprofile" style="flex:1" />
+      <button id="li-import-profile-btn" onclick="importLinkedInProfile()" style="background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 13px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s">Import</button>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px">Paste your LinkedIn URL and tap Import to auto-fill your profile</div>
+  </div>
+  <div class="profile-section">
+    <div class="profile-section-title">School / University</div>
+    <input class="profile-field" id="pf-school" value="${escHtml(profile.school)}" placeholder="e.g. San Jose State University" />
+  </div>
+  ${accountSection}
+  <button class="profile-save" onclick="saveProfile()">Save Profile</button>
+  <div style="height:8px"></div>`;
+}
+
+function openAccountSwitcher(){
+  closeSheet();
+  setTimeout(()=>showAuth('switch'), 200);
+}
+
+// ========== LINKEDIN IMPORT ==========
+
+// Pre-researched profile cache — instant, no API needed
+const LI_CACHE = {
+  'mateoortega': {
+    name: 'Mateo Ortega',
+    title: 'Computer Engineering Student · San Jose State University',
+    location: 'American Canyon, CA',
+    school: 'San Jose State University',
+    role: 'Workstation Assembly Technician · Steiger Dynamics',
+    about: "Pursuing a Bachelor's in Computer Engineering at San Jose State University. Previously earned two AS-Ts in Mathematics and Physics at Napa Valley College — part of the STEM community for over 7 years.\n\nBackground in robotics engineering, 3D modeling, soldering, digital circuit design, and programming. Currently part of the Braven Career Accelerator at SJSU. Experience as a Workstation Assembly Technician at Steiger Dynamics.",
+    skills: ['Computer Engineering','Robotics','3D Modeling','Digital Circuit Design','Python','Hardware Design','Soldering','Programming','Circuit Prototyping','Technical Development'],
+  },
+  'mark-carney-5b9744205': {
+    name: 'Mark Carney',
+    title: 'Prime Minister of Canada · MP for Nepean',
+    location: 'Ottawa, Ontario, Canada',
+    school: 'Harvard University · University of Oxford',
+    role: 'Prime Minister of Canada',
+    about: "24th Prime Minister of Canada and Leader of the Liberal Party. Former Governor of the Bank of Canada (2008–2013) and Governor of the Bank of England (2013–2020) — the first non-British citizen to hold that role.\n\nEconomist and public servant with a career spanning Goldman Sachs, the Bank of Canada, the Bank of England, Brookfield Asset Management, and the United Nations (Special Envoy for Climate Action and Finance). Harvard economics graduate, Oxford DPhil. Elected MP for Nepean in 2025.",
+    skills: ['Monetary Policy','Economic Policy','Central Banking','Climate Finance','Public Policy','Leadership','Goldman Sachs','G7 & G20'],
+  },
+};
+
+function linkedinInputChanged(){
+  const val = (document.getElementById('su-linkedin')?.value || '').trim();
+  const btn = document.getElementById('li-fetch-btn');
+  if(!btn) return;
+  const isValid = val.length > 5;
+  btn.disabled = !isValid;
+  btn.style.opacity = isValid ? '1' : '.4';
+}
+
+function extractLiUsername(url){
+  // Handle full URLs like https://ca.linkedin.com/in/mark-carney-5b9744205
+  const match = url.match(/linkedin\.com\/in\/([^\/\?\s#]+)/i);
+  if(match) return match[1].replace(/\/$/, '').toLowerCase();
+  // No domain — treat as raw slug
+  if(!url.includes('.') && url.length > 1) return url.toLowerCase();
+  return null;
+}
+
+let _liImportData = null;
+
+async function fetchLinkedInSignup(){
+  const urlVal = (document.getElementById('su-linkedin')?.value || '').trim();
+  const btn = document.getElementById('li-fetch-btn');
+  if(!urlVal) return;
+
+  const username = extractLiUsername(urlVal);
+  if(!username){ setLiStatus('⚠️ Paste a full LinkedIn URL, e.g. linkedin.com/in/yourname', 'warn'); return; }
+
+  btn.innerHTML = `<span class="spinner"></span>`;
+  btn.disabled = true;
+  setLiStatus('🔍 Looking up profile...', 'info');
+
+  // 1. Check local cache first (instant)
+  if(LI_CACHE[username]){
+    _liImportData = { ...LI_CACHE[username], linkedin: `linkedin.com/in/${username}` };
+    applyLiPreview(_liImportData);
+    setLiStatus('✅ Profile imported!', 'success');
+    btn.textContent = '✓ Done';
+    return;
+  }
+
+  // 2. Try Claude API with web search
+  setLiStatus('🔍 Searching LinkedIn profile...', 'info');
+  try {
+    const data = await fetchLiViaClaudeAPI(username);
+    if(data && data.name){
+      _liImportData = { ...data, linkedin: `linkedin.com/in/${username}` };
+      applyLiPreview(_liImportData);
+      setLiStatus('✅ Profile imported!', 'success');
+      btn.textContent = '✓ Done';
+    } else {
+      setLiStatus('ℹ️ Profile not found publicly. Fill in manually below.', 'warn');
+      _liImportData = null;
+      btn.textContent = 'Import';
+      btn.disabled = false;
+    }
+  } catch(e){
+    console.warn('LinkedIn fetch failed:', e);
+    setLiStatus('ℹ️ Could not auto-fetch. Fill in manually below.', 'warn');
+    _liImportData = null;
+    btn.textContent = 'Import';
+    btn.disabled = false;
+  }
+}
+
+async function fetchLiViaClaudeAPI(username){
+  const prompt = `Search for the public LinkedIn profile at linkedin.com/in/${username} and return ONLY a JSON object (no markdown, no explanation) with these exact keys:
+{
+  "name": "full name",
+  "title": "current job title and company or school",
+  "location": "city, region, country",
+  "school": "most recent university or school",
+  "about": "2-3 sentence professional summary based on their background",
+  "skills": ["skill1", "skill2", "skill3", "skill4", "skill5"]
+}
+If the profile cannot be found, return the JSON value null.`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 700,
+      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+      messages: [{ role: 'user', content: prompt }],
+    })
+  });
+
+  if(!resp.ok){ console.warn('API error', resp.status); return null; }
+  const data = await resp.json();
+
+  // Extract text content blocks only
+  const text = (data.content || [])
+    .filter(b => b.type === 'text')
+    .map(b => b.text)
+    .join('');
+
+  if(!text || text.trim().toLowerCase() === 'null') return null;
+
+  // Strip markdown fences if present
+  const clean = text.replace(/```json\s*|```\s*/g, '').trim();
+
+  // Find first JSON object in the text
+  const jsonMatch = clean.match(/\{[\s\S]*\}/);
+  if(!jsonMatch) return null;
+
+  try {
+    const parsed = JSON.parse(jsonMatch[0]);
+    return parsed?.name ? parsed : null;
+  } catch(e){ return null; }
+}
+
+function applyLiPreview(data){
+  const preview = document.getElementById('li-preview');
+  if(!preview) return;
+  preview.style.display = 'block';
+  const av = document.getElementById('li-prev-av');
+  const nameEl = document.getElementById('li-prev-name');
+  const titleEl = document.getElementById('li-prev-title');
+  const aboutEl = document.getElementById('li-prev-about');
+  if(av) av.textContent = makeInitials(data.name || '?');
+  if(nameEl) nameEl.textContent = data.name || '';
+  if(titleEl) titleEl.textContent = data.title || '';
+  if(aboutEl){
+    const ab = data.about || '';
+    aboutEl.textContent = ab.length > 140 ? ab.slice(0, 140) + '...' : ab;
+  }
+  // Pre-fill form fields
+  const setField = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
+  setField('su-name', data.name);
+  setField('su-title', data.title);
+}
+
+function setLiStatus(msg, type){
+  const el = document.getElementById('li-status');
+  if(!el) return;
+  el.textContent = msg;
+  const colors = { success: 'var(--red)', warn: 'var(--text3)', info: 'var(--text2)' };
+  el.style.color = colors[type] || 'var(--text2)';
+}
+
+// Import from LinkedIn inside profile sheet (for existing accounts)
+async function importLinkedInProfile(){
+  const urlVal = (document.getElementById('pf-linkedin')?.value || '').trim();
+  if(!urlVal){ toast('Enter your LinkedIn URL first'); return; }
+  const username = extractLiUsername(urlVal);
+  if(!username){ toast('⚠️ Invalid LinkedIn URL'); return; }
+
+  const btn = document.getElementById('li-import-profile-btn');
+  if(btn){ btn.innerHTML=`<span class="spinner"></span>`; btn.disabled = true; }
+
+  let data = LI_CACHE[username] || null;
+  if(!data){
+    try { data = await fetchLiViaClaudeAPI(username); } catch(e){ data = null; }
+  }
+
+  if(btn){ btn.textContent = 'Import'; btn.disabled = false; }
+  if(!data){ toast('ℹ️ Profile not found publicly'); return; }
+
+  // Update form fields
+  const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
+  set('pf-name', data.name);
+  set('pf-title', data.title);
+  set('pf-location', data.location);
+  set('pf-about', data.about);
+  set('pf-school', data.school);
+
+  // Immediately update profile object in memory
+  if(data.name){
+    profile.name = data.name;
+    profile.initials = makeInitials(data.name);
+    MEMBERS.MO.name = data.name;
+    MEMBERS.MO.initials = profile.initials;
+  }
+  if(data.title) profile.title = data.title;
+  if(data.location) profile.location = data.location;
+  if(data.about) profile.about = data.about;
+  if(data.school) profile.school = data.school;
+
+  // Replace skills entirely
+  if(data.skills?.length){
+    profile.skills = [...data.skills];
+    renderSkillTags();
+  }
+
+  // Update the profile sheet avatar and name display live
+  const profAvText = document.getElementById('prof-av-text');
+  if(profAvText) profAvText.textContent = profile.initials;
+
+  // Persist to localStorage and update all UI immediately
+  persistProfileToAccount();
+  updateHomeAvatar(); // updates #home-av, #home-greeting-name, .c-av
+
+  toast('✅ LinkedIn profile imported! Tap Save to confirm.');
+}
+
+
+(function init(){
+  // Save state when page closes/refreshes
+  window.addEventListener('beforeunload', () => {
+    if(session.isActive) session.save();
+  });
+
+  const accounts = loadAccounts();
+  const activeKey = getActiveKey();
+
+  if(Object.keys(accounts).length === 0){
+    // First launch — auto-create and log in as Mateo with full LinkedIn profile
+    const mateo = {
+      name: 'Mateo Ortega',
+      email: 'mateo@sjsu.edu',
+      password: btoa('dojo2026'),
+      initials: 'MO',
+      color: '#C8102E',
+      title: 'Computer Engineering Student · San Jose State University',
+      location: 'American Canyon, CA',
+      school: 'San Jose State University',
+      linkedin: 'linkedin.com/in/mateoortega',
+      about: "Pursuing a Bachelor's in Computer Engineering at San Jose State University. Previously earned two AS-Ts in Mathematics and Physics at Napa Valley College — part of the STEM community for over 7 years.\n\nBackground in robotics engineering, 3D modeling, soldering, digital circuit design, and programming. Currently part of the Braven Career Accelerator at SJSU. Experience as a Workstation Assembly Technician at Steiger Dynamics.",
+      skills: [
+        'Computer Engineering',
+        'Robotics',
+        '3D Modeling',
+        'Digital Circuit Design',
+        'Python',
+        'Hardware Design',
+        'Soldering',
+        'Programming',
+        'Circuit Prototyping',
+        'Technical Development',
+      ],
+      rsvpd: [1, 2],
+      joinedGroups: [1, 3],
+      pastConns: JSON.parse(JSON.stringify(DEFAULT_PAST_CONNS)),
+      conversations: JSON.parse(JSON.stringify(DEFAULT_CONVERSATIONS)),
+      matchIdx: 0,
+      createdAt: Date.now(),
+    };
+    const mateoUser = new UserAccount({
+      name: 'Mateo Ortega',
+      email: 'mateo@sjsu.edu',
+      password: btoa('dojo2026'),
+      initials: 'MO',
+      color: '#C8102E',
+      title: 'Computer Engineering Student · San Jose State University',
+      location: 'American Canyon, CA',
+      school: 'San Jose State University',
+      linkedin: 'linkedin.com/in/mateoortega',
+      about: "Pursuing a Bachelor's in Computer Engineering at San Jose State University. Previously earned two AS-Ts in Mathematics and Physics at Napa Valley College — part of the STEM community for over 7 years.\n\nBackground in robotics engineering, 3D modeling, soldering, digital circuit design, and programming. Currently part of the Braven Career Accelerator at SJSU. Experience as a Workstation Assembly Technician at Steiger Dynamics.",
+      skills: ['Computer Engineering','Robotics','3D Modeling','Digital Circuit Design','Python','Hardware Design','Soldering','Programming','Circuit Prototyping','Technical Development'],
+      rsvpd: [1, 2],
+      joinedGroups: [1, 3],
+      pastConns: JSON.parse(JSON.stringify(DEFAULT_PAST_CONNS)),
+      conversations: JSON.parse(JSON.stringify(DEFAULT_CONVERSATIONS)),
+      matchIdx: 0,
+    });
+    accounts['mateo@sjsu.edu'] = mateoUser.toJSON();
+    saveAccounts(accounts);
+    setActiveKey('mateo@sjsu.edu');
+    session.load(mateoUser.toJSON());
+    hideAuth();
+    renderHome();
+    renderFeed();
+    renderMessages();
+    requestAnimationFrame(() => updateHomeAvatar());
+    return;
+  }
+
+  if(activeKey && accounts[activeKey]){
+    session.load(accounts[activeKey]);
+    hideAuth();
+    renderHome();
+    renderFeed();
+    renderMessages();
+    requestAnimationFrame(() => updateHomeAvatar());
+  } else {
+    showAuth('login');
+  }
+})();
+
+</script>
 </body>
 </html>
