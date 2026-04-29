@@ -65,10 +65,10 @@
     const stemGains = [];
     const filters = [];
     const filterParams = [
-     { type: 'lowpass', freq: 250, q: 0.8 },      // Low / bass
-     { type: 'bandpass', freq: 800, q: 1.0 },     // Low-mid
-     { type: 'bandpass', freq: 3000, q: 1.0 },    // High-mid
-     { type: 'highpass', freq: 6000, q: 0.8 }     // High / treble
+     { type: 'lowpass',  freq: 200,  q: 0.8 },    // Low / bass   (< 200 Hz)
+     { type: 'bandpass', freq: 700,  q: 2.0 },    // Low-mid      (~350–1400 Hz)
+     { type: 'bandpass', freq: 2800, q: 2.0 },    // High-mid     (~1400–5600 Hz)
+     { type: 'highpass', freq: 5000, q: 0.8 }     // High / treble (> 5000 Hz)
     ];
 
     const fileInput = document.getElementById('fileInput');
