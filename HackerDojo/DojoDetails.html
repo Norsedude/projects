@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DojoDetails — Hacker Dojo</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+[data-theme="light"]{
+  --bg:#fafafa;--bg2:#f2f0ee;--bg3:#e8e4e0;
+  --surface:#ffffff;--surface2:#f5f3f0;
+  --border:#e2ddd8;--border2:#ccc7c0;
+  --red:#C8102E;--red2:#a50c24;
+  --red-dim:rgba(200,16,46,0.07);--red-mid:rgba(200,16,46,0.15);
+  --text:#111111;--text2:#5a5550;--text3:#999490;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+}
+[data-theme="dark"]{
+  --bg:#1e2128;--bg2:#252a34;--bg3:#2c3240;
+  --surface:#252a34;--surface2:#2c3240;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.16);
+  --red:#E8192C;--red2:#ff3347;
+  --red-dim:rgba(232,25,44,0.14);--red-mid:rgba(232,25,44,0.26);
+  --text:#eef0f6;--text2:#9ba3be;--text3:#5a637a;
+  --shadow:0 2px 16px rgba(0,0,0,0.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.5);
+}
+
+body{background:var(--bg);font-family:'Source Sans 3',sans-serif;color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+
+/* ---- TOP NAV ---- */
+.top-nav{padding:20px 24px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:50;border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:8px}
+.nav-torii{width:22px;height:22px;color:var(--red)}
+.nav-name{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--text)}
+.nav-name span{color:var(--red)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nav-btn{height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:5px;padding:0 12px;font-family:'Nunito',sans-serif;font-weight:700;transition:all .15s;white-space:nowrap}
+.nav-btn:active{transform:scale(.94)}
+.nav-btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.nav-btn.red:active{background:var(--red2)}
+
+/* ---- TABS ---- */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);padding:0 24px;background:var(--bg);position:sticky;top:57px;z-index:40}
+.tab{padding:11px 16px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;margin-bottom:-1px}
+.tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* ---- CONTENT ---- */
+.page-content{max-width:900px;margin:0 auto;padding:28px 24px 60px}
+
+/* ---- EVENT HERO ---- */
+.ev-hero{border-radius:20px;overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow-lg)}
+.ev-hero-banner{padding:28px 28px 24px;position:relative;overflow:hidden}
+.ev-hero-banner::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.07)}
+.ev-hero-banner::after{content:'';position:absolute;bottom:-30px;left:20px;width:100px;height:100px;border-radius:50%;background:rgba(0,0,0,.07)}
+.ev-hero-type{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.18);color:rgba(255,255,255,.9);margin-bottom:12px;position:relative;z-index:1}
+.ev-hero-icon{font-size:24px;margin-right:4px}
+.ev-hero-name{font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:6px;line-height:1.05;position:relative;z-index:1}
+.ev-hero-tagline{font-size:14px;color:rgba(255,255,255,.7);font-style:italic;margin-bottom:18px;position:relative;z-index:1}
+.ev-meta-chips{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.ev-meta-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:500;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.14)}
+
+/* ---- HERO ACTIONS ---- */
+.ev-hero-actions{background:var(--surface);border-top:1px solid var(--border);padding:16px 24px;display:flex;gap:10px;align-items:center}
+.rsvp-btn{flex:1;padding:13px;border-radius:11px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;cursor:pointer;transition:all .15s;border:none}
+.rsvp-btn.off{background:var(--red);color:#fff}
+.rsvp-btn.off:active{background:var(--red2);transform:scale(.97)}
+.rsvp-btn.on{background:var(--surface2);color:var(--red);border:2px solid var(--red)}
+.ext-btn{padding:13px 16px;border-radius:11px;background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.ext-btn:hover{border-color:var(--red);color:var(--red)}
+.ext-btn:active{transform:scale(.95)}
+.going-count{font-size:12px;color:var(--text3);white-space:nowrap}
+
+/* ---- SECTIONS ---- */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.section-title{font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ---- STEPS ---- */
+.step-row{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.step-row:last-child{border-bottom:none;padding-bottom:0}
+.step-row:first-child{padding-top:0}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;flex-shrink:0;margin-top:1px}
+.step-body{}
+.step-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.55}
+
+/* ---- STAT GRID ---- */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat-card{background:var(--surface2);border-radius:12px;padding:14px 12px;text-align:center}
+.stat-n{font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:var(--red);line-height:1;margin-bottom:4px}
+.stat-l{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+
+/* ---- BEFORE/AFTER ---- */
+.ba-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch}
+.ba-side{border-radius:14px;padding:18px}
+.ba-before{background:#fff3f4;border:1.5px solid rgba(200,16,46,.2)}
+.ba-after{background:rgba(34,197,94,.07);border:1.5px solid rgba(34,197,94,.2)}
+[data-theme="dark"] .ba-before{background:rgba(232,25,44,.08);border-color:rgba(232,25,44,.2)}
+[data-theme="dark"] .ba-after{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.18)}
+.ba-label{font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+.ba-before .ba-label{color:var(--red)}
+.ba-after .ba-label{color:#15803d}
+.ba-heading{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;margin-bottom:12px}
+.ba-before .ba-heading{color:#7f1d1d}
+.ba-after .ba-heading{color:#064e3b}
+[data-theme="dark"] .ba-before .ba-heading{color:#fca5a5}
+[data-theme="dark"] .ba-after .ba-heading{color:#6ee7b7}
+.ba-item{display:flex;gap:9px;margin-bottom:10px;align-items:flex-start}
+.ba-item:last-child{margin-bottom:0}
+.ba-dot{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
+.ba-before .ba-dot{background:rgba(200,16,46,.1)}
+.ba-after .ba-dot{background:rgba(34,197,94,.12)}
+.ba-text-head{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:1px}
+.ba-text-sub{font-size:11px;color:var(--text2);line-height:1.4}
+.ba-arrow{display:flex;align-items:center;justify-content:center;padding:0 16px}
+.ba-arrow-circle{width:44px;height:44px;border-radius:50%;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:var(--shadow)}
+.ba-metric{margin-top:14px;padding-top:12px;border-top:1.5px dashed var(--border)}
+.ba-metric-n{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900}
+.ba-before .ba-metric-n{color:var(--red)}
+.ba-after .ba-metric-n{color:#15803d}
+.ba-metric-l{font-size:11px;color:var(--text3)}
+
+/* ---- ATTENDEE SECTION ---- */
+.attendee-strip{display:flex;gap:8px;flex-wrap:wrap}
+.attendee-chip{display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px}
+.attendee-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;flex-shrink:0}
+.attendee-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--text)}
+.attendee-role{font-size:10px;color:var(--text3)}
+
+/* ---- TABS CONTENT ---- */
+.tab-section{display:none}
+.tab-section.active{display:block}
+
+/* ---- RELATED EVENTS ---- */
+.related-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.related-card:hover{border-color:var(--border2);transform:translateX(2px)}
+.related-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.related-info{flex:1;min-width:0}
+.related-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.related-meta{font-size:11px;color:var(--text2)}
+
+/* ---- TOAST ---- */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);border-radius:24px;padding:10px 20px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;white-space:nowrap;z-index:400;opacity:0;pointer-events:none;transition:all .22s cubic-bezier(.22,1,.36,1)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="top-nav">
+  <div class="nav-brand">
+    <svg class="nav-torii" viewBox="0 0 48 48" fill="none">
+      <rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/>
+      <rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/>
+      <rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+      <rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+    </svg>
+    <div class="nav-name">Dojo<span>Details</span></div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
+    <button class="nav-btn" onclick="prevEvent()">‹ Prev</button>
+    <button class="nav-btn" onclick="nextEvent()">Next ›</button>
+    <button class="nav-btn red" onclick="toggleRsvp()">RSVP</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+  <div class="tab" onclick="switchTab('flow',this)">Event Flow</div>
+  <div class="tab" onclick="switchTab('before-after',this)">Before & After</div>
+  <div class="tab" onclick="switchTab('related',this)">Related</div>
+</div>
+
+<div class="page-content">
+
+  <!-- EVENT HERO -->
+  <div class="ev-hero" id="ev-hero">
+    <div class="ev-hero-banner" id="ev-banner">
+      <div class="ev-hero-type" id="ev-type-badge"></div>
+      <div class="ev-hero-name" id="ev-name"></div>
+      <div class="ev-hero-tagline" id="ev-tagline"></div>
+      <div class="ev-meta-chips" id="ev-meta"></div>
+    </div>
+    <div class="ev-hero-actions">
+      <button class="rsvp-btn off" id="rsvp-btn" onclick="toggleRsvp()">RSVP — Join Members</button>
+      <button class="ext-btn" onclick="toast('📅 Opening Google Calendar...')">📅 Add</button>
+      <div class="going-count" id="going-count"></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW TAB -->
+  <div class="tab-section active" id="tab-overview">
+    <div class="stat-grid" id="stat-grid" style="margin-bottom:16px"></div>
+    <div class="section">
+      <div class="section-title">About This Event</div>
+      <div id="ev-about" style="font-size:14px;color:var(--text2);line-height:1.7"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Who's Going</div>
+      <div class="attendee-strip" id="attendee-strip"></div>
+    </div>
+  </div>
+
+  <!-- FLOW TAB -->
+  <div class="tab-section" id="tab-flow">
+    <div class="section">
+      <div class="section-title">How It Works</div>
+      <div id="step-list"></div>
+    </div>
+  </div>
+
+  <!-- BEFORE/AFTER TAB -->
+  <div class="tab-section" id="tab-before-after">
+    <div class="section" style="padding:20px">
+      <div class="section-title">Experience Transformation</div>
+      <div class="ba-grid" id="ba-grid"></div>
+    </div>
+  </div>
+
+  <!-- RELATED TAB -->
+  <div class="tab-section" id="tab-related">
+    <div id="related-list"></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+let dark = true;
+let currentIdx = 0;
+let isRsvpd = false;
+
+const ATTENDEES = {
+  HP:{name:'Hina Patel',role:'UX Designer',color:'#7c3aed'},
+  AA:{name:'Alex Alvarez',role:'Full Stack Eng',color:'#0369a1'},
+  AP:{name:'Allison Pon',role:'Product Manager',color:'#0891b2'},
+  HS:{name:'Heather Swinehart',role:'Staff Engineer',color:'#15803d'},
+  LT:{name:'Lilibeth Trinidad',role:'Hardware Eng',color:'#b45309'},
+  SS:{name:'Sousen Saddik',role:'ML Engineer',color:'#be185d'},
+  MO:{name:'Mateo Ortega',role:'Computer Eng',color:'#C8102E'},
+};
+
+const TYPE_COLORS = {
+  networking:{bg:'#c8102e',badge:'Networking',icon:'🔗'},
+  social:{bg:'#b45309',badge:'Social',icon:'🎮'},
+  showcase:{bg:'#1d4ed8',badge:'Showcase',icon:'🚀'},
+  food:{bg:'#15803d',badge:'Food & Drinks',icon:'🌮'},
+  workshop:{bg:'#7e22ce',badge:'Workshop',icon:'🎤'},
+};
+const TYPE_BG_CARD = {networking:'rgba(200,16,46,.12)',social:'rgba(245,158,11,.12)',showcase:'rgba(59,130,246,.12)',food:'rgba(34,197,94,.12)',workshop:'rgba(168,85,247,.12)'};
+const TYPE_COLOR_CARD = {networking:'var(--red)',social:'#b45309',showcase:'#1d4ed8',food:'#15803d',workshop:'#7e22ce'};
+
+const events = [
+  {
+    name:'Game Night Friday',type:'social',date:'Fri, May 9 · 6:00 to 9:00 PM',loc:'Main Room',going:18,icon:'🎮',
+    tagline:'"Meet new people. Win prizes. Have fun."',
+    about:'Every other Friday, groups of 4 strangers compete in trivia, mini challenges, and the famous spaghetti-marshmallow build. The structure is designed to remove the awkwardness of cold introductions. By the time you finish a round together, conversation happens on its own.\n\nGame Night tends to be one of the stickier events at Dojo. Members who come regularly tend to build the kinds of relationships that give them a reason to keep showing up.',
+    stats:[{n:'4',l:'People Per Group'},{n:'3',l:'Game Rounds'},{n:'30m',l:'Free Mingle'}],
+    steps:[{n:'1',t:'Groups of 4 randomized at the door',d:'You are placed with 3 people you do not know, intentionally. Name tags show your name and top skill.'},{n:'2',t:'3 rounds of games',d:'Tech trivia, mini engineering challenges, and the classic spaghetti and marshmallow tower build.'},{n:'3',t:'Points and prizes',d:'Top team wins prizes. Peer-to-peer shoutouts every round keep energy high.'},{n:'4',t:'Free mix and mingle',d:'Last 30 min is open floor to follow up, exchange contacts, and connect on DojoConnect.'}],
+    attendees:['HP','AA','AP','HS','MO'],
+    ba:{
+      before:{heading:'The Silent Room',items:[{h:'No interaction',s:'People work side-by-side for hours without talking'},{h:'Awkward intros',s:'No natural way to start conversations with strangers'},{h:'Hard to stay',s:'Members drift away when they have no relationships in the space'}]},
+      after:{heading:'The Connected Dojo',items:[{h:'Built-in connection',s:'Teams of strangers build rapport through shared challenge'},{h:'Natural conversation',s:'Games give people something to talk about before networking even starts'},{h:'Reasons to return',s:'Members who make friends here are more likely to keep coming back'}]},
+    },
+    related:[1,2,3],
+  },
+  {
+    name:'Networking Thursday',type:'networking',date:'Thu, May 7 · 6:00 to 8:00 PM',loc:'Main Hall',going:24,icon:'🔗',
+    tagline:'"Meet 8 people in 30 minutes, by design."',
+    about:'The flagship monthly networking event at Hacker Dojo. Structured speed intros mean you are guaranteed to meet people, not just stand around hoping someone talks to you.\n\nFollowed by open networking with food and drinks provided. Past attendees have found co-founders, employers, advisors, and long-term collaborators through this event.',
+    stats:[{n:'8',l:'People Met'},{n:'5m',l:'Per Intro Round'},{n:'60m',l:'Open Networking'}],
+    steps:[{n:'1',t:'Arrive and grab a name tag',d:'Your tag shows your name and top skill, so conversations start naturally without needing a rehearsed opener.'},{n:'2',t:'Structured speed intro rotations',d:'5-minute rounds in small groups. You will meet at least 8 people in the first 30 minutes.'},{n:'3',t:'Open networking floor',d:'Follow up with anyone you connected with, exchange contacts, and connect on DojoConnect.'},{n:'4',t:'Lightning announcements',d:'Members share what they are working on or looking for. A good way to find collaborators in the room.'}],
+    attendees:['HP','AA','AP','HS','LT','SS','MO'],
+    ba:{
+      before:{heading:'Standing Around',items:[{h:'No structure',s:'Walking into a room full of strangers with no clear way to start'},{h:'Wasted time',s:'Spending the whole event talking to the one person you already know'},{h:'Low signal',s:'Events that feel like obligations rather than opportunities'}]},
+      after:{heading:'Structured Connection',items:[{h:'Guaranteed introductions',s:'Speed rounds mean you meet people whether or not you feel like initiating'},{h:'Something to talk about',s:'Skill-tagged name tags give every introduction a natural starting point'},{h:'Warmer follow-ups',s:'The open floor after speed intros feels easier because you have already met'}]},
+    },
+    related:[0,2,3],
+  },
+  {
+    name:'Demo Day / Build Night',type:'showcase',date:'Sat, May 16 · 1:00 to 4:00 PM',loc:'Open Floor + Booths',going:31,icon:'🚀',
+    tagline:'"Show what you are building. Get real feedback. Find collaborators."',
+    about:'Set up a booth and show what you are building at any stage. Laptop demo, hardware prototype, early sketch, or just an idea. Walk around, give feedback, and find collaborators.\n\nDemo Day tends to be where the most meaningful collaborations at Hacker Dojo start. Seeing what others are building creates natural openings for "I can help with that" conversations that would not happen otherwise.',
+    stats:[{n:'Booths',l:'Any Stage Welcome'},{n:'3m',l:'Lightning Pitch'},{n:'1',l:'Prize: Free Month'}],
+    steps:[{n:'1',t:'Set up your booth',d:'Any project at any stage is welcome. A laptop, a prototype, a sketch, or just an idea is enough.'},{n:'2',t:'Walk-around hour',d:'Tour other booths, ask questions, and leave written feedback cards for each presenter.'},{n:'3',t:'Optional lightning pitches',d:'3-minute pitch to the full room with live questions from the crowd. No slides required.'},{n:'4',t:'Community vote and prizes',d:'Members vote on their favorite project. Winner receives a free month of Hacker Dojo membership.'}],
+    attendees:['HP','AA','LT','SS','MO'],
+    ba:{
+      before:{heading:'Building Alone',items:[{h:'Invisible work',s:'Projects in progress that no one at Dojo knows about'},{h:'No feedback loop',s:'Building without knowing whether the idea resonates with anyone'},{h:'Missed overlap',s:'Complementary skills exist in the room but people have no way to find each other'}]},
+      after:{heading:'Building Together',items:[{h:'Visible progress',s:'Everyone can see what others are working on, which naturally sparks curiosity and questions'},{h:'Useful feedback',s:'Structured feedback cards mean you leave with input you can actually act on'},{h:'Organic collaboration',s:'Knowing what others are building makes it easier to offer help or find a collaborator'}]},
+    },
+    related:[0,1,3],
+  },
+  {
+    name:'Founder Talk',type:'workshop',date:'Wed, May 20 · 6:00 to 7:30 PM',loc:'Room B',going:15,icon:'🎤',
+    tagline:'"Real stories from people who have actually built things."',
+    about:'A founder, engineer, or industry expert shares their story and opens it up for questions. Topics cover product, legal, startups, career pivots, and whatever the speaker has lived through.\n\nConversational format with no slides required and no keynote polish. Just honest answers to real questions from people who have been there.',
+    stats:[{n:'45m',l:'Main Talk'},{n:'30m',l:'Open Q&A'},{n:'15m',l:'1 on 1s After'}],
+    steps:[{n:'1',t:'Intro and speaker background',d:'15-minute overview of who they are and what they have built, including failures and pivots.'},{n:'2',t:'Main talk',d:'45-minute conversational deep dive on their topic. Attendees are encouraged to ask questions throughout.'},{n:'3',t:'Open Q&A',d:'Members ask anything related to career, technical challenges, business decisions, or personal journey.'},{n:'4',t:'Informal wrap-up',d:'Speaker stays 15 minutes after for one-on-one conversations with anyone who wants them.'}],
+    attendees:['HP','AP','HS','SS','MO'],
+    ba:{
+      before:{heading:'Generic Advice',items:[{h:'Textbook answers',s:'Startup advice that sounds right but does not reflect how things actually play out'},{h:'Polished presentations',s:'Speakers sharing success stories without the context of what failed along the way'},{h:'No real access',s:'No easy way to talk to someone who has actually shipped something and ask them directly'}]},
+      after:{heading:'Real Experience',items:[{h:'Earned perspective',s:'Stories from people who have shipped, failed, and adjusted give more useful context than theory'},{h:'Honest conversation',s:'Conversational format means answers reflect what actually happened, not what looked good in a deck'},{h:'Direct access',s:'Staying after the talk means you can ask the specific question you were too nervous to ask in the room'}]},
+    },
+    related:[0,1,2],
+  },
+];
+
+function renderEvent(){
+  const e = events[currentIdx];
+  const tc = TYPE_COLORS[e.type] || TYPE_COLORS.networking;
+
+  // Hero banner
+  document.getElementById('ev-banner').style.background = `linear-gradient(140deg, ${tc.bg} 0%, ${adjustColor(tc.bg,-20)} 100%)`;
+  document.getElementById('ev-type-badge').innerHTML = `${tc.icon} ${tc.badge}`;
+  document.getElementById('ev-name').textContent = e.name;
+  document.getElementById('ev-tagline').textContent = e.tagline;
+  document.getElementById('ev-meta').innerHTML = [
+    `📅 ${e.date}`,`📍 ${e.loc}`,e.going?`👤 ${e.going} going`:''
+  ].filter(Boolean).map(m=>`<div class="ev-meta-chip">${m}</div>`).join('');
+
+  // RSVP button
+  const rBtn = document.getElementById('rsvp-btn');
+  rBtn.textContent = isRsvpd ? "You're Going! Tap to Remove" : `RSVP — Join ${e.going||''} Members`;
+  rBtn.className = `rsvp-btn ${isRsvpd?'on':'off'}`;
+  document.getElementById('going-count').textContent = `${e.going+(isRsvpd?1:0)} going`;
+  document.querySelector('.nav-btn.red').textContent = isRsvpd ? '✓ Going' : 'RSVP';
+
+  // Stats
+  document.getElementById('stat-grid').innerHTML = e.stats.map(s=>`<div class="stat-card"><div class="stat-n">${s.n}</div><div class="stat-l">${s.l}</div></div>`).join('');
+
+  // About
+  document.getElementById('ev-about').innerHTML = e.about.split('\n').map(p=>`<p style="margin-bottom:10px">${p}</p>`).join('');
+
+  // Steps
+  document.getElementById('step-list').innerHTML = e.steps.map(s=>`
+    <div class="step-row">
+      <div class="step-num">${s.n}</div>
+      <div class="step-body"><div class="step-name">${s.t}</div><div class="step-desc">${s.d}</div></div>
+    </div>`).join('');
+
+  // Attendees
+  document.getElementById('attendee-strip').innerHTML = e.attendees.map(k=>{
+    const a=ATTENDEES[k]||{name:k,role:'Member',color:'#888'};
+    return `<div class="attendee-chip">
+      <div class="attendee-av" style="background:${a.color}">${k}</div>
+      <div><div class="attendee-name">${a.name}</div><div class="attendee-role">${a.role}</div></div>
+    </div>`;
+  }).join('');
+
+  // Before / after
+  const ba = e.ba;
+  document.getElementById('ba-grid').innerHTML = `
+    <div class="ba-side ba-before">
+      <div class="ba-label">Before</div>
+      <div class="ba-heading">${ba.before.heading}</div>
+      ${ba.before.items.map(it=>`<div class="ba-item"><div><div class="ba-text-head">${it.h}</div><div class="ba-text-sub">${it.s}</div></div></div>`).join('')}
+    </div>
+    <div class="ba-arrow"><div class="ba-arrow-circle">→</div></div>
+    <div class="ba-side ba-after">
+      <div class="ba-label">After</div>
+      <div class="ba-heading">${ba.after.heading}</div>
+      ${ba.after.items.map(it=>`<div class="ba-item"><div><div class="ba-text-head">${it.h}</div><div class="ba-text-sub">${it.s}</div></div></div>`).join('')}
+    </div>`;
+
+  // Related
+  document.getElementById('related-list').innerHTML = e.related
+    .filter(i => i !== currentIdx && events[i])
+    .map(i=>{
+    const r=events[i];const rt=TYPE_COLORS[r.type];
+    return `<div class="related-card" onclick="currentIdx=${i};isRsvpd=false;renderEvent();switchTab('overview',document.querySelectorAll('.tab')[0])">
+      <div class="related-icon" style="background:${TYPE_BG_CARD[r.type]||'var(--surface2)'}">${r.icon}</div>
+      <div class="related-info">
+        <div class="related-name">${r.name}</div>
+        <div class="related-meta">${r.date} · ${r.loc}</div>
+      </div>
+      <div style="font-size:18px;color:var(--text3)">›</div>
+    </div>`;
+  }).join('');
+}
+
+function adjustColor(hex, amount){
+  const n=parseInt(hex.replace('#',''),16);
+  const r=Math.min(255,Math.max(0,(n>>16)+amount));
+  const g=Math.min(255,Math.max(0,((n>>8)&0xff)+amount));
+  const b=Math.min(255,Math.max(0,(n&0xff)+amount));
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+
+function toggleRsvp(){
+  isRsvpd=!isRsvpd;
+  renderEvent();
+  toast(isRsvpd?"✅ RSVP'd! Added to your calendar.":'Removed RSVP');
+}
+
+function nextEvent(){currentIdx=(currentIdx+1)%events.length;isRsvpd=false;renderEvent();}
+function prevEvent(){currentIdx=(currentIdx-1+events.length)%events.length;isRsvpd=false;renderEvent();}
+
+function switchTab(tab, el){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-btn').textContent=dark?'☀️ Light':'☽ Dark';
+}
+
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+renderEvent();
+</script>
+</body>
+</html>
