@@ -53,14 +53,14 @@
      <label>High (treble)</label>
      <input id="gain3" type="range" min="0" max="2" step="0.01" value="1">
      <span id="val3">1.00</span>
-    <button id="download3" disabled>Download</button>
-    <div style="display:flex; align-items:center; gap:12px; margin-left:6px;">
-      <label style="min-width:90px;">Vocal Isolation</label>
-      <input id="vocalIso" type="range" min="0" max="2" step="0.01" value="1">
-      <span id="valVocal">1.00</span>
-      <button id="downloadVocal" disabled>Download Vocal</button>
+     <button id="download3" disabled>Download</button>
     </div>
-    </div>
+  </div>
+  <div class="row" style="margin-top:16px;">
+    <label style="min-width:90px;">Vocal Isolation</label>
+    <input id="vocalIso" type="range" min="0" max="2" step="0.01" value="1">
+    <span id="valVocal">1.00</span>
+    <button id="downloadVocal" disabled>Download Vocal</button>
   </div>
 
   <script>
@@ -113,8 +113,10 @@
 
     // Create persistent processing + gain nodes so sliders control live gains.
     function createStemNodes() {
-      // cleanup old
+      // cleanup old gain nodes
       for (let g of stemGains) if (g) try { g.disconnect(); } catch(e){}
+      // cleanup old processing nodes
+      for (let p of processNodes) if (p && p.node) try { p.node.disconnect(); } catch(e){}
       processNodes.length = 0; stemGains.length = 0;
       // create per-stem gain nodes (these always route to destination)
       for (let i = 0; i < 4; ++i) {
@@ -151,27 +153,25 @@
       highMidBP.frequency.value = 4000;
       highMidBP.Q.value = 1.2;
       processNodes.push({ node: highMidBP });
-
-      // Update UI displays for sliders
-      for (let i = 0; i < 4; ++i) {
-        const slider = document.getElementById('gain' + i);
-        const display = document.getElementById('val' + i);
-        display.textContent = parseFloat(slider.value).toFixed(2);
-        slider.addEventListener('input', (e) => {
-          if (stemGains[i]) stemGains[i].gain.value = parseFloat(e.target.value);
-          display.textContent = parseFloat(e.target.value).toFixed(2);
-        });
-      }
-      const vocalSlider = document.getElementById('vocalIso');
-      document.getElementById('valVocal').textContent = parseFloat(vocalSlider.value).toFixed(2);
-      vocalSlider.addEventListener('input', (e) => {
-        document.getElementById('valVocal').textContent = parseFloat(e.target.value).toFixed(2);
-      });
     }
 
-    function startPlayback() {
+    // Wire sliders once at init time (not inside createStemNodes to avoid listener accumulation).
+    for (let i = 0; i < 4; ++i) {
+      const slider = document.getElementById('gain' + i);
+      const display = document.getElementById('val' + i);
+      slider.addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        if (stemGains[i]) stemGains[i].gain.value = v;
+        display.textContent = v.toFixed(2);
+      });
+    }
+    document.getElementById('vocalIso').addEventListener('input', (e) => {
+      document.getElementById('valVocal').textContent = parseFloat(e.target.value).toFixed(2);
+    });
+
+    async function startPlayback() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
       createStemNodes();
       // create fresh source
       src = audioCtx.createBufferSource();
@@ -371,6 +371,7 @@
                 // prevent original listeners from firing
                 e.stopImmediatePropagation();
                 e.preventDefault();
+                if (!buffer) return;
                 btn.disabled = true;
                 try {
                     const blob = await createCleanStemWavBlob(i);
@@ -390,6 +391,7 @@
             vocalBtn.addEventListener('click', async (e) => {
                 e.stopImmediatePropagation();
                 e.preventDefault();
+                if (!buffer) return;
                 vocalBtn.disabled = true;
                 try {
                     // render all stems then combine: use vocal stem (index 0) and subtract others with stronger factor
