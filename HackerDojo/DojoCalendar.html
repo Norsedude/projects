@@ -1,371 +1,471 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hacker Dojo — Community Calendar</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>DojoCalendar — Hacker Dojo</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #faf8f4;
-    --ink: #1a1814;
-    --muted: #8a8479;
-    --border: #e4e0d8;
-    --networking: #2563eb;
-    --networking-bg: #eff6ff;
-    --social: #7c3aed;
-    --social-bg: #f5f3ff;
-    --showcase: #d97706;
-    --showcase-bg: #fffbeb;
-    --food: #059669;
-    --food-bg: #ecfdf5;
-    --workshop: #dc2626;
-    --workshop-bg: #fef2f2;
-    --radius: 12px;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    font-family: 'Outfit', sans-serif;
-    color: var(--ink);
-    min-height: 100vh;
-    padding: 48px 32px;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
 
-  .page-header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-  }
-  .eyebrow::before, .eyebrow::after {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: var(--border);
-  }
-  .calendar-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px;
-    font-weight: 900;
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin-bottom: 8px;
-  }
-  .calendar-title span {
-    color: #2563eb;
-  }
-  .calendar-subtitle {
-    font-size: 15px;
-    color: var(--muted);
-    font-weight: 400;
-  }
+[data-theme="light"]{
+  --bg:#fafafa;--bg2:#f2f0ee;--bg3:#e8e4e0;
+  --surface:#ffffff;--surface2:#f5f3f0;
+  --border:#e2ddd8;--border2:#ccc7c0;
+  --red:#C8102E;--red2:#a50c24;
+  --red-dim:rgba(200,16,46,0.07);--red-mid:rgba(200,16,46,0.15);
+  --text:#111111;--text2:#5a5550;--text3:#999490;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+}
+[data-theme="dark"]{
+  --bg:#1e2128;--bg2:#252a34;--bg3:#2c3240;
+  --surface:#252a34;--surface2:#2c3240;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.16);
+  --red:#E8192C;--red2:#ff3347;
+  --red-dim:rgba(232,25,44,0.14);--red-mid:rgba(232,25,44,0.26);
+  --text:#eef0f6;--text2:#9ba3be;--text3:#5a637a;
+  --shadow:0 2px 16px rgba(0,0,0,0.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.5);
+}
 
-  .legend {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-  }
+body{background:var(--bg);font-family:'Source Sans 3',sans-serif;color:var(--text);min-height:100vh;padding:40px 20px 60px;transition:background .3s,color .3s}
 
-  .calendar-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-  }
+/* ---- PAGE HEADER ---- */
+.page-header{display:flex;align-items:center;justify-content:space-between;max-width:860px;margin:0 auto 32px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-torii{width:28px;height:28px;color:var(--red)}
+.brand-text{}
+.brand-top{font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.brand-name{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;letter-spacing:-.01em;color:var(--text)}
+.brand-name span{color:var(--red)}
+.page-actions{display:flex;gap:8px;align-items:center}
+.btn-theme{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.btn-theme:active{transform:scale(.9)}
+.btn-add{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:10px;border:none;background:var(--red);color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn-add:active{transform:scale(.96);background:var(--red2)}
 
-  .cal-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: var(--ink);
-    color: #fff;
-  }
-  .day-name {
-    text-align: center;
-    padding: 14px 8px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-  }
-  .day-name:first-child { color: rgba(255,255,255,0.35); }
-  .day-name:last-child { color: rgba(255,255,255,0.35); }
+/* ---- CALENDAR WRAPPER ---- */
+.cal-outer{max-width:860px;margin:0 auto}
 
-  .cal-body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-  .cal-cell {
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    min-height: 110px;
-    padding: 10px 8px 8px;
-    position: relative;
-    transition: background 0.15s;
-  }
-  .cal-cell:nth-child(7n) { border-right: none; }
-  .cal-cell:hover { background: #fdfcfa; }
-  .cal-cell.other-month .date-num { color: #ccc; }
-  .cal-cell.other-month { background: #faf9f7; }
-  .cal-cell.today { background: #f0f7ff; }
-  .cal-cell.today .date-num {
-    background: var(--networking);
-    color: #fff;
-    border-radius: 6px;
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .cal-cell.weekend { background: #fdfcf8; }
+/* ---- MONTH HERO ---- */
+.cal-hero{background:var(--red);border-radius:20px 20px 0 0;padding:24px 28px 20px;position:relative;overflow:hidden;box-shadow:0 -2px 0 rgba(0,0,0,.1)}
+.cal-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08)}
+.cal-hero::after{content:'';position:absolute;bottom:-30px;left:24px;width:100px;height:100px;border-radius:50%;background:rgba(0,0,0,.07)}
+.cal-hero-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
+.cal-arr{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.14);border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Nunito',sans-serif;font-weight:700}
+.cal-arr:hover{background:rgba(255,255,255,.22)}
+.cal-arr:active{transform:scale(.9)}
+.cal-hero-label{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.cal-big-month{font-family:'Nunito',sans-serif;font-size:58px;font-weight:900;color:#fff;line-height:.9;letter-spacing:-.03em;position:relative;z-index:1}
+.cal-big-year{font-size:20px;font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;letter-spacing:0}
+.cal-hero-stats{display:flex;gap:20px;margin-top:14px;position:relative;z-index:1}
+.cal-stat{text-align:center}
+.cal-stat-n{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff;line-height:1}
+.cal-stat-l{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:2px}
 
-  .date-num {
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 5px;
-  }
+/* ---- DOW ROW ---- */
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.cal-dow span{text-align:center;padding:10px 4px;font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
 
-  .event-pill {
-    font-size: 9.5px;
-    font-weight: 600;
-    padding: 3px 7px;
-    border-radius: 5px;
-    margin-bottom: 3px;
-    line-height: 1.3;
-    display: flex;
-    align-items: flex-start;
-    gap: 3px;
-    cursor: default;
-  }
-  .event-pill .pill-icon { flex-shrink: 0; font-size: 10px; }
-  .event-pill .pill-text { }
-  .event-pill .pill-time { font-weight: 400; opacity: 0.75; font-size: 8.5px; display: block; }
+/* ---- GRID ---- */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 20px 20px;overflow:hidden;box-shadow:var(--shadow-lg)}
+.cal-cell{min-height:90px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 6px 6px;cursor:pointer;transition:background .12s;position:relative}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell:hover{background:var(--bg2)}
+.cal-cell.other-m{background:var(--bg2);opacity:.5}
+.cal-cell.is-today{background:var(--red-dim)}
+.cal-cell.is-today .cdn{background:var(--red);color:#fff;border-radius:7px;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.cal-cell.is-selected{outline:2px solid var(--red);outline-offset:-2px;background:var(--red-dim)}
+.cal-cell.past-d{opacity:.38}
+.cal-cell.has-rsvp::after{content:'';position:absolute;bottom:5px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--red)}
+.cdn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.ev-pill{font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:4px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:1.45;font-family:'Nunito',sans-serif;letter-spacing:.02em}
+.ep-networking{background:var(--red-dim);color:var(--red)}
+.ep-social{background:rgba(245,158,11,.12);color:#b45309}
+.ep-showcase{background:rgba(59,130,246,.12);color:#1d4ed8}
+.ep-food{background:rgba(34,197,94,.12);color:#15803d}
+.ep-workshop{background:rgba(168,85,247,.12);color:#7e22ce}
+.ep-custom{background:rgba(100,116,139,.12);color:#64748b}
+.ev-more{font-size:8px;color:var(--text3);font-weight:600;padding:0 2px;font-family:'Nunito',sans-serif}
 
-  .ev-networking { background: var(--networking-bg); color: var(--networking); }
-  .ev-social { background: var(--social-bg); color: var(--social); }
-  .ev-showcase { background: var(--showcase-bg); color: var(--showcase); }
-  .ev-food { background: var(--food-bg); color: var(--food); }
-  .ev-workshop { background: var(--workshop-bg); color: var(--workshop); }
+/* ---- LEGEND ---- */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0 24px;padding:0 4px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);font-weight:500}
+.legend-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
 
-  .food-truck-badge {
-    position: absolute;
-    bottom: 5px; right: 5px;
-    font-size: 14px;
-    opacity: 0.6;
-  }
+/* ---- DAY PANEL ---- */
+.day-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:var(--shadow)}
+.day-panel-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.day-panel-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--text)}
+.day-panel-close{width:28px;height:28px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.day-panel-close:hover{color:var(--red);border-color:var(--red-mid)}
 
-  .cal-footer {
-    background: #f5f3ef;
-    border-top: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .footer-stat {
-    text-align: center;
-  }
-  .footer-stat .num {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--ink);
-    line-height: 1;
-  }
-  .footer-stat .lbl {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 600;
-    margin-top: 2px;
-  }
-  .footer-cta {
-    background: var(--ink);
-    color: #fff;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-  }
+/* ---- EVENT LIST ITEMS ---- */
+.ev-item{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.ev-item:last-child{margin-bottom:0}
+.ev-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.ev-item.nt::before{background:var(--red)}
+.ev-item.so::before{background:#f59e0b}
+.ev-item.sh::before{background:#3b82f6}
+.ev-item.fd::before{background:#22c55e}
+.ev-item.ws::before{background:#a855f7}
+.ev-item:hover{border-color:var(--border2);transform:translateX(2px)}
+.ev-item-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ev-item-info{flex:1;min-width:0}
+.ev-item-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-item-meta{font-size:11px;color:var(--text2);display:flex;gap:8px}
+.ev-item-rsvp{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid var(--red);color:var(--red);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.ev-item-rsvp.on{background:var(--red);color:#fff}
+.ev-item-rsvp:active{transform:scale(.92)}
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .calendar-grid { animation: fadeIn 0.5s ease; }
+/* ---- UPCOMING STRIP ---- */
+.upcoming-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.upcoming-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text3)}
+.upcoming-see{font-size:12px;color:var(--red);cursor:pointer;font-weight:600}
 
-  .prototype-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff;
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
+/* ---- EMPTY STATE ---- */
+.empty-day{padding:20px;text-align:center}
+.empty-day-icon{font-size:28px;margin-bottom:8px;opacity:.5}
+.empty-day-txt{font-size:13px;color:var(--text2);margin-bottom:12px}
+.btn-add-small{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:9px;border:none;background:var(--red);color:#fff;cursor:pointer;transition:all .15s}
+.btn-add-small:active{transform:scale(.95)}
+
+/* ---- MODAL ---- */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex;animation:obg .2s}
+@keyframes obg{from{opacity:0}to{opacity:1}}
+.modal{width:100%;max-width:860px;background:var(--modal-bg,var(--surface));border-radius:22px 22px 0 0;border-top:1px solid var(--border2);padding:20px 24px 40px;animation:sup .28s cubic-bezier(.22,1,.36,1);max-height:85vh;overflow-y:auto;scrollbar-width:none}
+.modal::-webkit-scrollbar{display:none}
+.modal-bg{background:var(--surface)}
+@keyframes sup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 18px}
+.modal-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text);margin-bottom:3px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:18px}
+.chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.dchip{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px}
+.step-list{list-style:none;margin-bottom:16px}
+.step-list li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5;color:var(--text2)}
+.step-list li:last-child{border-bottom:none}
+.step-n{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;margin-top:1px}
+.modal-rsvp{width:100%;padding:15px;background:var(--red);color:#fff;border:none;border-radius:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px}
+.modal-rsvp:active{transform:scale(.98);background:var(--red2)}
+.modal-rsvp.rsvpd{background:var(--surface2);color:var(--red);border:2px solid var(--red)}
+.ext-cal-btn{width:100%;padding:12px;margin-top:8px;background:transparent;color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.ext-cal-btn:hover{border-color:var(--red);color:var(--red)}
+.modal-sec{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:9px}
+
+/* form */
+.form-group{margin-bottom:13px}
+.form-label{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .15s;resize:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--red)}
+.form-select option{background:var(--surface)}
+.form-textarea{min-height:80px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.type-btns{display:flex;gap:6px;flex-wrap:wrap}
+.type-btn{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;padding:6px 11px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;text-transform:capitalize}
+.type-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+.submit-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:4px}
+.submit-btn:active{transform:scale(.97);background:var(--red2)}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);border-radius:24px;padding:10px 20px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;white-space:nowrap;z-index:400;opacity:0;pointer-events:none;transition:all .22s cubic-bezier(.22,1,.36,1)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+[data-theme="light"] .modal{--modal-bg:#ffffff}
+[data-theme="dark"] .modal{--modal-bg:#252a34}
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <div class="prototype-tag">📋 Prototype 2</div>
-  <div class="eyebrow">Hacker Dojo · Mountain View</div>
-  <div class="calendar-title">May <span>2026</span></div>
-  <div class="calendar-subtitle">Community Events Calendar — Building connections, one event at a time</div>
-</div>
-
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:#2563eb;"></div>Networking</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>Social / Fun</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#d97706;"></div>Showcase</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#059669;"></div>Food / Casual</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#dc2626;"></div>Workshop</div>
-</div>
-
-<div class="calendar-grid">
-  <div class="cal-header">
-    <div class="day-name">Sun</div>
-    <div class="day-name">Mon</div>
-    <div class="day-name">Tue</div>
-    <div class="day-name">Wed</div>
-    <div class="day-name">Thu</div>
-    <div class="day-name">Fri</div>
-    <div class="day-name">Sat</div>
+  <div class="brand">
+    <svg class="brand-torii" viewBox="0 0 48 48" fill="none">
+      <rect x="4" y="8" width="40" height="5" rx="2.5" fill="currentColor"/>
+      <rect x="7" y="14" width="34" height="4" rx="2" fill="currentColor"/>
+      <rect x="8" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+      <rect x="35" y="18" width="5" height="24" rx="2.5" fill="currentColor"/>
+    </svg>
+    <div class="brand-text">
+      <div class="brand-top">Hacker Dojo</div>
+      <div class="brand-name">Dojo<span>Calendar</span></div>
+    </div>
   </div>
-  <div class="cal-body">
-
-    <!-- Row 1 -->
-    <div class="cal-cell other-month weekend"><div class="date-num">27</div></div>
-    <div class="cal-cell other-month"><div class="date-num">28</div></div>
-    <div class="cal-cell other-month"><div class="date-num">29</div></div>
-    <div class="cal-cell other-month"><div class="date-num">30</div></div>
-    <div class="cal-cell other-month"><div class="date-num">1</div></div>
-    <div class="cal-cell other-month weekend"><div class="date-num">2</div></div>
-    <div class="cal-cell other-month weekend"><div class="date-num">3</div></div>
-
-    <!-- Row 2: May 4–10 -->
-    <div class="cal-cell weekend"><div class="date-num">4</div></div>
-    <div class="cal-cell"><div class="date-num">5</div></div>
-    <div class="cal-cell"><div class="date-num">6</div>
-      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
-      <div class="food-truck-badge">🍩</div>
-    </div>
-    <div class="cal-cell"><div class="date-num">7</div></div>
-    <div class="cal-cell today"><div class="date-num">8</div>
-      <div class="event-pill ev-networking"><span class="pill-icon">🔗</span><span class="pill-text">Networking Thursday<span class="pill-time">6–8pm · Main Hall</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">9</div>
-      <div class="event-pill ev-social"><span class="pill-icon">🎮</span><span class="pill-text">Game Night<span class="pill-time">6–9pm · Groups of 4</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">10</div></div>
-
-    <!-- Row 3: May 11–17 -->
-    <div class="cal-cell weekend"><div class="date-num">11</div></div>
-    <div class="cal-cell"><div class="date-num">12</div></div>
-    <div class="cal-cell"><div class="date-num">13</div>
-      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
-      <div class="food-truck-badge">🚚</div>
-    </div>
-    <div class="cal-cell"><div class="date-num">14</div>
-      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">15</div></div>
-    <div class="cal-cell weekend"><div class="date-num">16</div>
-      <div class="event-pill ev-social"><span class="pill-icon">🎯</span><span class="pill-text">Scavenger Hunt<span class="pill-time">4–6pm · Whole Space</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">17</div>
-      <div class="event-pill ev-showcase"><span class="pill-icon">🚀</span><span class="pill-text">Demo Day<span class="pill-time">1–4pm · Booths</span></span></div>
-    </div>
-
-    <!-- Row 4: May 18–24 -->
-    <div class="cal-cell weekend"><div class="date-num">18</div></div>
-    <div class="cal-cell"><div class="date-num">19</div></div>
-    <div class="cal-cell"><div class="date-num">20</div>
-      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">21</div>
-      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">22</div>
-      <div class="event-pill ev-workshop"><span class="pill-icon">🎤</span><span class="pill-text">Founder Talk<span class="pill-time">6–7:30pm · Room B</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">23</div>
-      <div class="event-pill ev-social"><span class="pill-icon">🎮</span><span class="pill-text">Video Game Fri<span class="pill-time">5–9pm · Gaming Zone</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">24</div></div>
-
-    <!-- Row 5: May 25–31 -->
-    <div class="cal-cell weekend"><div class="date-num">25</div></div>
-    <div class="cal-cell"><div class="date-num">26</div>
-      <div class="event-pill ev-workshop"><span class="pill-icon">🏆</span><span class="pill-text">Peer Awards Q2<span class="pill-time">5–6pm · Lounge</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">27</div>
-      <div class="event-pill ev-food"><span class="pill-icon">🌮</span><span class="pill-text">Food Truck Tue<span class="pill-time">12–2pm · Outside</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">28</div>
-      <div class="event-pill ev-food"><span class="pill-icon">☕</span><span class="pill-text">Donut Wed<span class="pill-time">9–10am · Free</span></span></div>
-    </div>
-    <div class="cal-cell"><div class="date-num">29</div>
-      <div class="event-pill ev-networking"><span class="pill-icon">🔗</span><span class="pill-text">Networking Thursday<span class="pill-time">6–8pm · Main Hall</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">30</div>
-      <div class="event-pill ev-showcase"><span class="pill-icon">🛠️</span><span class="pill-text">Build Night<span class="pill-time">6–9pm · Open Collab</span></span></div>
-    </div>
-    <div class="cal-cell weekend"><div class="date-num">31</div></div>
-
-  </div>
-  <div class="cal-footer">
-    <div class="footer-stat"><div class="num">14</div><div class="lbl">Events in May</div></div>
-    <div class="footer-stat"><div class="num">5</div><div class="lbl">Event Types</div></div>
-    <div class="footer-stat"><div class="num">4×</div><div class="lbl">Weekly Touchpoints</div></div>
-    <div class="footer-stat"><div class="num">2</div><div class="lbl">Monthly Food Trucks</div></div>
-    <div class="footer-cta">View Full Schedule →</div>
+  <div class="page-actions">
+    <button class="btn-theme" id="theme-btn" onclick="toggleTheme()">☀️</button>
+    <button class="btn-add" onclick="openAddEvent()">＋ Add Event</button>
   </div>
 </div>
 
+<div class="cal-outer">
+  <!-- Hero -->
+  <div class="cal-hero">
+    <div class="cal-hero-nav">
+      <button class="cal-arr" onclick="calNav(-1)">‹</button>
+      <div class="cal-hero-label" id="cal-label">May 2026</div>
+      <button class="cal-arr" onclick="calNav(1)">›</button>
+    </div>
+    <div>
+      <span class="cal-big-month" id="cal-big">May</span><span class="cal-big-month cal-big-year" id="cal-year">2026</span>
+    </div>
+    <div class="cal-hero-stats">
+      <div class="cal-stat"><div class="cal-stat-n" id="stat-events">14</div><div class="cal-stat-l">Events</div></div>
+      <div class="cal-stat"><div class="cal-stat-n" id="stat-rsvp">2</div><div class="cal-stat-l">RSVP'd</div></div>
+      <div class="cal-stat"><div class="cal-stat-n" id="stat-types">5</div><div class="cal-stat-l">Types</div></div>
+    </div>
+  </div>
+  <!-- DOW -->
+  <div class="cal-dow">
+    <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+  </div>
+  <!-- Grid -->
+  <div class="cal-grid" id="cal-grid"></div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Networking</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Social</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Showcase</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Food</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>Workshop</div>
+  </div>
+
+  <!-- Day panel -->
+  <div id="day-panel" style="display:none">
+    <div class="day-panel">
+      <div class="day-panel-hdr">
+        <div class="day-panel-title" id="day-panel-title">Thursday, May 7</div>
+        <button class="day-panel-close" onclick="closePanel()">✕</button>
+      </div>
+      <div id="day-panel-events"></div>
+    </div>
+  </div>
+
+  <!-- Upcoming strip -->
+  <div class="upcoming-hdr">
+    <div class="upcoming-title">Upcoming Events</div>
+    <div class="upcoming-see" onclick="">See All</div>
+  </div>
+  <div id="upcoming-list"></div>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const TODAY_ISO = '2026-05-07';
+let calYear = 2026, calMonth = 4;
+let rsvpd = new Set([1,2]);
+let dark = true;
+let selectedISO = null;
+
+let events = [
+  {id:1,name:'Networking Thursday',type:'networking',date:'2026-05-07',time:'6:00–8:00 PM',loc:'Main Hall',going:24,icon:'🔗',steps:[{n:'1',t:'Arrive & grab a name tag',d:'Your tag shows your name and top skill'},{n:'2',t:'Speed intro rotations',d:'5-min rounds — meet 8 people in 30 min'},{n:'3',t:'Open networking floor',d:'Free floor to follow up and exchange contacts'},{n:'4',t:'Lightning announcements',d:'Members share what they need or offer'}]},
+  {id:2,name:'Game Night Friday',type:'social',date:'2026-05-09',time:'6:00–9:00 PM',loc:'Main Room',going:18,icon:'🎮',steps:[{n:'1',t:'Groups of 4 randomized at door',d:'Placed with 3 people you do not know'},{n:'2',t:'3 rounds of games',d:'Tech trivia, mini challenges, marshmallow tower'},{n:'3',t:'Points and prizes',d:'Top team wins, peer shoutouts each round'},{n:'4',t:'Mix and mingle',d:'Last 30 min open floor — add on DojoConnect'}]},
+  {id:3,name:'Demo Day / Build Night',type:'showcase',date:'2026-05-16',time:'1:00–4:00 PM',loc:'Open Floor + Booths',going:31,icon:'🚀',steps:[{n:'1',t:'Set up your booth',d:'Any project — demo, prototype, or idea'},{n:'2',t:'Walk-around hour',d:'Tour booths, ask questions, leave feedback'},{n:'3',t:'Lightning pitches',d:'Optional 3-min pitch to the full room'},{n:'4',t:'Community vote + prizes',d:'Winner gets a free month of membership'}]},
+  {id:4,name:'Founder Talk',type:'workshop',date:'2026-05-20',time:'6:00–7:30 PM',loc:'Room B',going:15,icon:'🎤',steps:[{n:'1',t:'Intro',d:'15-min overview of who they are and what they built'},{n:'2',t:'Main talk',d:'45-min conversational deep dive'},{n:'3',t:'Open Q&A',d:'Members ask anything — career, technical, personal'},{n:'4',t:'Informal wrap-up',d:'Speaker stays 15 min for one-on-ones'}]},
+  {id:5,name:'Food Truck Tuesday',type:'food',date:'2026-05-12',time:'12:00–2:00 PM',loc:'Outside Entrance',going:null,icon:'🌮',steps:[{n:'1',t:'Check the feed morning-of',d:'Truck and menu announced daily'},{n:'2',t:'Show your member badge',d:'Members eat free, guests pay regular price'},{n:'3',t:'Eat outside together',d:'Picnic tables set up as communal space'}]},
+  {id:6,name:'Scavenger Hunt',type:'social',date:'2026-05-23',time:'4:00–6:00 PM',loc:'Whole Space',going:22,icon:'🎯',steps:[{n:'1',t:'Get your clue sheet',d:'Each clue leads to a hidden duck in the building'},{n:'2',t:'Explore the whole space',d:'Ducks hidden in areas members rarely visit'},{n:'3',t:'First 5 winners get prizes',d:'Prizes: free snacks, Dojo swag, guest passes'}]},
+  {id:7,name:'Networking Thursday',type:'networking',date:'2026-05-28',time:'6:00–8:00 PM',loc:'Main Hall',going:19,icon:'🔗',steps:[{n:'1',t:'Arrive & grab a name tag',d:'Your tag shows your name and top skill'},{n:'2',t:'Speed intros',d:'5-min rounds — meet 8 people in 30 min'},{n:'3',t:'Open floor',d:'Free networking and contact exchange'}]},
+  {id:8,name:'Video Game Fridays',type:'social',date:'2026-05-02',time:'5:00–9:00 PM',loc:'Gaming Zone',going:20,icon:'🕹️',steps:[{n:'1',t:'Drop in anytime after 5pm',d:'No RSVP required'},{n:'2',t:'Join a rotating lobby',d:'Games rotate hourly — new people each round'},{n:'3',t:'Snacks provided',d:'Light snacks and drinks in the gaming zone'}]},
+  {id:9,name:'Donut Wednesday',type:'food',date:'2026-05-06',time:'9:00–10:00 AM',loc:'Lounge',going:null,icon:'🍩',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'},{n:'2',t:'Coffee available',d:'Coffee and tea in the lounge'},{n:'3',t:'Chat and connect',d:'Unstructured — just hang out'}]},
+  {id:10,name:'Peer Awards Q2',type:'workshop',date:'2026-05-26',time:'5:00–6:00 PM',loc:'Lounge',going:12,icon:'🏆',steps:[{n:'1',t:'Nominations open 2 weeks before',d:'Nominate anyone in the community'},{n:'2',t:'Voting week',d:'All members vote on nominees'},{n:'3',t:'Awards ceremony',d:'Two awards given per quarter with prizes'}]},
+  {id:11,name:'Food Truck Tuesday',type:'food',date:'2026-05-19',time:'12:00–2:00 PM',loc:'Outside Entrance',going:null,icon:'🌮',steps:[{n:'1',t:'Check the feed',d:'Truck announced morning-of'},{n:'2',t:'Show your badge',d:'Free for members'},{n:'3',t:'Eat and connect',d:'Picnic tables outside'}]},
+  {id:12,name:'Donut Wednesday',type:'food',date:'2026-05-13',time:'9:00–10:00 AM',loc:'Lounge',going:null,icon:'🍩',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'},{n:'2',t:'Coffee available',d:'Coffee and tea in the lounge'}]},
+  {id:13,name:'Donut Wednesday',type:'food',date:'2026-05-20',time:'9:00–10:00 AM',loc:'Lounge',going:null,icon:'🍩',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'}]},
+  {id:14,name:'Donut Wednesday',type:'food',date:'2026-05-27',time:'9:00–10:00 AM',loc:'Lounge',going:null,icon:'🍩',steps:[{n:'1',t:'Come in before 10am',d:'First come first served'}]},
+];
+
+const TYPE_PILL = {networking:'ep-networking',social:'ep-social',showcase:'ep-showcase',food:'ep-food',workshop:'ep-workshop',custom:'ep-custom'};
+const TYPE_BAR = {networking:'nt',social:'so',showcase:'sh',food:'fd',workshop:'ws'};
+const TYPE_BG = {networking:'rgba(232,25,44,.12)',social:'rgba(245,158,11,.12)',showcase:'rgba(59,130,246,.12)',food:'rgba(34,197,94,.12)',workshop:'rgba(168,85,247,.12)',custom:'rgba(100,116,139,.12)'};
+const TYPE_COLOR = {networking:'var(--red)',social:'#b45309',showcase:'#1d4ed8',food:'#15803d',workshop:'#7e22ce',custom:'#64748b'};
+
+function pd(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d);}
+
+function renderCal(){
+  const mn = MONTHS[calMonth];
+  document.getElementById('cal-label').textContent = `${mn} ${calYear}`;
+  document.getElementById('cal-big').textContent = mn;
+  document.getElementById('cal-year').textContent = calYear;
+  const today = pd(TODAY_ISO);
+  const first = new Date(calYear,calMonth,1).getDay();
+  const days = new Date(calYear,calMonth+1,0).getDate();
+  const prevDays = new Date(calYear,calMonth,0).getDate();
+  const monthEvs = events.filter(e=>{const[y,m]=e.date.split('-').map(Number);return y===calYear&&m-1===calMonth;});
+  const byDay={};
+  monthEvs.forEach(e=>{const d=parseInt(e.date.split('-')[2],10);if(!byDay[d])byDay[d]=[];byDay[d].push(e);});
+  let html='';
+  for(let i=first-1;i>=0;i--) html+=`<div class="cal-cell other-m"><div class="cdn">${prevDays-i}</div></div>`;
+  for(let d=1;d<=days;d++){
+    const iso=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=iso===TODAY_ISO;
+    const isPast=pd(iso)<today&&!isToday;
+    const isSel=iso===selectedISO;
+    const dayEvs=byDay[d]||[];
+    const hasRsvp=dayEvs.some(e=>rsvpd.has(e.id));
+    html+=`<div class="cal-cell${isToday?' is-today':''}${isPast?' past-d':''}${isSel?' is-selected':''}${hasRsvp?' has-rsvp':''}" onclick="dayClick('${iso}')">
+      <div class="cdn">${d}</div>
+      ${dayEvs.slice(0,2).map(e=>`<div class="ev-pill ${TYPE_PILL[e.type]||'ep-custom'}">${e.icon} ${e.name.split(' ').slice(0,2).join(' ')}</div>`).join('')}
+      ${dayEvs.length>2?`<div class="ev-more">+${dayEvs.length-2}</div>`:''}
+    </div>`;
+  }
+  const total=first+days;const rem=total%7===0?0:7-(total%7);
+  for(let d=1;d<=rem;d++) html+=`<div class="cal-cell other-m"><div class="cdn">${d}</div></div>`;
+  document.getElementById('cal-grid').innerHTML=html;
+  // stats
+  document.getElementById('stat-events').textContent=monthEvs.length;
+  document.getElementById('stat-rsvp').textContent=monthEvs.filter(e=>rsvpd.has(e.id)).length;
+  document.getElementById('stat-types').textContent=new Set(monthEvs.map(e=>e.type)).size;
+  renderUpcoming();
+}
+
+function calNav(dir){
+  calMonth+=dir;
+  if(calMonth<0){calMonth=11;calYear--;}
+  if(calMonth>11){calMonth=0;calYear++;}
+  selectedISO=null;
+  document.getElementById('day-panel').style.display='none';
+  renderCal();
+}
+
+function dayClick(iso){
+  selectedISO=iso;
+  renderCal();
+  const dayEvs=events.filter(e=>e.date===iso);
+  const[y,mo,d]=iso.split('-').map(Number);
+  const label=new Date(y,mo-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('day-panel-title').textContent=label;
+  const evEl=document.getElementById('day-panel-events');
+  if(!dayEvs.length){
+    evEl.innerHTML=`<div class="empty-day"><div class="empty-day-icon">📭</div><div class="empty-day-txt">No events scheduled on this day</div><button class="btn-add-small" onclick="openAddEvent('${iso}')">＋ Add Event</button></div>`;
+  } else {
+    evEl.innerHTML=dayEvs.map(e=>buildEvItem(e)).join('');
+  }
+  document.getElementById('day-panel').style.display='block';
+  document.getElementById('day-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildEvItem(e){
+  const isR=rsvpd.has(e.id);
+  return `<div class="ev-item ${TYPE_BAR[e.type]||'nt'}" onclick="openEventDetail(${e.id})">
+    <div class="ev-item-icon" style="background:${TYPE_BG[e.type]||TYPE_BG.custom}">${e.icon}</div>
+    <div class="ev-item-info">
+      <div class="ev-item-name">${e.name}</div>
+      <div class="ev-item-meta"><span>🕐 ${e.time}</span><span>📍 ${e.loc}</span>${e.going?`<span>👤 ${e.going+(isR?1:0)}</span>`:''}</div>
+      ${isR?'<div style="font-size:10px;color:#15803d;font-family:Nunito,sans-serif;font-weight:700;margin-top:3px">✓ You\'re going</div>':''}
+    </div>
+    <button class="ev-item-rsvp ${isR?'on':''}" onclick="event.stopPropagation();toggleRsvp(${e.id},this)">${isR?'✓ Going':'RSVP'}</button>
+  </div>`;
+}
+
+function renderUpcoming(){
+  const today=pd(TODAY_ISO);
+  const up=events.filter(e=>pd(e.date)>=today).sort((a,b)=>pd(a.date)-pd(b.date)).slice(0,5);
+  document.getElementById('upcoming-list').innerHTML=up.map(e=>buildEvItem(e)).join('');
+}
+
+function toggleRsvp(id,btn){
+  if(rsvpd.has(id)){rsvpd.delete(id);btn.textContent='RSVP';btn.classList.remove('on');}
+  else{rsvpd.add(id);btn.textContent='✓ Going';btn.classList.add('on');}
+  renderCal();
+  toast(rsvpd.has(id)?'✅ RSVP\'d!':'Removed RSVP');
+}
+
+function openEventDetail(id){
+  const e=events.find(x=>x.id===id);if(!e)return;
+  const isR=rsvpd.has(id);
+  const[ey,em,ed]=e.date.split('-').map(Number);
+  const dl=new Date(ey,em-1,ed).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('modal-content').innerHTML=`
+    <div style="display:inline-flex;align-items:center;gap:6px;background:${TYPE_BG[e.type]};color:${TYPE_COLOR[e.type]};padding:3px 10px;border-radius:5px;font-family:Nunito,sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">${e.icon} ${e.type}</div>
+    <div class="modal-title">${e.name}</div>
+    <div class="modal-sub">Join fellow Dojo members for this ${e.type} event</div>
+    <div class="chip-row">
+      <div class="dchip">📅 ${dl}</div>
+      <div class="dchip">🕐 ${e.time}</div>
+      <div class="dchip">📍 ${e.loc}</div>
+      ${e.going?`<div class="dchip">👤 ${e.going+(isR?1:0)} going</div>`:''}
+    </div>
+    <div class="modal-sec">How It Works</div>
+    <ul class="step-list">
+      ${e.steps.map(s=>`<li><div class="step-n">${s.n}</div><div><strong style="font-family:Nunito,sans-serif;font-weight:700;display:block;margin-bottom:2px;color:var(--text)">${s.t}</strong>${s.d}</div></li>`).join('')}
+    </ul>
+    <button class="modal-rsvp ${isR?'rsvpd':''}" id="mrsvp" onclick="modalRsvp(${id})">
+      ${isR?'✓ You\'re Going! — Tap to Remove':`RSVP${e.going?' — Join '+e.going+' Members':''}`}
+    </button>
+    <button class="ext-cal-btn" onclick="toast('📅 Opening Google Calendar...')">📅 Add to External Calendar</button>`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function modalRsvp(id){
+  const btn=document.getElementById('mrsvp');
+  if(rsvpd.has(id)){rsvpd.delete(id);btn.classList.remove('rsvpd');btn.textContent='RSVP';toast('Removed RSVP');}
+  else{rsvpd.add(id);btn.classList.add('rsvpd');btn.textContent="✓ You're Going!";toast('✅ RSVP\'d!');}
+  renderCal();
+}
+
+let addEventType='networking';
+function openAddEvent(prefillDate){
+  const df=prefillDate||`${calYear}-${String(calMonth+1).padStart(2,'0')}-15`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="modal-title">Add Event</div>
+    <div class="modal-sub">Create a new Hacker Dojo community event</div>
+    <div class="form-group"><label class="form-label">Event Name</label><input class="form-input" id="ne-name" placeholder="e.g. Coffee & Code Morning" /></div>
+    <div class="form-group"><label class="form-label">Type</label>
+      <div class="type-btns" id="type-btns">
+        ${['networking','social','showcase','food','workshop'].map((t,i)=>`<button class="type-btn${i===0?' active':''}" onclick="selType(this,'${t}')">${t}</button>`).join('')}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="ne-date" type="date" value="${df}" /></div>
+      <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="ne-time" placeholder="6:00–8:00 PM" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="ne-loc" placeholder="e.g. Main Hall" /></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="ne-desc" placeholder="What's this event about?"></textarea></div>
+    <button class="submit-btn" onclick="submitEvent()">Create Event</button>`;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function selType(btn,t){document.querySelectorAll('#type-btns .type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');addEventType=t;}
+
+function submitEvent(){
+  const name=document.getElementById('ne-name')?.value.trim();
+  const date=document.getElementById('ne-date')?.value;
+  const time=document.getElementById('ne-time')?.value.trim()||'TBD';
+  const loc=document.getElementById('ne-loc')?.value.trim()||'TBD';
+  if(!name||!date){toast('⚠️ Name and date required');return;}
+  events.push({id:Date.now(),name,type:addEventType,date,time,loc,going:0,icon:'📌',steps:[{n:'1',t:'Show up!',d:'Come and join the event.'}]});
+  closeModal();
+  renderCal();
+  toast(`✅ "${name}" added!`);
+}
+
+function closePanel(){document.getElementById('day-panel').style.display='none';selectedISO=null;renderCal();}
+function closeModal(e){if(e&&e.target!==document.getElementById('overlay'))return;document.getElementById('overlay').classList.remove('open');}
+
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-btn').textContent=dark?'☀️':'☽';
+}
+
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2300);
+}
+
+renderCal();
+</script>
 </body>
 </html>
